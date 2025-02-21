@@ -1,6 +1,9 @@
 <template>
   <svg class="m-gantt-grid-container">
-    <g stroke-width="1" stroke="#e9e9e9" stroke-dasharray="12, 8" transform="translate(-0.5,-0.5)">
+    <g stroke-width="1"
+       stroke="#e9e9e9"
+       stroke-dasharray="12, 8"
+       transform="translate(-0.5,-0.5)">
       <line v-for="position in verticalLinesList"
             :key="position"
             :x1="position"
@@ -19,7 +22,7 @@
   </svg>
 </template>
 <script lang="ts" setup>
-import { MGanttStyleOption, GanttBodyStartInfo } from 'src/mGantt/types';
+import { MGanttStyleOption, GanttBodyStartInfo } from '@/types';
 import { ref, inject, Ref, onMounted, computed, watch, toRef, onBeforeUnmount } from 'vue';
 import { getRound } from '../../util';
 import dayjs from 'dayjs';

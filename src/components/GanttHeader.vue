@@ -22,7 +22,9 @@
 </template>
 <script lang="ts" setup>
 import dayjs from 'dayjs';
-import { ref, inject, Ref, onMounted, computed, watch, onBeforeUnmount, shallowRef } from 'vue';
+import { ref, inject, onMounted, computed, watch, onBeforeUnmount, shallowRef } from 'vue';
+import type { Ref } from 'vue';
+
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import type { GanttHeaderUnit, BlockItem } from '../types';
 import { getRound } from '../util';

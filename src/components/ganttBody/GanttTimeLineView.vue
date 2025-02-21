@@ -40,10 +40,10 @@
 <script lang="ts" setup>
 import { ref, inject, Ref, onMounted, computed, watch, toRef, onBeforeUnmount, shallowRef, triggerRef } from 'vue';
 import dayjs, { Dayjs } from 'dayjs';
-import { GanttRowNode, VisibleRow, TimeLine, TimeLineNode, VisibleTimeLine, MGanttStyleOption, TimePointNode, TimePoint, RowData } from 'src/mGantt/types';
+import { GanttRowNode, VisibleRow, TimeLine, TimeLineNode, VisibleTimeLine, MGanttStyleOption, TimePointNode, TimePoint, RowData } from '@/types';
 import minMax from 'dayjs/plugin/minMax';
 import isBetween from 'dayjs/plugin/isBetween';
-import { treeForEach } from '../../../../src/util/common';
+import { treeForEach } from '@/util';
 
 dayjs.extend(minMax);
 dayjs.extend(isBetween);

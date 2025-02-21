@@ -9,7 +9,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, inject, Ref } from 'vue';
+import { ref, inject } from 'vue';
+import type { Ref } from 'vue';
 
 export interface Props {
   width: number,

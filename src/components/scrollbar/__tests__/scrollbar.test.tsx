@@ -3,10 +3,9 @@ import ScrollBar from '../ScrollBar.vue';
 import { describe, expect, test } from '@jest/globals';
 import { VueNode } from '@vue/test-utils/dist/types';
 import { nextTick } from 'vue';
-import defineGetter from '../../../../util/testUtil/define-getter';
-import addScrollTo from '../../../../util/testUtil/scrollTo';
-import makeScroll from '../../../../util/testUtil/make-scroll';
-import { sleep } from '../../../../util/common';
+import defineGetter from '@/testUtil/define-getter';
+import addScrollTo from '@/testUtil/scrollTo';
+import makeScroll from '@/testUtil/make-scroll';
 
 describe('scrollbar', () => {
   test('tag prop', () => {
@@ -36,7 +35,7 @@ describe('scrollbar', () => {
 
     const scrollWrap = wrapper.find('.m-scrollbar-wrap').element as VueNode<HTMLDivElement>;
     const scrollView = wrapper.find('.m-scrollbar-view').element as VueNode<HTMLDivElement>;
-    
+
     expect(scrollView.classList.contains('view-class')).toBeTruthy();
     expect(scrollView.style.background).toBe('red');
     expect(scrollWrap.classList.contains('wrap-class')).toBeTruthy();
@@ -88,7 +87,7 @@ describe('scrollbar', () => {
     const verticalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-vertical');
     const wrapView = wrapper.find('.m-scrollbar-wrap').element as VueNode<HTMLDivElement>;
     const scrollView = wrapper.find('.m-scrollbar-view').element as VueNode<HTMLDivElement>;
-  
+
     defineGetter(wrapView, 'offsetWidth', outWidth);
     defineGetter(wrapView, 'offsetHeight', outHeight);
     defineGetter(scrollView, 'offsetWidth', innerWidth);
@@ -120,7 +119,7 @@ describe('scrollbar', () => {
     const verticalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-vertical');
     const wrapView = wrapper.find('.m-scrollbar-wrap').element as VueNode<HTMLDivElement>;
     const scrollView = wrapper.find('.m-scrollbar-view').element as VueNode<HTMLDivElement>;
-  
+
     defineGetter(wrapView, 'offsetWidth', outWidth);
     defineGetter(wrapView, 'offsetHeight', outHeight);
     defineGetter(scrollView, 'offsetWidth', innerWidth);
@@ -151,7 +150,7 @@ describe('scrollbar', () => {
 
     const wrapViewElement = wrapView.element;
     const scrollViewElement = scrollView.element;
-  
+
     defineGetter(wrapViewElement, 'offsetWidth', outWidth);
     defineGetter(wrapViewElement, 'offsetHeight', outHeight);
     defineGetter(scrollViewElement, 'offsetWidth', innerWidth);
@@ -191,14 +190,14 @@ describe('scrollbar', () => {
 
     const wrapViewElement = wrapView.element;
     const scrollViewElement = scrollView.element;
-  
+
     defineGetter(wrapViewElement, 'offsetWidth', outWidth);
     defineGetter(wrapViewElement, 'offsetHeight', outHeight);
     defineGetter(scrollViewElement, 'offsetWidth', innerWidth);
     defineGetter(scrollViewElement, 'offsetHeight', innerHeight);
     wrapper.vm.onResize();
     await nextTick();
-    
+
     addScrollTo(verticalThumb.element);
     addScrollTo(horizontalThumb.element);
     addScrollTo(wrapViewElement);
@@ -231,18 +230,18 @@ describe('scrollbar', () => {
 
     const wrapViewElement = wrapView.element;
     const scrollViewElement = scrollView.element;
-  
+
     defineGetter(wrapViewElement, 'offsetWidth', outWidth);
     defineGetter(wrapViewElement, 'offsetHeight', outHeight);
     defineGetter(scrollViewElement, 'offsetWidth', innerWidth);
     defineGetter(scrollViewElement, 'offsetHeight', innerHeight);
     wrapper.vm.onResize();
     await nextTick();
-    
+
     addScrollTo(verticalThumb.element);
     addScrollTo(horizontalThumb.element);
     addScrollTo(wrapViewElement);
-    
+
     wrapper.vm.scrollTo({ top: 50, left: 70 });
 
     await nextTick();
@@ -271,14 +270,14 @@ describe('scrollbar', () => {
 
     const wrapViewElement = wrapView.element;
     const scrollViewElement = scrollView.element;
-  
+
     defineGetter(wrapViewElement, 'offsetWidth', outWidth);
     defineGetter(wrapViewElement, 'offsetHeight', outHeight);
     defineGetter(scrollViewElement, 'offsetWidth', innerWidth);
     defineGetter(scrollViewElement, 'offsetHeight', innerHeight);
     wrapper.vm.onResize();
     await nextTick();
-    
+
     addScrollTo(verticalThumb.element);
     addScrollTo(horizontalThumb.element);
     addScrollTo(wrapViewElement);
