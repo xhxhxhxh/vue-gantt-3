@@ -1,21 +1,21 @@
 <template>
-  <div ref="ganttHeaderRef" class="m-gantt-header">
-    <div class="m-gantt-header-first-level " :style="{width: ganttHeaderLevelWidth, height: `${headerHeight + 1}px`}">
+  <div ref="ganttHeaderRef" class="vg-header">
+    <div class="vg-header-first-level " :style="{width: ganttHeaderLevelWidth, height: `${headerHeight + 1}px`}">
       <div v-for="item in firstLevelBlocks"
            :key="item.key"
-           class="m-gantt-header-block"
+           class="vg-header-block"
            :title="item.tip"
            :style="{width: item.width + 'px', left: item.left + 'px'}">
-        <span class="m-gantt-header-block-text">{{ item.text }}</span>
+        <span class="vg-header-block-text">{{ item.text }}</span>
       </div>
     </div>
-    <div v-show="showSecondLevel" class="m-gantt-header-second-level" :style="{width: ganttHeaderLevelWidth, height: `${headerHeight + 1}px`}">
+    <div v-show="showSecondLevel" class="vg-header-second-level" :style="{width: ganttHeaderLevelWidth, height: `${headerHeight + 1}px`}">
       <div v-for="item in secondLevelBlocks"
            :key="item.key"
-           class="m-gantt-header-block"
+           class="vg-header-block"
            :title="item.tip"
            :style="{width: item.width + 'px', left: item.left + 'px'}">
-        <span class="m-gantt-header-block-text">{{ item.text }}</span>
+        <span class="vg-header-block-text">{{ item.text }}</span>
       </div>
     </div>
   </div>
@@ -27,7 +27,7 @@ import type { Ref } from 'vue';
 
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import type { GanttHeaderUnit, BlockItem } from '../types';
-import { getRound } from '../util';
+import { getRound } from '@/utils/common';
 
 dayjs.extend(quarterOfYear);
 
@@ -271,17 +271,17 @@ defineExpose({
 </script>
 
 <style lang="scss">
-.m-gantt-header {
+.vg-header {
   min-width: 100%;
   max-width: 100%;
   overflow: auto;
   &::-webkit-scrollbar {
     display: none;
   }
-  .m-gantt-header-first-level, .m-gantt-header-second-level {
+  .vg-header-first-level, .vg-header-second-level {
     position: relative;
 
-    .m-gantt-header-block {
+    .vg-header-block {
       position: absolute;
       height: 100%;
       display: flex;
@@ -289,7 +289,7 @@ defineExpose({
       align-items: center;
       border-right: 1px solid #e9e9e9;
       border-bottom: 1px solid #e9e9e9;
-      .m-gantt-header-block-text {
+      .vg-header-block-text {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;

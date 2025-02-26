@@ -1,5 +1,5 @@
 <template>
-  <svg class="m-gantt-grid-container">
+  <svg class="vg-grid-container">
     <g stroke-width="1"
        stroke="#e9e9e9"
        stroke-dasharray="12, 8"
@@ -24,7 +24,7 @@
 <script lang="ts" setup>
 import { MGanttStyleOption, GanttBodyStartInfo } from '@/types';
 import { ref, inject, Ref, onMounted, computed, watch, toRef, onBeforeUnmount } from 'vue';
-import { getRound } from '../../util';
+import { getRound } from '@/utils/common';
 import dayjs from 'dayjs';
 
 export interface Props {
@@ -157,7 +157,7 @@ defineExpose({
 
 </script>
 <style lang="scss">
-.m-gantt-grid-container {
+.vg-grid-container {
   width: 100%;
   height: 100%;
   position: relative;

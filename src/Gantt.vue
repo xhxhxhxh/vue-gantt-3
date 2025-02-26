@@ -49,7 +49,7 @@ import type { RowData, ColumnData, DefaultCol, GanttRowNode, MGanttStyleOption, 
 import { ref, provide, onMounted, onBeforeUnmount, onBeforeMount, shallowRef, watch } from 'vue';
 import ExpandableBox from './components/ExpandableBox.vue';
 import dayjs from 'dayjs';
-import { treeForEachSkipChildren } from "./util";
+import { treeForEachSkipChildren } from "@/utils/common";
 import minMax from 'dayjs/plugin/minMax';
 
 dayjs.extend(minMax);
@@ -108,7 +108,7 @@ const showSecondLevel = ref(true);
 let lastMouseMoveTarget: HTMLElement | null = null;
 let lastClickedRowId = '';
 let lastClickedRowIndex = 0;
-const rowClass = 'vue3-gantt-chart-row';
+const rowClass = 'vg-row';
 
 provide(
   'selectedRowIds',
@@ -538,7 +538,7 @@ function handleGanttMouseDown (this: HTMLElement, event: MouseEvent) {
       document.addEventListener('mouseup', handleGanttMouseUp);
     }
   } else {
-    const { target: ganttBodyRef } = getTargetElementInfo(event.target as HTMLElement | null, 'vue3-gantt-chart-body');
+    const { target: ganttBodyRef } = getTargetElementInfo(event.target as HTMLElement | null, 'vg-body');
     if (ganttBodyRef) {
       selectedRowIds.value.clear();
     }
@@ -662,22 +662,36 @@ defineExpose({
   getDisplayRows
 });
 
+defineOptions({
+  name: 'Vue3GanttChart',
+});
+
 </script>
 <style lang="scss">
 .vue3-gantt-chart {
   height: 100%;
   display: flex;
   overflow: hidden;
+  box-sizing: border-box;
+  *, :before, :after {
+    box-sizing: border-box;
+  }
+  img {
+    border: 0;
+    vertical-align: middle;
+    -webkit-user-drag: none;
+    user-select: none;
+  }
   .c-expandable-box {
     ._drag-line {
       right: -4px !important;
     }
     margin-right: 4px;
   }
-  .vue3-gantt-chart-left-table {
+  .vg-left-table {
     border-right: 1px solid #e9e9e9;
   }
-  .vue3-gantt-chart-right-gantt {
+  .vg-right-gantt {
     flex: 1;
     border-left: 1px solid #e9e9e9;
   }

@@ -1,25 +1,25 @@
 <template>
-  <div class="m-gantt-time-line-view">
+  <div class="vg-time-line-view">
     <div v-for="row in visibleRows"
          :key="row.id"
-         class="m-gantt-time-line-row m-gantt-row"
+         class="vg-time-line-row vg-row"
          :data-row-id="row.id"
-         :class="{'m-gantt-selected-row': selectedRowIds.has(row.id)}"
+         :class="{'vg-selected-row': selectedRowIds.has(row.id)}"
          :style="{height: rowHeight + 'px', transform: `translateY(${row.translateY}px)`}">
       <div v-for="timeLine in visibleTimeLineMap.get(row.id)"
            :key="timeLine.id"
            :style="{width: timeLine.width + 'px', transform: `translateX(${timeLine.translateX}px)`}"
-           class="m-gantt-time-line-row-time-line">
-        <div v-if="timeLine.type === 'normal'" class="m-gantt-time-line-normal" :style="{ backgroundColor: getTimeLineBackgroundColor(timeLine)}">
+           class="vg-time-line-row-time-line">
+        <div v-if="timeLine.type === 'normal'" class="vg-time-line-normal" :style="{ backgroundColor: getTimeLineBackgroundColor(timeLine)}">
           <div v-show="styleOption?.barsLabeling !== 'none'"
-               class="m-gantt-time-line-label"
+               class="vg-time-line-label"
                :class="{toLeft: styleOption?.barsLabeling === 'beforeTheBar', toRight: styleOption?.barsLabeling === 'afterTheBar'}">
             <img v-show="styleOption?.barsLabeling === 'insideBarWithIcon' && timeLine.icon" :src="timeLine.icon" alt="">
             <span>{{ timeLine.label || '' }}</span>
           </div>
           <div v-for="timePoint in timeLine.timePointNodes?.filter((() => styleOption?.showTimePoints))"
                :key="timePoint.id"
-               class="m-gantt-time-line-normal-time-points"
+               class="vg-time-line-normal-time-points"
                :style="{transform: `translate(${timePoint.translateX - timePointSize / 2 - 1}px, -50%)`, width: `${timePointSize}px`, height: `${timePointSize}px`}"
                @contextmenu.stop="e => onTimePointContextMenu(e, timeLine, timePoint, row.id)"
                @mousedown.stop="e => onTimePointMouseDown(e, timeLine, timePoint)">
@@ -27,12 +27,12 @@
             <img v-else :src="timePoint.icon" alt="">
           </div>
         </div>
-        <div v-if="timeLine.type === 'parentTimeLineNode'" class="m-gantt-time-line-parentNode">
-          <div class="m-gantt-time-line-parentNode-bar"></div>
-          <img class="m-gantt-time-line-parentNode-triangle m-gantt-time-line-parentNode-triangle-left" src="../../../../assets/images/BlackTriangle.svg">
-          <img class="m-gantt-time-line-parentNode-triangle m-gantt-time-line-parentNode-triangle-right" src="../../../../assets/images/BlackTriangle.svg">
+        <div v-if="timeLine.type === 'parentTimeLineNode'" class="vg-time-line-parentNode">
+          <div class="vg-time-line-parentNode-bar"></div>
+          <img class="vg-time-line-parentNode-triangle vg-time-line-parentNode-triangle-left" src="../../../../assets/images/BlackTriangle.svg">
+          <img class="vg-time-line-parentNode-triangle vg-time-line-parentNode-triangle-right" src="../../../../assets/images/BlackTriangle.svg">
         </div>
-        <div v-if="timeLine.type === 'sameDateTimeLineNode'" class="m-gantt-time-line-sameNode"></div>
+        <div v-if="timeLine.type === 'sameDateTimeLineNode'" class="vg-time-line-sameNode"></div>
       </div>
     </div>
   </div>
@@ -43,7 +43,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { GanttRowNode, VisibleRow, TimeLine, TimeLineNode, VisibleTimeLine, MGanttStyleOption, TimePointNode, TimePoint, RowData } from '@/types';
 import minMax from 'dayjs/plugin/minMax';
 import isBetween from 'dayjs/plugin/isBetween';
-import { treeForEach } from '@/util';
+import { treeForEach } from '@/utils/common';
 
 dayjs.extend(minMax);
 dayjs.extend(isBetween);
@@ -426,24 +426,24 @@ defineExpose({
 });
 </script>
 <style lang="scss">
-.m-gantt-time-line-view {
+.vg-time-line-view {
   width: 100%;
   height: 100%;
   left: 0;
   top: 0;
   position: absolute;
-  .m-gantt-time-line-row {
+  .vg-time-line-row {
     position: absolute;
     width: 100%;
-    &.m-gantt-selected-row {
+    &.vg-selected-row {
       background-color: #747AD0;
     }
-    .m-gantt-time-line-row-time-line {
+    .vg-time-line-row-time-line {
       position: absolute;
       left: 0;
       height: 100%;
 
-      .m-gantt-time-line-normal {
+      .vg-time-line-normal {
         position: absolute;
         width: 100%;
         left: 0;
@@ -453,7 +453,7 @@ defineExpose({
         border-radius: 16px;
         border: 1px solid #000;
         background: #fff;
-        .m-gantt-time-line-normal-time-points {
+        .vg-time-line-normal-time-points {
           cursor: move;
           position: absolute;
           left: 0;
@@ -464,7 +464,7 @@ defineExpose({
           }
         }
       }
-      .m-gantt-time-line-sameNode {
+      .vg-time-line-sameNode {
         width: 8px;
         height: 8px;
         position: absolute;
@@ -473,34 +473,34 @@ defineExpose({
         background-color: #000;
         transform: translate(-50%, -50%) rotate(45deg);
       }
-      .m-gantt-time-line-parentNode {
+      .vg-time-line-parentNode {
         position: absolute;
         width: 100%;
         left: 0;
         top: 50%;
         transform: translateY(-50%);
         height: 16px;
-        .m-gantt-time-line-parentNode-bar {
+        .vg-time-line-parentNode-bar {
           position: absolute;
           width: 100%;
-          top: 2.5px;
+          top: 3px;
           height: 7px;
           background-color: #000;
         }
-        .m-gantt-time-line-parentNode-triangle {
+        .vg-time-line-parentNode-triangle {
           position: absolute;
           top: 50%;
-          &.m-gantt-time-line-parentNode-triangle-left {
+          &.vg-time-line-parentNode-triangle-left {
             left: 0;
             transform: translateX(-50%) translateY(-50%);
           }
-          &.m-gantt-time-line-parentNode-triangle-right {
+          &.vg-time-line-parentNode-triangle-right {
             right: 0;
             transform: translateX(50%) translateY(-50%);
           }
         }
       }
-      .m-gantt-time-line-label {
+      .vg-time-line-label {
         position: absolute;
         height: 100%;
         max-width: 100%;

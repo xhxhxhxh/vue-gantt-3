@@ -1,5 +1,5 @@
 <template>
-  <div class="m-gantt-body" :style="{height: ganttBodyHeight, width: ganttBodyWidth}">
+  <div class="vg-body" :style="{height: ganttBodyHeight, width: ganttBodyWidth}">
     <GanttGrid
       ref="ganttGridRef"
       :rowHeight="rowHeight"
@@ -120,7 +120,7 @@ defineExpose({
 
 </script>
 <style lang="scss">
-.m-gantt-body {
+.vg-body {
   position: relative;
 }
 </style>

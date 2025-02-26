@@ -1,5 +1,5 @@
 <template>
-  <div ref="ganttRightGantt" class="m-gantt-right-gantt">
+  <div ref="ganttRightGantt" class="vg-right-gantt">
     <GanttHeader
       ref="ganttHeaderRef"
       :edgeSpacing="edgeSpacing"
@@ -41,7 +41,7 @@ import dayjs from 'dayjs';
 import { ref, onBeforeMount, computed, onMounted, onBeforeUnmount, watch, shallowRef, inject, toRef } from 'vue';
 import minMax from 'dayjs/plugin/minMax';
 import GanttBody from './ganttBody/GanttBody.vue';
-import { getRound } from '../util';
+import { getRound } from '@/utils/common';
 
 dayjs.extend(minMax);
 
@@ -270,7 +270,7 @@ defineExpose({
 
 </script>
 <style lang="scss">
-.m-gantt-right-gantt {
+.vg-right-gantt {
   display: flex;
   flex-direction: column;
   height: 100%;

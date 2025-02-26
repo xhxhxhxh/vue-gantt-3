@@ -1,6 +1,6 @@
 <template>
-  <div class="m-gantt-cell-expandable" :style="{paddingLeft: currentPaddingLeft + 'px'}">
-    <span v-if="rowNode?.hasChildren" class="m-gantt-cell-expand-box" :style="{left: positionLeft + 'px'}" @mousedown.stop="setExpand">
+  <div class="vg-cell-expandable" :style="{paddingLeft: currentPaddingLeft + 'px'}">
+    <span v-if="rowNode?.hasChildren" class="vg-cell-expand-box" :style="{left: positionLeft + 'px'}" @mousedown.stop="setExpand">
       <img v-show="rowNode.expand" src="../../../assets/images/shrink.svg" alt="">
       <img v-show="!rowNode.expand" src="../../../assets/images/spread.svg" alt="">
     </span>
@@ -30,11 +30,11 @@ const setExpand = (event: MouseEvent) => {
 
 </script>
 <style lang="scss">
-.m-gantt-cell-expandable {
+.vg-cell-expandable {
   margin-left: -7px;
   height: 100%;
   position: relative;
-  .m-gantt-cell-expand-box {
+  .vg-cell-expand-box {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);

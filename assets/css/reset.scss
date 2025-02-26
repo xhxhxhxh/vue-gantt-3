@@ -1,0 +1,105 @@
+body,
+ol,
+ul,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+th,
+td,
+dl,
+dd,
+form,
+fieldset,
+legend,
+input,
+textarea,
+select {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+html body {
+    font-size: 12px;
+    font-family: pingfang SC, helvetica neue, arial, hiragino sans gb, microsoft yahei ui, microsoft yahei, simsun, sans-serif, PingFangSC-Medium, PingFang SC, -apple-system, BlinkMacSystemFont, segoe ui, Roboto, Arial, noto sans, apple color emoji, segoe ui emoji, segoe ui symbol, noto color emoji;
+    background: #fff;
+    -webkit-text-size-adjust: 100%;
+}
+
+a {
+    // color: #2d374b;
+    text-decoration: none;
+}
+
+a:hover {
+    // color: #cd0200;
+    text-decoration: underline;
+}
+
+em {
+    font-style: normal;
+}
+
+li {
+    list-style: none;
+}
+
+img {
+    border: 0;
+    vertical-align: middle;
+    -webkit-user-drag: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+p {
+    word-wrap: break-word;
+}
+
+
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+*, :before, :after {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar-track {
+    // box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.22);
+    border-radius: 0px;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+    background: #FFFFFF;
+    border: 0;
+}
+
+::-webkit-scrollbar-thumb {
+    border: 2px solid #fff;
+    background-color: #C8D1DE;
+    border-radius: 0;
+
+}
+
+::-webkit-scrollbar-corner {
+    background-color: #F0EFEF;
+}
+
+
+

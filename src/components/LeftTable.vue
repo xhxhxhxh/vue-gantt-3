@@ -1,5 +1,5 @@
 <template>
-  <div ref="leftTableRef" class="m-gantt-left-table">
+  <div ref="leftTableRef" class="vg-left-table">
     <div v-show="showSecondLevel" class="first-level-header" :style="{height: headerHeight + 1 + 'px'}"></div>
     <ag-grid-vue
       class="ag-theme-alpine ag-theme-mgantttheme"
@@ -83,7 +83,7 @@ let cacheLastRowDom: HTMLDivElement | null = null;
 const domLayout = ref('normal');
 
 const gridOptions = {
-  rowClass: 'm-gantt-row',
+  rowClass: 'vg-row',
   doesExternalFilterPass,
   isExternalFilterPresent,
 };
@@ -369,7 +369,7 @@ defineExpose({
 
 </script>
 <style lang="scss">
-.m-gantt-left-table {
+.vg-left-table {
   height: 100%;
   display: flex;
   flex-direction: column;

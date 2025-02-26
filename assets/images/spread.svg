@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="11px" height="11px" viewBox="0 0 11 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>treeiconshrink</title>
+    <defs>
+        <linearGradient x1="50%" y1="18.182373%" x2="50%" y2="77.2186279%" id="linearGradient-1">
+            <stop stop-color="#986060" offset="0%"></stop>
+            <stop stop-color="#654040" offset="33.3212716%"></stop>
+            <stop stop-color="#000000" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="0%" y1="50%" x2="100%" y2="50%" id="linearGradient-2">
+            <stop stop-color="#A8B1BB" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="公共组件" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="左侧4" transform="translate(-30.000000, -84.000000)">
+            <g id="treeiconshrink" transform="translate(30.000000, 84.000000)">
+                <rect id="矩形" fill="url(#linearGradient-1)" fill-rule="nonzero" opacity="0" x="0" y="0" width="11" height="11"></rect>
+                <rect id="矩形" fill="url(#linearGradient-2)" x="1" y="1" width="9" height="9"></rect>
+                <path d="M8,4.99998438 L6.00009375,4.99998438 L4.99990625,5.00014063 L3,5.00014063 L3,6.00009375 L4.99990625,6.00009375 L6.00009375,6.00009375 L8,6.00009375 L8,4.99998438 Z M11,1.45519152e-11 L11,11 L0,11 L0,1.45519152e-11 L11,1.45519152e-11 Z M10,1 L1,1 L1,10 L10,10 L10,1 Z" id="形状" fill="#414F58" fill-rule="nonzero"></path>
+                <polygon id="路径" fill="#8F979C" fill-rule="nonzero" points="9 4.99998438 8.60001875 4.99998438 8.39998125 5.00014063 8 5.00014063 8 6.00009375 8.39998125 6.00009375 8.60001875 6.00009375 9 6.00009375"></polygon>
+                <polygon id="路径" fill="#8F979C" fill-rule="nonzero" points="3 4.99998438 2.60001875 4.99998438 2.39998125 5.00014063 2 5.00014063 2 6.00009375 2.39998125 6.00009375 2.60001875 6.00009375 3 6.00009375"></polygon>
+                <polygon id="路径" fill="#414F58" transform="translate(5.500000, 5.500039) rotate(90.000000) translate(-5.500000, -5.500039) " points="8 4.99998438 6.00009375 4.99998438 4.99990625 5.00014063 3 5.00014063 3 6.00009375 4.99990625 6.00009375 6.00009375 6.00009375 8 6.00009375"></polygon>
+                <polygon id="路径" fill="#8F979C" fill-rule="nonzero" transform="translate(5.500000, 8.500039) rotate(90.000000) translate(-5.500000, -8.500039) " points="6 7.99998438 5.60001875 7.99998438 5.39998125 8.00014063 5 8.00014063 5 9.00009375 5.39998125 9.00009375 5.60001875 9.00009375 6 9.00009375"></polygon>
+                <polygon id="路径" fill="#8F979C" fill-rule="nonzero" transform="translate(5.500000, 2.500039) rotate(90.000000) translate(-5.500000, -2.500039) " points="6 1.99998438 5.60001875 1.99998438 5.39998125 2.00014063 5 2.00014063 5 3.00009375 5.39998125 3.00009375 5.60001875 3.00009375 6 3.00009375"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,5 +1,5 @@
 import { isUndefined } from 'lodash';
-import { sleep } from '@/util';
+import { sleep } from '@/utils/common';
 
 const makeScroll = (
   dom: Element,

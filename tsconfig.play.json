@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "vue3-gantt-chart": ["./src"],
+      "vue3-gantt-chart/*": ["./src/*"]
+    },
+  },
+  "include": [
+    "play/**/*",
+    "play/**/*.vue",
+    "play/**/*.ts",
+    "play/**/*.tsx",
+  ],
+}
