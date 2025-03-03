@@ -24,6 +24,7 @@
         :edgeSpacing="edgeSpacing"
         :perHourSpacing="perHourSpacing"
         :ganttMinDate="ganttMinDate"
+        :ganttMaxDate="ganttMaxDate"
         :rowBuffer="rowBuffer"
         :ganttViewWidth="ganttViewWidth"
         :visibleRowIds="visibleRowIds"

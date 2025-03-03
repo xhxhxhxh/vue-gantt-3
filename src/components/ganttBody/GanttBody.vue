@@ -14,12 +14,14 @@
       :rowHeight="rowHeight"
       :perHourSpacing="perHourSpacing"
       :ganttMinDate="ganttMinDate"
+      :ganttMaxDate="ganttMaxDate"
       :rowBuffer="rowBuffer"
       :rowNodeMap="rowNodeMap"
       :visibleRowIds="visibleRowIds"
       :edgeSpacing="edgeSpacing"
       :styleOption="styleOption"
       :timePointComp="timePointComp"
+      :ganttBodyWidth="ganttBodyWidth"
     ></GanttTimeLineView>
   </div>
 </template>
@@ -37,6 +39,7 @@ export interface Props {
   perHourSpacing: number,
   rowBuffer: number,
   ganttMinDate: dayjs.Dayjs,
+  ganttMaxDate: dayjs.Dayjs | null,
   ganttViewWidth: number,
   rows: RowData[],
   rowNodeMap: Map<string, GanttRowNode>,

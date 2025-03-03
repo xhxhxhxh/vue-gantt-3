@@ -64,3 +64,11 @@ export function treeForEach<T>(
 
 // 等待 单位秒
 export const sleep = (s = 0) => new Promise(r => setTimeout(r, s * 1000));
+
+export const toMap = <K=string, V=any>(items: Array<V> | Set<V>, idKey = 'id'): Map<K, V> => {
+  const map = new Map<K, V>();
+  for (let it of items) {
+    map.set(it[idKey], it);
+  }
+  return map;
+};

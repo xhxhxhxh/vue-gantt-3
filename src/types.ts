@@ -92,6 +92,7 @@ export interface VisibleTimeLine {
   width: number,
   startDate: dayjs.Dayjs,
   endDate: dayjs.Dayjs,
+  timeLineNode: TimeLineNode,
   icon?: string,
   label?: string,
   styleOption?: TimeLineStyle,

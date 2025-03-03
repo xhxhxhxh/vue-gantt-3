@@ -11,12 +11,14 @@
            :style="{width: timeLine.width + 'px', transform: `translateX(${timeLine.translateX}px)`}"
            class="vg-time-line-row-time-line">
         <div v-if="timeLine.type === 'normal'" class="vg-time-line-normal" :style="{ backgroundColor: getTimeLineBackgroundColor(timeLine)}">
+          <div class="vg-move-block" @mousedown="e => startTimeLineMove(e, timeLine, row.id, 'left')"></div>
           <div v-show="styleOption?.barsLabeling !== 'none'"
                class="vg-time-line-label"
                :class="{toLeft: styleOption?.barsLabeling === 'beforeTheBar', toRight: styleOption?.barsLabeling === 'afterTheBar'}">
             <img v-show="styleOption?.barsLabeling === 'insideBarWithIcon' && timeLine.icon" :src="timeLine.icon" alt="">
             <span>{{ timeLine.label || '' }}</span>
           </div>
+          <div class="vg-move-block" @mousedown="e => startTimeLineMove(e, timeLine, row.id, 'right')"></div>
           <div v-for="timePoint in timeLine.timePointNodes?.filter((() => styleOption?.showTimePoints))"
                :key="timePoint.id"
                class="vg-time-line-normal-time-points"
@@ -43,7 +45,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { GanttRowNode, VisibleRow, TimeLine, TimeLineNode, VisibleTimeLine, MGanttStyleOption, TimePointNode, TimePoint, RowData } from '@/types';
 import minMax from 'dayjs/plugin/minMax';
 import isBetween from 'dayjs/plugin/isBetween';
-import { treeForEach } from '@/utils/common';
+import { getRound, toMap, treeForEach } from '@/utils/common';
 
 dayjs.extend(minMax);
 dayjs.extend(isBetween);
@@ -51,6 +53,7 @@ dayjs.extend(isBetween);
 export interface Props {
   rowHeight: number,
   ganttMinDate: dayjs.Dayjs,
+  ganttMaxDate: dayjs.Dayjs | null,
   perHourSpacing: number,
   rowBuffer: number,
   visibleRowIds: string[],
@@ -72,6 +75,10 @@ const visibleRows = shallowRef<VisibleRow[]>([]);
 const visibleTimeLineMap = shallowRef<Map<string, VisibleTimeLine[]>>(new Map());
 const bufferWidth = 200;
 const selectedRowIds = inject('selectedRowIds') as Ref<Set<string>>;
+const minTimeLineWidth = 20;
+let timeLineMoving = false;
+let movingTimeLine: VisibleTimeLine | null = null;
+let movingTimeLineRowId = '';
 
 const timePointSize = computed(() => {
   return props.styleOption?.timePointSize || 28;
@@ -145,10 +152,9 @@ const sortTimeLinesInRowNode = (rowNode: GanttRowNode) => {
         timeLineNodes.push(timeLineNode);
       }
     }
-
-    timeLineNodes.sort((date1, date2) => {
-      if (date1.startDate.isSame(date2.startDate)) return 0;
-      if (date1.startDate.isBefore(date2.startDate)) {
+    timeLineNodes.sort((timeLine1, timeLine2) => {
+      if (timeLine1.startDate.isSame(timeLine2.startDate)) return 0;
+      if (timeLine1.startDate.isBefore(timeLine2.startDate)) {
         return -1;
       } else {
         return 1;
@@ -277,8 +283,12 @@ const freshVisibleTimeLines = (freshAll = true) => {
       const visibleTimeLines: VisibleTimeLine[] = [];
       const startIndex = getTimeLineIndexInView(timeLineNodes, startDateInView, 'min');
       const endIndex = getTimeLineIndexInView(timeLineNodes, endDateInView, 'max');
+      const hasMovingTimeLine = movingTimeLineRowId === rowId;
       for (let i = startIndex; i < endIndex; i++) {
         const currentTimeNode = timeLineNodes[i];
+
+        if (hasMovingTimeLine && currentTimeNode.id === movingTimeLine?.id) continue;
+
         const currentStartDate = currentTimeNode.startDate;
         const currentEndDate = currentTimeNode.endDate;
         const translateX = currentStartDate.diff(startDate, 'hour', true) * perHourSpacing;
@@ -306,6 +316,7 @@ const freshVisibleTimeLines = (freshAll = true) => {
           id: currentTimeNode.id,
           startDate: currentTimeNode.startDate,
           endDate: currentTimeNode.endDate,
+          timeLineNode: currentTimeNode,
           width,
           translateX,
           styleOption: currentTimeNode.styleOption,
@@ -314,6 +325,9 @@ const freshVisibleTimeLines = (freshAll = true) => {
           icon: currentTimeNode.icon,
           label: currentTimeNode.label,
         });
+      }
+      if (hasMovingTimeLine) {
+        visibleTimeLines.push(movingTimeLine!);
       }
       newVisibleTimeLineMap.set(rowId, visibleTimeLines);
     }
@@ -419,6 +433,112 @@ const freshTimeLines = (rowNodes: GanttRowNode[]) => {
   freshTimeLineViewAfterScrollTop();
 };
 
+const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: string, direction: 'left' | 'right') => {
+  let lastX = e.clientX;
+  const oldTranslateX = timeLine.translateX;
+  const oldWidth = timeLine.width;
+  const currentTimeLineNode = timeLine.timeLineNode;
+  const { edgeSpacing, perHourSpacing } = props;
+  const { minWidth, leftMaxWidth, rightMaxWidth } = getTimeLineLimitWidth(currentTimeLineNode);
+  const maxWidth = direction === 'left' ? leftMaxWidth : rightMaxWidth;
+  const wrapWidth = wrapRef.value!.offsetWidth;
+  movingTimeLine = timeLine;
+  movingTimeLineRowId = rowId;
+  const onMouseMove = (event: MouseEvent) => {
+    let currentX = event.clientX;
+    const diffX = currentX - lastX;
+    lastX = currentX;
+    console.log('onMouseMove');
+    timeLineStretch(timeLine, diffX, minWidth, maxWidth, direction);
+    if (direction === 'left' && timeLine.translateX - wrapRef.value!.scrollLeft <= edgeSpacing) {
+      if (!timeLineMoving) {
+        timeLineMoving = true;
+        closeEdgeScroll(-10, (moveSpacing) => {
+          timeLineStretch(timeLine, moveSpacing, minWidth, maxWidth, direction);
+        });
+      }
+    } else if (direction === 'right' && scrollViewScrollLeft.value + wrapWidth <= timeLine.translateX + timeLine.width + edgeSpacing) {
+      if (!timeLineMoving) {
+        timeLineMoving = true;
+        closeEdgeScroll(10, (moveSpacing) => {
+          timeLineStretch(timeLine, moveSpacing, minWidth, maxWidth, direction);
+        });
+      }
+    } else {
+      timeLineMoving = false;
+    }
+
+  };
+  const onMouseUp = () => {
+    timeLineMoving = false;
+    movingTimeLine = null;
+    movingTimeLineRowId = '';
+    if (direction === 'left' && timeLine.translateX !== oldTranslateX) {
+      const diffTranslate = timeLine.translateX - oldTranslateX;
+      const diffSecond = diffTranslate / perHourSpacing * 60 * 60;
+      const newStartDate = currentTimeLineNode.startDate.add(diffSecond, 'second');
+      currentTimeLineNode.startDate = newStartDate;
+    }
+    if (direction === 'right' && timeLine.width !== oldWidth) {
+      const diffWidth = timeLine.width - oldWidth;
+      const diffSecond = diffWidth / perHourSpacing * 60 * 60;
+      const newEndDate = currentTimeLineNode.endDate.add(diffSecond, 'second');
+      currentTimeLineNode.endDate = newEndDate;
+    }
+    window.removeEventListener('mousemove', onMouseMove);
+    window.removeEventListener('mouseup', onMouseUp);
+  };
+
+  window.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('mouseup', onMouseUp);
+};
+
+const timeLineStretch = (timeLine: VisibleTimeLine, distance: number, minWidth: number, maxWidth: number, direction: 'left' | 'right') => {
+  const oldWidth = timeLine.width;
+  const { edgeSpacing } = props;
+  if (direction === 'left') {
+    timeLine.width -= distance;
+  } else {
+    timeLine.width += distance;
+  }
+  if (timeLine.width < minWidth) {
+    timeLine.width = minWidth;
+  }
+  if (timeLine.width > maxWidth) {
+    timeLine.width = maxWidth;
+  }
+  if (direction === 'left') {
+    timeLine.translateX += oldWidth - timeLine.width;
+  }
+  if (timeLine.translateX < edgeSpacing) {
+    timeLine.translateX = edgeSpacing;
+  }
+  triggerRef(visibleTimeLineMap);
+};
+
+const getTimeLineLimitWidth = (timeLine: TimeLineNode) => {
+  const { edgeSpacing, ganttMaxDate, ganttMinDate, perHourSpacing } = props;
+  const rightMaxWidth = getRound((ganttMaxDate?.diff(timeLine.startDate, 'hour', true) || 0) * perHourSpacing);
+  const leftMaxWidth = getRound((timeLine.endDate?.diff(ganttMinDate, 'hour', true) || 0) * perHourSpacing);
+  const minWidth = edgeSpacing;
+  return {
+    rightMaxWidth,
+    leftMaxWidth,
+    minWidth
+  };
+};
+
+const closeEdgeScroll = (perMoveSpacing: number, callBack: (moveSpacing: number) => any) => {
+  if (timeLineMoving) {
+    console.log('moving');
+    wrapRef.value!.scrollLeft += perMoveSpacing;
+    callBack(perMoveSpacing);
+    requestAnimationFrame(() => {
+      closeEdgeScroll(perMoveSpacing, callBack);
+    });
+  }
+};
+
 defineExpose({
   onScroll,
   onResize,
@@ -442,7 +562,7 @@ defineExpose({
       position: absolute;
       left: 0;
       height: 100%;
-
+      user-select: none;
       .vg-time-line-normal {
         position: absolute;
         width: 100%;
@@ -461,6 +581,20 @@ defineExpose({
           > img {
             width: 100%;
             height: 100%;
+          }
+        }
+        .vg-move-block {
+          position: absolute;
+          width: 8px;
+          height: 100%;
+          cursor: e-resize;
+          &:first-of-type {
+            left: 0;
+            transform: translateX(-50%);
+          }
+          &:last-of-type {
+            right: 0;
+            transform: translateX(50%);
           }
         }
       }
