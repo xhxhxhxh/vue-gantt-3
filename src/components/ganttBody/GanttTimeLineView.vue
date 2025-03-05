@@ -75,7 +75,6 @@ const visibleRows = shallowRef<VisibleRow[]>([]);
 const visibleTimeLineMap = shallowRef<Map<string, VisibleTimeLine[]>>(new Map());
 const bufferWidth = 200;
 const selectedRowIds = inject('selectedRowIds') as Ref<Set<string>>;
-const minTimeLineWidth = 20;
 let timeLineMoving = false;
 let movingTimeLine: VisibleTimeLine | null = null;
 let movingTimeLineRowId = '';
@@ -442,6 +441,7 @@ const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: stri
   const { minWidth, leftMaxWidth, rightMaxWidth } = getTimeLineLimitWidth(currentTimeLineNode);
   const maxWidth = direction === 'left' ? leftMaxWidth : rightMaxWidth;
   const wrapWidth = wrapRef.value!.offsetWidth;
+  let invalidDistance = 0;
   movingTimeLine = timeLine;
   movingTimeLineRowId = rowId;
   const onMouseMove = (event: MouseEvent) => {
@@ -449,18 +449,43 @@ const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: stri
     const diffX = currentX - lastX;
     lastX = currentX;
     console.log('onMouseMove');
-    timeLineStretch(timeLine, diffX, minWidth, maxWidth, direction);
-    if (direction === 'left' && timeLine.translateX - wrapRef.value!.scrollLeft <= edgeSpacing) {
+    const perInvalidDistance = calcPerInvalidDistance(timeLine.width, diffX, minWidth, direction);
+    if (invalidDistance === 0) {
+      timeLineStretch(timeLine, diffX, minWidth, maxWidth, direction);
+    }
+    const nextInvalidDistance = invalidDistance + perInvalidDistance;
+    if ((nextInvalidDistance >= 0 && direction === 'left')
+    || (nextInvalidDistance <= 0 && direction === 'right')) {
+      invalidDistance += perInvalidDistance;
+    } else if ((invalidDistance > 0 && nextInvalidDistance < 0 && direction === 'left')
+    || (invalidDistance < 0 && nextInvalidDistance > 0 && direction === 'right')) {
+      timeLineStretch(timeLine, nextInvalidDistance, minWidth, maxWidth, direction);
+      invalidDistance = 0;
+    }
+
+    const scrollLeft = wrapRef.value!.scrollLeft;
+    const scrollDistance = 10;
+    if ((direction === 'left' && timeLine.translateX - scrollLeft <= edgeSpacing)
+    || (direction === 'right' && timeLine.translateX + timeLine.width - scrollLeft <= edgeSpacing)) {
       if (!timeLineMoving) {
         timeLineMoving = true;
-        closeEdgeScroll(-10, (moveSpacing) => {
+        closeEdgeScroll(-scrollDistance, (moveSpacing) => {
+          if (direction === 'right' && timeLine.width - scrollDistance < minWidth) {
+            timeLineMoving = false;
+            invalidDistance -= minWidth - timeLine.width + scrollDistance;
+          }
           timeLineStretch(timeLine, moveSpacing, minWidth, maxWidth, direction);
         });
       }
-    } else if (direction === 'right' && scrollViewScrollLeft.value + wrapWidth <= timeLine.translateX + timeLine.width + edgeSpacing) {
+    } else if ((direction === 'right' && scrollLeft + wrapWidth <= timeLine.translateX + timeLine.width + edgeSpacing)
+     || (direction === 'left' && scrollLeft + wrapWidth <= timeLine.translateX + edgeSpacing)) {
       if (!timeLineMoving) {
         timeLineMoving = true;
-        closeEdgeScroll(10, (moveSpacing) => {
+        closeEdgeScroll(scrollDistance, (moveSpacing) => {
+          if (direction === 'left' && timeLine.width - scrollDistance < minWidth) {
+            timeLineMoving = false;
+            invalidDistance += minWidth - timeLine.width + scrollDistance;
+          }
           timeLineStretch(timeLine, moveSpacing, minWidth, maxWidth, direction);
         });
       }
@@ -493,6 +518,14 @@ const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: stri
   window.addEventListener('mouseup', onMouseUp);
 };
 
+const calcPerInvalidDistance = (timeLineWidth: number, distance: number, minWidth: number, direction: 'left' | 'right') => {
+  if (direction === 'left') {
+    return minWidth - timeLineWidth + distance;
+  } else {
+    return timeLineWidth + distance - minWidth;
+  }
+};
+
 const timeLineStretch = (timeLine: VisibleTimeLine, distance: number, minWidth: number, maxWidth: number, direction: 'left' | 'right') => {
   const oldWidth = timeLine.width;
   const { edgeSpacing } = props;
@@ -517,10 +550,10 @@ const timeLineStretch = (timeLine: VisibleTimeLine, distance: number, minWidth: 
 };
 
 const getTimeLineLimitWidth = (timeLine: TimeLineNode) => {
-  const { edgeSpacing, ganttMaxDate, ganttMinDate, perHourSpacing } = props;
+  const { ganttMaxDate, ganttMinDate, perHourSpacing } = props;
   const rightMaxWidth = getRound((ganttMaxDate?.diff(timeLine.startDate, 'hour', true) || 0) * perHourSpacing);
   const leftMaxWidth = getRound((timeLine.endDate?.diff(ganttMinDate, 'hour', true) || 0) * perHourSpacing);
-  const minWidth = edgeSpacing;
+  const minWidth = 4;
   return {
     rightMaxWidth,
     leftMaxWidth,
@@ -585,16 +618,16 @@ defineExpose({
         }
         .vg-move-block {
           position: absolute;
-          width: 8px;
+          width: 6px;
           height: 100%;
-          cursor: e-resize;
+          cursor: ew-resize;
           &:first-of-type {
             left: 0;
-            transform: translateX(-50%);
+            transform: translateX(-100%);
           }
           &:last-of-type {
             right: 0;
-            transform: translateX(50%);
+            transform: translateX(100%);
           }
         }
       }
