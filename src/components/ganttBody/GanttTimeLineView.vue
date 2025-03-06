@@ -65,6 +65,11 @@ export interface Props {
 console.log('ganttTimeLine');
 const props = defineProps<Props>();
 
+const emit = defineEmits<{
+  (event: 'updateMinDate', date: dayjs.Dayjs): void,
+  (event: 'updateMaxDate', date: dayjs.Dayjs): void,
+}>();
+
 const wrapRef = inject('wrapRef') as Ref<HTMLDivElement | undefined>;
 
 const scrollViewScrollTop = ref(0);

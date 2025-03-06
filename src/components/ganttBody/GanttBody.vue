@@ -22,6 +22,8 @@
       :styleOption="styleOption"
       :timePointComp="timePointComp"
       :ganttBodyWidth="ganttBodyWidth"
+      @update-min-date="updateMinDate"
+      @update-max-date="updateMaxDate"
     ></GanttTimeLineView>
   </div>
 </template>
@@ -48,6 +50,12 @@ export interface Props {
   timePointComp?: any
 }
 console.log('ganttBody');
+
+const emit = defineEmits<{
+  (event: 'updateMinDate', date: dayjs.Dayjs): void,
+  (event: 'updateMaxDate', date: dayjs.Dayjs): void,
+}>();
+
 const props = defineProps<Props>();
 
 const wrapRef = inject('wrapRef') as Ref<HTMLDivElement | undefined>;
@@ -113,6 +121,14 @@ const freshTimeLines = (rowNodes: GanttRowNode[]) => {
   if (ganttTimeLineViewRef.value) {
     ganttTimeLineViewRef.value.freshTimeLines(rowNodes);
   }
+};
+
+const updateMinDate = (minDate: dayjs.Dayjs) => {
+  emit('updateMinDate', minDate);
+};
+
+const updateMaxDate = (maxDate: dayjs.Dayjs) => {
+  emit('updateMinDate', maxDate);
 };
 
 defineExpose({

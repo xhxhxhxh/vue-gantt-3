@@ -30,6 +30,8 @@
         :visibleRowIds="visibleRowIds"
         :styleOption="styleOption"
         :timePointComp="timePointComp"
+        @update-min-date="updateMinDate"
+        @update-max-date="updateMaxDate"
       ></GanttBody>
     </ScrollBar>
   </div>
@@ -113,6 +115,14 @@ const updateMinAndMaxDate = () => {
     ganttMaxDate.value = maxEndDate;
   }
   console.log('min, max date', ganttMinDate.value, ganttMaxDate.value);
+};
+
+const updateMinDate = (minDate: dayjs.Dayjs) => {
+  ganttMinDate.value = minDate;
+};
+
+const updateMaxDate = (maxDate: dayjs.Dayjs) => {
+  ganttMaxDate.value = maxDate;
 };
 
 const updateGanttViewWidth = () => {

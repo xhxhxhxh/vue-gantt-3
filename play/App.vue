@@ -16,7 +16,7 @@
 <script lang="ts" setup>
 import { ref, onBeforeMount, shallowRef, markRaw } from 'vue';
 import { ColumnData, DefaultCol, RowData } from 'vue3-gantt-chart/types';
-import dayjs from 'dayjs';
+import { getSingleRow, getMultiRows, getLargeNumRows, getEmptyRows } from './utils/mockData';
 
 const getRowId = (rowData: RowData) => (rowData as RowData).id;
 const columns = ref<ColumnData[]>([
@@ -48,77 +48,8 @@ const defaultCol = ref<DefaultCol>({
 const rows = shallowRef<RowData[]>([]); // 对于数据量大的情况此处需要用shallowRef，可极大提高初始打开甘特图性能
 
 onBeforeMount(() => {
-  getRows();
+  rows.value = getSingleRow();
 });
-
-const getRows = () => {
-  console.time('getRows');
-  const rowDatas: RowData[] = [];
-  for (let i = 0; i < 50; i++) {
-    const newRow = createRow(i + 1);
-    newRow.children = [createRow('firstChild' + i), createRow('secondChild' + i)];
-    newRow.children[0].children = [createRow('thirdChild' + i)];
-    rowDatas.push(newRow);
-  }
-  rows.value = rowDatas;
-  console.log('rowDatas', rowDatas);
-  console.timeEnd('getRows');
-};
-
-const getEmptyRows = (emptyRowCount: number) => {
-  const newEmptyRows: RowData[] = [];
-  for (let i = 0; i < emptyRowCount; i++) {
-    newEmptyRows.push({ id: 'empty-row-' + i, modelId: '', loaded: 1 });
-  }
-  return newEmptyRows;
-};
-
-const createRow = (id: string | number): RowData => {
-  return {
-    id: id.toString(),
-    name: '张三',
-    displayStartDate: '2023-06-08',
-    displayEndDate: '2023-09-20',
-    timeLines: createTimeLine(),
-  };
-};
-
-const createTimeLine = (num = 10) => {
-  const timeLines: any[] = [];
-  let startYear = 2022;
-  for (let i = 1; i <= num; i++) {
-    const startDate = createRandomDate(`${startYear}-01-01`, `${startYear}-12-31`);
-    startYear++;
-    const endDate = createRandomDate(`${startYear}-01-01`, `${startYear}-12-31`);
-    startYear++;
-    timeLines.push({
-      startDate,
-      endDate,
-      timePoints: [],
-      id: 'timeline' + i
-    });
-  }
-  return timeLines;
-};
-
-const createRandomDate = (minDate: string, maxDate: string) => {
-  const minSecond = dayjs(minDate).unix();
-  const maxSecond = dayjs(maxDate).unix();
-
-  if (minSecond < 0 || maxSecond < 0) {
-    return '';
-  }
-
-  const diffSecond = maxSecond - minSecond;
-
-  if (diffSecond < 0) {
-    return '';
-  }
-
-  const randomSecond = Math.floor(Math.random() * diffSecond);
-  const currentSecond = minSecond + randomSecond;
-  return dayjs.unix(currentSecond).format('YYYY-MM-DD HH:mm:ss');
-};
 
 const onSelectChange = (selectedIds: string[]) => {
   selectedRowIds.value.splice(0);

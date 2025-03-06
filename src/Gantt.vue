@@ -669,6 +669,7 @@ defineOptions({
 </script>
 <style lang="scss">
 .vue3-gantt-chart {
+  width: 100%;
   height: 100%;
   display: flex;
   overflow: hidden;
