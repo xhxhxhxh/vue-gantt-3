@@ -175,12 +175,12 @@ const onRowsChange = (newRows: RowData[], oldRows: RowData[]) => {
   const topLevelRowNodeFromDelete: GanttRowNode[] = [];
   const topLevelRowNodeFromOldDelete: GanttRowNode[] = [];
   for (let rowId of newAddRowIds) {
-    const topParentRowNode = getTopLevelId(rowId, newRowNodeMap);
+    const topParentRowNode = getTopLevelRow(rowId, newRowNodeMap);
     topParentRowNode && topLevelRowNodeFromAdd.push(topParentRowNode);
   }
 
   for (let rowId of newDeleteRowIds) {
-    const oldTopParentRowNode = getTopLevelId(rowId, oldRowNodeMap);
+    const oldTopParentRowNode = getTopLevelRow(rowId, oldRowNodeMap);
     oldTopParentRowNode && topLevelRowNodeFromOldDelete.push(oldTopParentRowNode);
 
     const topParentRowNode = oldTopParentRowNode && newRowNodeMap.get(oldTopParentRowNode.id);
@@ -339,7 +339,7 @@ const freshRowNodes = (rows: RowData[]) => {
         oldStartDate,
         oldEndDate
       });
-      const topLevelRowNode = getTopLevelId(currentRowNode.id, rowNodeMap.value);
+      const topLevelRowNode = getTopLevelRow(currentRowNode.id, rowNodeMap.value);
       topLevelRowNode && needUpdateTopRowNodes.add(topLevelRowNode);
     }
 
@@ -364,13 +364,18 @@ const freshTimeLines = (rowIds: string[]) => {
 };
 
 // 返回最顶层的RowNode
-const getTopLevelId = (rowId: string, currentRowNodeMap: Map<string, GanttRowNode>) => {
+const getTopLevelRow = (rowId: string, currentRowNodeMap: Map<string, GanttRowNode>) => {
   let currentRowNode = currentRowNodeMap.get(rowId);
   while (currentRowNode?.parentId) {
     currentRowNode = currentRowNodeMap.get(currentRowNode.parentId);
   }
   return currentRowNode;
 };
+
+provide(
+  'getTopLevelRow',
+  getTopLevelRow
+);
 
 const refreshRowNodeDate = (rowNodes: GanttRowNode[]) => {
   for (let rowNode of rowNodes) {
@@ -649,6 +654,35 @@ const getDisplayRows = () => {
     return null;
   }
 };
+
+const updateRowNodeDateByTimeLine = (rowId: string, startDate?: dayjs.Dayjs, endDate?: dayjs.Dayjs) => {
+  const currentRowNode = rowNodeMap.value.get(rowId);
+
+  if (startDate) {
+    if (currentRowNode && startDate.isBefore(currentRowNode.startDate)) {
+      currentRowNode.startDate = startDate;
+      if (currentRowNode.parentId) {
+        updateRowNodeDateByTimeLine(currentRowNode.parentId, startDate);
+
+      }
+    }
+  }
+  if (endDate) {
+    if (currentRowNode && endDate.isAfter(currentRowNode.endDate)) {
+      currentRowNode.endDate = endDate;
+      if (currentRowNode.parentId) {
+        updateRowNodeDateByTimeLine(currentRowNode.parentId, endDate);
+
+      }
+    }
+
+  }
+};
+
+provide(
+  'updateRowNodeDateByTimeLine',
+  updateRowNodeDateByTimeLine
+);
 
 defineExpose({
   getRowNode,

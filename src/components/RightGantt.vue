@@ -41,7 +41,7 @@ import ScrollBar from './scrollbar/ScrollBar.vue';
 import GanttHeader from './GanttHeader.vue';
 import type { RowData, ColumnData, DefaultCol, GanttRowNode, MGanttStyleOption } from '../types';
 import dayjs from 'dayjs';
-import { ref, onBeforeMount, computed, onMounted, onBeforeUnmount, watch, shallowRef, inject, toRef } from 'vue';
+import { ref, onBeforeMount, computed, onMounted, onBeforeUnmount, watch, shallowRef, inject, toRef, provide } from 'vue';
 import minMax from 'dayjs/plugin/minMax';
 import GanttBody from './ganttBody/GanttBody.vue';
 import { getRound } from '@/utils/common';
@@ -104,6 +104,15 @@ watch(() => props.defaultPerHourSpacing, (val) => {
   perHourSpacing.value = val;
 });
 
+const getGanttMinAndMaxDate = (excludeRowIds: string[] = [], freshStartDate = true, freshEndDate = true) => {
+  return getMinAndMaxDate(props.firstLevelRowNode, excludeRowIds, freshStartDate, freshEndDate);
+};
+
+provide(
+  'getGanttMinAndMaxDate',
+  getGanttMinAndMaxDate
+);
+
 const updateMinAndMaxDate = () => {
   console.time('getMinAndMaxDate');
   const { minStartDate, maxEndDate } = getMinAndMaxDate(props.firstLevelRowNode);
@@ -137,19 +146,20 @@ const updateGanttViewWidth = () => {
 
 watch([perHourSpacing, ganttMinDate, ganttMaxDate, edgeSpacing], updateGanttViewWidth);
 
-const getMinAndMaxDate = (expectRowNodes: GanttRowNode[], freshStartDate = true, freshEndDate = true) => {
+const getMinAndMaxDate = (expectRowNodes: GanttRowNode[], excludeRowIds: string[] = [], freshStartDate = true, freshEndDate = true) => {
   const startDateArr: dayjs.Dayjs[] = [];
   const endDateArr: dayjs.Dayjs[] = [];
+  const excludeRowIdsSet = new Set(excludeRowIds || []);
 
   if (freshStartDate) {
     for (let rowNode of expectRowNodes) {
-      rowNode.startDate && startDateArr.push(rowNode.startDate);
+      rowNode.startDate && !excludeRowIdsSet.has(rowNode.id) && startDateArr.push(rowNode.startDate);
     }
   }
 
   if (freshEndDate) {
     for (let rowNode of expectRowNodes) {
-      rowNode.endDate && endDateArr.push(rowNode.endDate);
+      rowNode.endDate && !excludeRowIdsSet.has(rowNode.id) && endDateArr.push(rowNode.endDate);
     }
   }
 
@@ -188,7 +198,7 @@ const updateMinAndMaxDateByChangeRowNode = ({ addedRowNodes = [], deletedRowNode
   }
 
   if (freshStartDate || freshEndDate) {
-    const { minStartDate, maxEndDate } = getMinAndMaxDate(freshRowNodes, freshStartDate, freshEndDate);
+    const { minStartDate, maxEndDate } = getMinAndMaxDate(freshRowNodes, [], freshStartDate, freshEndDate);
     if (minStartDate) {
       ganttMinDate.value = minStartDate;
     }

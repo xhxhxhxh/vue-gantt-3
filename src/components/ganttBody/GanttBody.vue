@@ -21,7 +21,7 @@
       :edgeSpacing="edgeSpacing"
       :styleOption="styleOption"
       :timePointComp="timePointComp"
-      :ganttBodyWidth="ganttBodyWidth"
+      :ganttViewWidth="ganttViewWidth"
       @update-min-date="updateMinDate"
       @update-max-date="updateMaxDate"
     ></GanttTimeLineView>
@@ -128,7 +128,7 @@ const updateMinDate = (minDate: dayjs.Dayjs) => {
 };
 
 const updateMaxDate = (maxDate: dayjs.Dayjs) => {
-  emit('updateMinDate', maxDate);
+  emit('updateMaxDate', maxDate);
 };
 
 defineExpose({
