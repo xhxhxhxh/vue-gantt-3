@@ -44,7 +44,7 @@ import dayjs from 'dayjs';
 import { ref, onBeforeMount, computed, onMounted, onBeforeUnmount, watch, shallowRef, inject, toRef, provide } from 'vue';
 import minMax from 'dayjs/plugin/minMax';
 import GanttBody from './ganttBody/GanttBody.vue';
-import { getRound } from '@/utils/common';
+import { getRound, treeForEach } from '@/utils/common';
 
 dayjs.extend(minMax);
 
@@ -104,8 +104,43 @@ watch(() => props.defaultPerHourSpacing, (val) => {
   perHourSpacing.value = val;
 });
 
+const getTopLevelRow = inject('getTopLevelRow') as (rowId: string, currentRowNodeMap: Map<string, GanttRowNode>) => GanttRowNode;
+
 const getGanttMinAndMaxDate = (excludeRowIds: string[] = [], freshStartDate = true, freshEndDate = true) => {
-  return getMinAndMaxDate(props.firstLevelRowNode, excludeRowIds, freshStartDate, freshEndDate);
+  const excludeRowIdSet = new Set(excludeRowIds);
+  const excludeFirstLevelRowId = excludeRowIds.map((rowId) => getTopLevelRow(rowId, props.rowNodeMap).id);
+  const excludeFirstLevelRowIdSet = new Set(excludeFirstLevelRowId);
+  const needFirstLevelRowNode: GanttRowNode[] = [];
+  const excludeFirstLevelRowNode: GanttRowNode[] = [];
+  for (let rowNode of props.firstLevelRowNode) {
+    if (excludeFirstLevelRowIdSet.has(rowNode.id)) {
+      excludeFirstLevelRowNode.push(rowNode);
+    } else {
+      needFirstLevelRowNode.push(rowNode);
+    }
+  }
+
+  const { minStartDate, maxEndDate } = getMinAndMaxDate(needFirstLevelRowNode, freshStartDate, freshEndDate);
+  let allMinStartDates: dayjs.Dayjs[] = [];
+  let allMaxEndDates: dayjs.Dayjs[] = [];
+
+  if (minStartDate) {
+    allMinStartDates.push(minStartDate);
+  }
+  if (maxEndDate) {
+    allMaxEndDates.push(maxEndDate);
+  }
+
+  treeForEach(excludeFirstLevelRowNode, (rowNode) => {
+    if (!rowNode.hasChildren && !excludeRowIdSet.has(rowNode.id)) {
+      rowNode.startDate && allMinStartDates.push(rowNode.startDate);
+      rowNode.endDate && allMaxEndDates.push(rowNode.endDate);
+    }
+  });
+  return {
+    minStartDate: dayjs.min(allMinStartDates),
+    maxEndDate: dayjs.max(allMaxEndDates)
+  };
 };
 
 provide(
@@ -146,20 +181,18 @@ const updateGanttViewWidth = () => {
 
 watch([perHourSpacing, ganttMinDate, ganttMaxDate, edgeSpacing], updateGanttViewWidth);
 
-const getMinAndMaxDate = (expectRowNodes: GanttRowNode[], excludeRowIds: string[] = [], freshStartDate = true, freshEndDate = true) => {
+const getMinAndMaxDate = (expectRowNodes: GanttRowNode[], freshStartDate = true, freshEndDate = true) => {
   const startDateArr: dayjs.Dayjs[] = [];
   const endDateArr: dayjs.Dayjs[] = [];
-  const excludeRowIdsSet = new Set(excludeRowIds || []);
-
   if (freshStartDate) {
     for (let rowNode of expectRowNodes) {
-      rowNode.startDate && !excludeRowIdsSet.has(rowNode.id) && startDateArr.push(rowNode.startDate);
+      rowNode.startDate && startDateArr.push(rowNode.startDate);
     }
   }
 
   if (freshEndDate) {
     for (let rowNode of expectRowNodes) {
-      rowNode.endDate && !excludeRowIdsSet.has(rowNode.id) && endDateArr.push(rowNode.endDate);
+      rowNode.endDate && endDateArr.push(rowNode.endDate);
     }
   }
 
@@ -198,7 +231,7 @@ const updateMinAndMaxDateByChangeRowNode = ({ addedRowNodes = [], deletedRowNode
   }
 
   if (freshStartDate || freshEndDate) {
-    const { minStartDate, maxEndDate } = getMinAndMaxDate(freshRowNodes, [], freshStartDate, freshEndDate);
+    const { minStartDate, maxEndDate } = getMinAndMaxDate(freshRowNodes, freshStartDate, freshEndDate);
     if (minStartDate) {
       ganttMinDate.value = minStartDate;
     }

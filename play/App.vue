@@ -23,7 +23,8 @@ const columns = ref<ColumnData[]>([
   {
     field: 'name',
     headerName: '名称',
-    resizable: true
+    resizable: true,
+    cellRendererParams: { expandable: true }
   },
   {
     field: 'displayStartDate',
@@ -48,7 +49,7 @@ const defaultCol = ref<DefaultCol>({
 const rows = shallowRef<RowData[]>([]); // 对于数据量大的情况此处需要用shallowRef，可极大提高初始打开甘特图性能
 
 onBeforeMount(() => {
-  rows.value = getSingleRow();
+  rows.value = getLargeNumRows();
 });
 
 const onSelectChange = (selectedIds: string[]) => {

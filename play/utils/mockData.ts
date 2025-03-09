@@ -8,11 +8,11 @@ export const getSingleRow = () => {
 };
 
 export const getMultiRows = () => {
-  return createRows(30, 1, 'day');
+  return createRows(12, 1, 'month');
 };
 
 export const getLargeNumRows = () => {
-  return createRows(100, 10, 'month', true);
+  return createRows(10, 10, 'month', true);
 };
 
 const createRows = (number: number, timeLineNum: number, timeSpanUnit: TimeSpanUnit, createChildren = false) => {

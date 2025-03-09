@@ -74,8 +74,7 @@ const emit = defineEmits<{
 const wrapRef = inject('wrapRef') as Ref<HTMLDivElement | undefined>;
 const getGanttMinAndMaxDate = inject('getGanttMinAndMaxDate') as (excludeRowIds?: string[], freshStartDate?: boolean, freshEndDate?: boolean)
  => { minStartDate: dayjs.Dayjs | null, maxEndDate: dayjs.Dayjs | null };
-const getTopLevelRow = inject('getTopLevelRow') as (rowId: string, currentRowNodeMap: Map<string, GanttRowNode>) => GanttRowNode;
-const updateRowNodeDateByTimeLine = inject('updateRowNodeDateByTimeLine') as (rowId: string, startDate?: dayjs.Dayjs, endDate?: dayjs.Dayjs) => void;
+const freshRowNodeDateByTimeLine = inject('freshRowNodeDateByTimeLine') as (rowId: string) => void;
 
 const scrollViewScrollTop = ref(0);
 const scrollViewScrollLeft = ref(0);
@@ -445,25 +444,22 @@ const freshTimeLines = (rowNodes: GanttRowNode[]) => {
 const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: string, direction: 'left' | 'right') => {
   let lastX = e.clientX;
   const oldWidth = timeLine.width;
-  const currentTimeLineNode = timeLine.timeLineNode;
-  const { edgeSpacing, rowNodeMap } = props;
+  const { edgeSpacing } = props;
   const minWidth = 4;
   const wrapWidth = wrapRef.value!.offsetWidth;
   let invalidDistance = 0;
+  let startScrollX = 0;
   movingTimeLine = timeLine;
   movingTimeLineRowId = rowId;
-  const toplevelRowNode = getTopLevelRow(rowId, rowNodeMap);
-  const toplevelRowNodeId = toplevelRowNode.id;
 
   const onMouseMove = (event: MouseEvent) => {
     let currentX = event.clientX;
     const diffX = currentX - lastX;
-    lastX = currentX;
-    const oldTranslateX = timeLine.translateX;
     console.log('onMouseMove');
+
     const perInvalidDistance = calcPerInvalidDistance(timeLine.width, diffX, minWidth, direction);
     if (invalidDistance === 0) {
-      timeLineStretch(timeLine, toplevelRowNodeId, diffX, minWidth, direction);
+      timeLineStretch(timeLine, rowId, diffX, minWidth, direction);
     }
     const nextInvalidDistance = invalidDistance + perInvalidDistance;
     if ((nextInvalidDistance >= 0 && direction === 'left')
@@ -471,39 +467,52 @@ const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: stri
       invalidDistance += perInvalidDistance;
     } else if ((invalidDistance > 0 && nextInvalidDistance < 0 && direction === 'left')
     || (invalidDistance < 0 && nextInvalidDistance > 0 && direction === 'right')) {
-      timeLineStretch(timeLine, toplevelRowNodeId, nextInvalidDistance, minWidth, direction);
+      timeLineStretch(timeLine, rowId, nextInvalidDistance, minWidth, direction);
       invalidDistance = 0;
     }
 
     const scrollLeft = wrapRef.value!.scrollLeft;
     const scrollDistance = 10;
-    if ((direction === 'left' && oldTranslateX + diffX - scrollLeft <= edgeSpacing)
+    if ((direction === 'left' && timeLine.translateX - scrollLeft <= edgeSpacing)
     || (direction === 'right' && timeLine.translateX + timeLine.width - scrollLeft <= edgeSpacing)) {
-      if (!timeLineMoving) {
-        timeLineMoving = true;
-        closeEdgeScroll(-scrollDistance, (moveSpacing) => {
-          if (direction === 'right' && timeLine.width - scrollDistance < minWidth) {
-            timeLineMoving = false;
-            invalidDistance -= minWidth - timeLine.width + scrollDistance;
-          }
-          timeLineStretch(timeLine, toplevelRowNodeId, moveSpacing, minWidth, direction);
-        });
+      if (diffX < 0) {
+        if (!timeLineMoving) {
+          timeLineMoving = true;
+          startScrollX = lastX;
+          closeEdgeScroll(-scrollDistance, (moveSpacing) => {
+            if (direction === 'right' && timeLine.width - scrollDistance < minWidth) {
+              timeLineMoving = false;
+              invalidDistance -= minWidth - timeLine.width + scrollDistance;
+            }
+            timeLineStretch(timeLine, rowId, moveSpacing, minWidth, direction);
+          });
+        }
+      } else if (currentX >= startScrollX) {
+        timeLineMoving = false;
       }
+
     } else if ((direction === 'right' && scrollLeft + wrapWidth <= timeLine.translateX + timeLine.width + edgeSpacing)
      || (direction === 'left' && scrollLeft + wrapWidth <= timeLine.translateX + edgeSpacing)) {
-      if (!timeLineMoving) {
-        timeLineMoving = true;
-        closeEdgeScroll(scrollDistance, (moveSpacing) => {
-          if (direction === 'left' && timeLine.width - scrollDistance < minWidth) {
-            timeLineMoving = false;
-            invalidDistance += minWidth - timeLine.width + scrollDistance;
-          }
-          timeLineStretch(timeLine, toplevelRowNodeId, moveSpacing, minWidth, direction);
-        });
+      if (diffX > 0) {
+        if (!timeLineMoving) {
+          timeLineMoving = true;
+          startScrollX = lastX;
+          closeEdgeScroll(scrollDistance, (moveSpacing) => {
+            if (direction === 'left' && timeLine.width - scrollDistance < minWidth) {
+              timeLineMoving = false;
+              invalidDistance += minWidth - timeLine.width + scrollDistance;
+            }
+            timeLineStretch(timeLine, rowId, moveSpacing, minWidth, direction);
+          });
+        }
+      } else if (currentX <= startScrollX) {
+        timeLineMoving = false;
       }
+
     } else {
       timeLineMoving = false;
     }
+    lastX = currentX;
 
   };
   const onMouseUp = () => {
@@ -511,11 +520,7 @@ const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: stri
     movingTimeLine = null;
     movingTimeLineRowId = '';
     if (timeLine.width !== oldWidth) {
-      if (direction === 'left') {
-        updateRowNodeDateByTimeLine(rowId, currentTimeLineNode.startDate);
-      } else {
-        updateRowNodeDateByTimeLine(rowId, undefined, currentTimeLineNode.endDate);
-      }
+      freshRowNodeDateByTimeLine(rowId);
     }
     window.removeEventListener('mousemove', onMouseMove);
     window.removeEventListener('mouseup', onMouseUp);
@@ -540,7 +545,7 @@ const calcPerInvalidDistance = (timeLineWidth: number, distance: number, minWidt
   }
 };
 
-const timeLineStretch = (timeLine: VisibleTimeLine, toplevelRowNodeId: string, distance: number, minWidth: number, direction: 'left' | 'right') => {
+const timeLineStretch = (timeLine: VisibleTimeLine, rowId: string, distance: number, minWidth: number, direction: 'left' | 'right') => {
   const oldWidth = timeLine.width;
   const { edgeSpacing, ganttViewWidth } = props;
   if (direction === 'left') {
@@ -557,11 +562,13 @@ const timeLineStretch = (timeLine: VisibleTimeLine, toplevelRowNodeId: string, d
     timeLine.timeLineNode.startDate = nextStartDate;
     timeLine.startDate = nextStartDate;
     if (timeLine.translateX === edgeSpacing && diffWidth > 0) {
-      const { minStartDate } = getGanttMinAndMaxDate([toplevelRowNodeId], true, false);
+      const { minStartDate } = getGanttMinAndMaxDate([rowId], true, false);
       if (!minStartDate || nextStartDate.isBefore(minStartDate)) {
         emit('updateMinDate', nextStartDate);
         timeLine.translateX = edgeSpacing;
         return;
+      } else if (nextStartDate.isAfter(minStartDate)) {
+        emit('updateMinDate', minStartDate);
       }
     }
     timeLine.translateX += diffWidth;
@@ -569,11 +576,13 @@ const timeLineStretch = (timeLine: VisibleTimeLine, toplevelRowNodeId: string, d
     const nextEndDate = getDiffSecondByDistance(-diffWidth, timeLine.endDate);
     timeLine.timeLineNode.endDate = nextEndDate;
     timeLine.endDate = nextEndDate;
-    if (timeLine.translateX + getRound(oldWidth) + edgeSpacing === ganttViewWidth && diffWidth > 0) {
-      const { maxEndDate } = getGanttMinAndMaxDate([toplevelRowNodeId], false, true);
+    if (getRound(timeLine.translateX + oldWidth + edgeSpacing) === getRound(ganttViewWidth) && diffWidth > 0) {
+      const { maxEndDate } = getGanttMinAndMaxDate([rowId], false, true);
       if (!maxEndDate || nextEndDate.isAfter(maxEndDate)) {
         emit('updateMaxDate', nextEndDate);
         return;
+      } else if (nextEndDate.isBefore(maxEndDate)) {
+        emit('updateMaxDate', maxEndDate);
       }
     }
   }
@@ -586,18 +595,6 @@ const timeLineStretch = (timeLine: VisibleTimeLine, toplevelRowNodeId: string, d
 
   triggerRef(visibleTimeLineMap);
 };
-
-// const getTimeLineLimitWidth = (timeLine: TimeLineNode) => {
-//   const { ganttMaxDate, ganttMinDate, perHourSpacing } = props;
-//   const rightMaxWidth = getRound((ganttMaxDate?.diff(timeLine.startDate, 'hour', true) || 0) * perHourSpacing);
-//   const leftMaxWidth = getRound((timeLine.endDate?.diff(ganttMinDate, 'hour', true) || 0) * perHourSpacing);
-//   const minWidth = 4;
-//   return {
-//     rightMaxWidth,
-//     leftMaxWidth,
-//     minWidth
-//   };
-// };
 
 const closeEdgeScroll = (perMoveSpacing: number, callBack: (moveSpacing: number) => any) => {
   if (timeLineMoving) {

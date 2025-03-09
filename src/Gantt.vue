@@ -655,33 +655,31 @@ const getDisplayRows = () => {
   }
 };
 
-const updateRowNodeDateByTimeLine = (rowId: string, startDate?: dayjs.Dayjs, endDate?: dayjs.Dayjs) => {
+const freshRowNodeDateByTimeLine = (rowId: string) => {
   const currentRowNode = rowNodeMap.value.get(rowId);
+  const startDateArr: dayjs.Dayjs[] = [];
+  const endDateArr: dayjs.Dayjs[] = [];
 
-  if (startDate) {
-    if (currentRowNode && startDate.isBefore(currentRowNode.startDate)) {
-      currentRowNode.startDate = startDate;
-      if (currentRowNode.parentId) {
-        updateRowNodeDateByTimeLine(currentRowNode.parentId, startDate);
-
-      }
+  if (currentRowNode?.timeLineNodes) {
+    for (let timeLineNode of currentRowNode.timeLineNodes) {
+      startDateArr.push(timeLineNode.startDate);
+      endDateArr.push(timeLineNode.endDate);
     }
-  }
-  if (endDate) {
-    if (currentRowNode && endDate.isAfter(currentRowNode.endDate)) {
-      currentRowNode.endDate = endDate;
-      if (currentRowNode.parentId) {
-        updateRowNodeDateByTimeLine(currentRowNode.parentId, endDate);
-
-      }
-    }
-
+    const oldStartDate = currentRowNode.startDate;
+    const oldEndDate = currentRowNode.endDate;
+    Object.assign(currentRowNode, {
+      startDate: dayjs.min(startDateArr),
+      endDate: dayjs.max(endDateArr),
+      oldStartDate,
+      oldEndDate
+    });
+    refreshRowNodeDate([getTopLevelRow(rowId, rowNodeMap.value)!]);
   }
 };
 
 provide(
-  'updateRowNodeDateByTimeLine',
-  updateRowNodeDateByTimeLine
+  'freshRowNodeDateByTimeLine',
+  freshRowNodeDateByTimeLine
 );
 
 defineExpose({
