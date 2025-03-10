@@ -566,6 +566,7 @@ const timeLineStretch = (timeLine: VisibleTimeLine, rowId: string, distance: num
       if (!minStartDate || nextStartDate.isBefore(minStartDate)) {
         emit('updateMinDate', nextStartDate);
         timeLine.translateX = edgeSpacing;
+        updateParentTimeLine(rowId);
         return;
       } else if (nextStartDate.isAfter(minStartDate)) {
         emit('updateMinDate', minStartDate);
@@ -580,6 +581,7 @@ const timeLineStretch = (timeLine: VisibleTimeLine, rowId: string, distance: num
       const { maxEndDate } = getGanttMinAndMaxDate([rowId], false, true);
       if (!maxEndDate || nextEndDate.isAfter(maxEndDate)) {
         emit('updateMaxDate', nextEndDate);
+        updateParentTimeLine(rowId);
         return;
       } else if (nextEndDate.isBefore(maxEndDate)) {
         emit('updateMaxDate', maxEndDate);
@@ -592,7 +594,7 @@ const timeLineStretch = (timeLine: VisibleTimeLine, rowId: string, distance: num
   } else if (timeLine.translateX + timeLine.width + edgeSpacing > ganttViewWidth) {
     emit('updateMaxDate', timeLine.endDate);
   }
-
+  updateParentTimeLine(rowId);
   triggerRef(visibleTimeLineMap);
 };
 
@@ -604,6 +606,42 @@ const closeEdgeScroll = (perMoveSpacing: number, callBack: (moveSpacing: number)
     requestAnimationFrame(() => {
       closeEdgeScroll(perMoveSpacing, callBack);
     });
+  }
+};
+
+const updateParentTimeLine = (rowId: string) => {
+  const parentRowNode = props.rowNodeMap.get(rowId);
+  const { perHourSpacing } = props;
+  const { startDate } = startInfo.value;
+  if (parentRowNode) {
+    const parentTimeLineNode = parentRowNode.timeLineNodes?.[0];
+    const parentVisibleTimeLine = visibleTimeLineMap.value.get(rowId)?.[0];
+    if (parentTimeLineNode) {
+      const childrenRowNodes = parentRowNode.children || [];
+      const startDateArr: dayjs.Dayjs[] = [];
+      const endDateArr: dayjs.Dayjs[] = [];
+      for (let childRowNode of childrenRowNodes) {
+        const childTimeLineNodes = childRowNode.timeLineNodes || [];
+        for (let childTimeLineNode of childTimeLineNodes) {
+          startDateArr.push(childTimeLineNode.startDate);
+          endDateArr.push(childTimeLineNode.endDate);
+        }
+        const minStartDate = dayjs.min(startDateArr);
+        const maxEndDate = dayjs.max(endDateArr);
+        if (minStartDate && maxEndDate) {
+          parentTimeLineNode.startDate = minStartDate;
+          parentTimeLineNode.endDate = maxEndDate;
+          if (parentVisibleTimeLine) {
+            const translateX = parentTimeLineNode.startDate.diff(startDate, 'hour', true) * perHourSpacing;
+            const width = parentTimeLineNode.endDate.diff(parentTimeLineNode.startDate, 'hour', true) * perHourSpacing;
+            parentVisibleTimeLine.translateX = translateX;
+            parentVisibleTimeLine.width = width;
+          }
+        }
+
+      }
+      parentRowNode.parentId && updateParentTimeLine(parentRowNode.parentId);
+    }
   }
 };
 

@@ -12,7 +12,7 @@ export const getMultiRows = () => {
 };
 
 export const getLargeNumRows = () => {
-  return createRows(10, 10, 'month', true);
+  return createRows(20, 10, 'month', true);
 };
 
 const createRows = (number: number, timeLineNum: number, timeSpanUnit: TimeSpanUnit, createChildren = false) => {
@@ -41,13 +41,12 @@ const createSingleRow = (id: string | number, timeLineNum: number, timeSpanUnit:
 
 const createTimeLine = (num = 10, timeSpanUnit: TimeSpanUnit) => {
   const timeLines: any[] = [];
-
+  let firstTimeSpan = getRandomTimeSpan(timeSpanUnit);
   for (let i = 1; i <= num; i++) {
-    const firstTimeSpan = getRandomTimeSpan(timeSpanUnit);
     const startDate = dayjs().add(firstTimeSpan, timeSpanUnit).format('YYYY-MM-DD');
     const secondTimeSpan = firstTimeSpan + getRandomTimeSpan(timeSpanUnit);
     const endDate = dayjs().add(secondTimeSpan, timeSpanUnit).format('YYYY-MM-DD');
-
+    firstTimeSpan += getRandomTimeSpan(timeSpanUnit);
     timeLines.push({
       startDate,
       endDate,
