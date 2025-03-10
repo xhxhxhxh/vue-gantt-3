@@ -42,6 +42,8 @@ export interface TimeLineNode {
   startDate: dayjs.Dayjs,
   endDate: dayjs.Dayjs,
   id: string,
+  isMerge?: boolean,
+  mergedTimeLineNodes?: TimeLineNode[],
   timePointNodes?: TimePointNode[],
   styleOption?: TimeLineStyle,
   isSameDate?: boolean,

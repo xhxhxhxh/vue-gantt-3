@@ -75,6 +75,7 @@ const wrapRef = inject('wrapRef') as Ref<HTMLDivElement | undefined>;
 const getGanttMinAndMaxDate = inject('getGanttMinAndMaxDate') as (excludeRowIds?: string[], freshStartDate?: boolean, freshEndDate?: boolean)
  => { minStartDate: dayjs.Dayjs | null, maxEndDate: dayjs.Dayjs | null };
 const freshRowNodeDateByTimeLine = inject('freshRowNodeDateByTimeLine') as (rowId: string) => void;
+const timeLineStretchChange = inject('timeLineStretchChange') as (rowId: string, timeLineIds: string[], startDate: dayjs.Dayjs | null, endDate: dayjs.Dayjs | null) => void;
 
 const scrollViewScrollTop = ref(0);
 const scrollViewScrollLeft = ref(0);
@@ -137,7 +138,7 @@ const freshVisibleRows = () => {
       const timeLineNodes = sortTimeLinesInRowNode(currentRowNode);
 
       if (timeLineNodes) {
-        const timeLineNodesAfterCombine = combineOverlapTimeLine(timeLineNodes);
+        const timeLineNodesAfterCombine = mergeOverlapTimeLine(timeLineNodes);
         currentRowNode.timeLineNodes = timeLineNodesAfterCombine;
       }
 
@@ -160,30 +161,46 @@ const sortTimeLinesInRowNode = (rowNode: GanttRowNode) => {
         timeLineNodes.push(timeLineNode);
       }
     }
-    timeLineNodes.sort((timeLine1, timeLine2) => {
-      if (timeLine1.startDate.isSame(timeLine2.startDate)) return 0;
-      if (timeLine1.startDate.isBefore(timeLine2.startDate)) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
+    sortTimeLineNodes(timeLineNodes);
     return timeLineNodes;
   }
 };
 
+const sortTimeLineNodes = (timeLineNodes: TimeLineNode[]) => {
+  timeLineNodes.sort((timeLine1, timeLine2) => {
+    if (timeLine1.startDate.isSame(timeLine2.startDate)) return 0;
+    if (timeLine1.startDate.isBefore(timeLine2.startDate)) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
+};
+
 // 如果时间线之间有重叠区域需要将两个时间线合并
-const combineOverlapTimeLine = (timeLineNodes: TimeLineNode[]) => {
+const mergeOverlapTimeLine = (timeLineNodes: TimeLineNode[]) => {
   const newTimeLineNodes: TimeLineNode[] = [];
   for (let timeLineNode of timeLineNodes) {
     const lastTimeLineNode = newTimeLineNodes[newTimeLineNodes.length - 1];
     if (lastTimeLineNode && !timeLineNode.startDate.isAfter(lastTimeLineNode.endDate)) {
+      lastTimeLineNode.isMerge = true;
       const maxEndDate = dayjs.max([lastTimeLineNode.endDate, timeLineNode.endDate]);
       maxEndDate && (lastTimeLineNode.endDate = maxEndDate);
       // 时间线中如果有时间点应该不支持合并
       // if (lastTimeLineNode.timePointNodes && timeLineNode.timePointNodes) {
       //   lastTimeLineNode.timePointNodes = lastTimeLineNode.timePointNodes.concat(timeLineNode.timePointNodes)
       // }
+
+      if (!lastTimeLineNode.mergedTimeLineNodes) {
+        lastTimeLineNode.mergedTimeLineNodes = [lastTimeLineNode];
+      }
+      if (timeLineNode.isMerge) {
+        timeLineNode.isMerge = false;
+        lastTimeLineNode.mergedTimeLineNodes = lastTimeLineNode.mergedTimeLineNodes.concat(timeLineNode.mergedTimeLineNodes!);
+        timeLineNode.mergedTimeLineNodes = undefined;
+      } else {
+        lastTimeLineNode.mergedTimeLineNodes.push(timeLineNode);
+      }
     } else {
       newTimeLineNodes.push(timeLineNode);
     }
@@ -444,9 +461,10 @@ const freshTimeLines = (rowNodes: GanttRowNode[]) => {
 const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: string, direction: 'left' | 'right') => {
   let lastX = e.clientX;
   const oldWidth = timeLine.width;
-  const { edgeSpacing } = props;
+  const { edgeSpacing, rowNodeMap } = props;
   const minWidth = 4;
   const wrapWidth = wrapRef.value!.offsetWidth;
+  const currentRowNode = rowNodeMap.get(rowId);
   let invalidDistance = 0;
   let startScrollX = 0;
   movingTimeLine = timeLine;
@@ -521,6 +539,13 @@ const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: stri
     movingTimeLineRowId = '';
     if (timeLine.width !== oldWidth) {
       freshRowNodeDateByTimeLine(rowId);
+      if (currentRowNode?.timeLineNodes) {
+        sortTimeLineNodes(currentRowNode.timeLineNodes);
+        currentRowNode.timeLineNodes = mergeOverlapTimeLine(currentRowNode.timeLineNodes);
+        onTimeLineStretchChange(rowId, timeLine, direction);
+        visibleTimeLineMap.value.delete(rowId);
+        freshVisibleTimeLines(false);
+      }
     }
     window.removeEventListener('mousemove', onMouseMove);
     window.removeEventListener('mouseup', onMouseUp);
@@ -643,6 +668,31 @@ const updateParentTimeLine = (rowId: string) => {
       parentRowNode.parentId && updateParentTimeLine(parentRowNode.parentId);
     }
   }
+};
+
+const onTimeLineStretchChange = (rowId: string, timeLine: VisibleTimeLine, direction: 'left' | 'right') => {
+  const timeLineNode = timeLine.timeLineNode;
+  const timeLineIds: string[] = [timeLineNode.id];
+  const finalStartDate = direction === 'left' ? timeLineNode.startDate : null;
+  const finalEndDate = direction === 'right' ? timeLineNode.endDate : null;
+
+  if (timeLineNode.isMerge) {
+    const mergedTimeLineNodes = timeLineNode.mergedTimeLineNodes;
+    for (let mergedTimeLineNode of mergedTimeLineNodes!) {
+      if (direction === 'left') {
+        if (mergedTimeLineNode.startDate.isBefore(timeLineNode.startDate)) {
+          timeLineIds.push(mergedTimeLineNode.id);
+          mergedTimeLineNode.startDate = timeLineNode.startDate;
+        }
+      } else {
+        if (mergedTimeLineNode.endDate.isAfter(timeLineNode.endDate)) {
+          timeLineIds.push(mergedTimeLineNode.id);
+          mergedTimeLineNode.endDate = timeLineNode.endDate;
+        }
+      }
+    }
+  }
+  timeLineStretchChange(rowId, timeLineIds, finalStartDate, finalEndDate);
 };
 
 defineExpose({

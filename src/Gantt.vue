@@ -92,6 +92,7 @@ const emit = defineEmits<{
   (event: 'timePointMoveFinished', timePoint: TimePoint, date: dayjs.Dayjs): void,
   (event: 'perHourSpacingChange', perHourSpacing: number): void,
   (event: 'timePointContextMenu', e: MouseEvent, timePoints: TimePoint[], rowData?: RowData): void,
+  (event: 'timeLineStretchChange', rowId: string, timeLineIds: string[], startDate: dayjs.Dayjs | null, endDate: dayjs.Dayjs | null): void,
 }>();
 
 const rightGanttRef = ref<InstanceType<typeof RightGantt>>();
@@ -680,6 +681,15 @@ const freshRowNodeDateByTimeLine = (rowId: string) => {
 provide(
   'freshRowNodeDateByTimeLine',
   freshRowNodeDateByTimeLine
+);
+
+const timeLineStretchChange = (rowId: string, timeLineIds: string[], startDate: dayjs.Dayjs | null, endDate: dayjs.Dayjs | null) => {
+  emit('timeLineStretchChange', rowId, timeLineIds, startDate, endDate);
+};
+
+provide(
+  'timeLineStretchChange',
+  timeLineStretchChange
 );
 
 defineExpose({
