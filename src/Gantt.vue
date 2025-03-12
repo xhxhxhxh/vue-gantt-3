@@ -45,7 +45,7 @@
 <script lang="ts" setup>
 import LeftTable from "./components/LeftTable.vue";
 import RightGantt from "./components/RightGantt.vue";
-import type { RowData, ColumnData, DefaultCol, GanttRowNode, MGanttStyleOption, TimePoint } from './types';
+import type { RowData, ColumnData, DefaultCol, GanttRowNode, MGanttStyleOption, TimePoint, MovedTimeLineData } from './types';
 import { ref, provide, onMounted, onBeforeUnmount, onBeforeMount, shallowRef, watch } from 'vue';
 import ExpandableBox from './components/ExpandableBox.vue';
 import dayjs from 'dayjs';
@@ -93,6 +93,8 @@ const emit = defineEmits<{
   (event: 'perHourSpacingChange', perHourSpacing: number): void,
   (event: 'timePointContextMenu', e: MouseEvent, timePoints: TimePoint[], rowData?: RowData): void,
   (event: 'timeLineStretchChange', rowId: string, timeLineIds: string[], startDate: dayjs.Dayjs | null, endDate: dayjs.Dayjs | null): void,
+  (event: 'timeLineMoveChange', rowId: string, timeLineIds: string[], movedTimeData: MovedTimeLineData[]): void,
+
 }>();
 
 const rightGanttRef = ref<InstanceType<typeof RightGantt>>();
@@ -690,6 +692,15 @@ const timeLineStretchChange = (rowId: string, timeLineIds: string[], startDate: 
 provide(
   'timeLineStretchChange',
   timeLineStretchChange
+);
+
+const timeLineMoveChange = (rowId: string, timeLineIds: string[], movedTimeData: MovedTimeLineData[]) => {
+  emit('timeLineMoveChange', rowId, timeLineIds, movedTimeData);
+};
+
+provide(
+  'timeLineMoveChange',
+  timeLineMoveChange
 );
 
 defineExpose({

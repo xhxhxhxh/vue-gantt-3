@@ -10,15 +10,19 @@
            :key="timeLine.id"
            :style="{width: timeLine.width + 'px', transform: `translateX(${timeLine.translateX}px)`}"
            class="vg-time-line-row-time-line">
-        <div v-if="timeLine.type === 'normal'" class="vg-time-line-normal" :style="{ backgroundColor: getTimeLineBackgroundColor(timeLine)}">
-          <div class="vg-move-block" @mousedown="e => startTimeLineMove(e, timeLine, row.id, 'left')"></div>
+        <div v-if="timeLine.type === 'normal'"
+             class="vg-time-line-normal"
+             :class="{moving: timeLine.moving === true}"
+             :style="{ backgroundColor: getTimeLineBackgroundColor(timeLine)}"
+             @mousedown="e => startTimeLineMove(e, timeLine, row.id)">
+          <div class="vg-move-block" @mousedown="e => startTimeLineStretch(e, timeLine, row.id, 'left')"></div>
           <div v-show="styleOption?.barsLabeling !== 'none'"
                class="vg-time-line-label"
                :class="{toLeft: styleOption?.barsLabeling === 'beforeTheBar', toRight: styleOption?.barsLabeling === 'afterTheBar'}">
             <img v-show="styleOption?.barsLabeling === 'insideBarWithIcon' && timeLine.icon" :src="timeLine.icon" alt="">
             <span>{{ timeLine.label || '' }}</span>
           </div>
-          <div class="vg-move-block" @mousedown="e => startTimeLineMove(e, timeLine, row.id, 'right')"></div>
+          <div class="vg-move-block" @mousedown="e => startTimeLineStretch(e, timeLine, row.id, 'right')"></div>
           <div v-for="timePoint in timeLine.timePointNodes?.filter((() => styleOption?.showTimePoints))"
                :key="timePoint.id"
                class="vg-time-line-normal-time-points"
@@ -42,7 +46,7 @@
 <script lang="ts" setup>
 import { ref, inject, Ref, onMounted, computed, watch, toRef, onBeforeUnmount, shallowRef, triggerRef, nextTick } from 'vue';
 import dayjs, { Dayjs } from 'dayjs';
-import { GanttRowNode, VisibleRow, TimeLine, TimeLineNode, VisibleTimeLine, MGanttStyleOption, TimePointNode, TimePoint, RowData } from '@/types';
+import { GanttRowNode, VisibleRow, TimeLine, TimeLineNode, VisibleTimeLine, MGanttStyleOption, TimePointNode, TimePoint, RowData, MovedTimeLineData } from '@/types';
 import minMax from 'dayjs/plugin/minMax';
 import isBetween from 'dayjs/plugin/isBetween';
 import { getRound, toMap, treeForEach } from '@/utils/common';
@@ -76,6 +80,7 @@ const getGanttMinAndMaxDate = inject('getGanttMinAndMaxDate') as (excludeRowIds?
  => { minStartDate: dayjs.Dayjs | null, maxEndDate: dayjs.Dayjs | null };
 const freshRowNodeDateByTimeLine = inject('freshRowNodeDateByTimeLine') as (rowId: string) => void;
 const timeLineStretchChange = inject('timeLineStretchChange') as (rowId: string, timeLineIds: string[], startDate: dayjs.Dayjs | null, endDate: dayjs.Dayjs | null) => void;
+const timeLineMoveChange = inject('timeLineMoveChange') as (rowId: string, timeLineIds: string[], movedTimeData: MovedTimeLineData[]) => void;
 
 const scrollViewScrollTop = ref(0);
 const scrollViewScrollLeft = ref(0);
@@ -458,7 +463,7 @@ const freshTimeLines = (rowNodes: GanttRowNode[]) => {
   freshTimeLineViewAfterScrollTop();
 };
 
-const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: string, direction: 'left' | 'right') => {
+const startTimeLineStretch = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: string, direction: 'left' | 'right') => {
   let lastX = e.clientX;
   const oldWidth = timeLine.width;
   const { edgeSpacing, rowNodeMap } = props;
@@ -469,7 +474,7 @@ const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: stri
   let startScrollX = 0;
   movingTimeLine = timeLine;
   movingTimeLineRowId = rowId;
-
+  e.stopPropagation();
   const onMouseMove = (event: MouseEvent) => {
     let currentX = event.clientX;
     const diffX = currentX - lastX;
@@ -555,6 +560,86 @@ const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: stri
   window.addEventListener('mouseup', onMouseUp);
 };
 
+const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: string) => {
+  const { edgeSpacing, rowNodeMap, ganttViewWidth } = props;
+
+  timeLine.moving = true;
+  movingTimeLine = timeLine;
+  movingTimeLineRowId = rowId;
+  let lastX = e.clientX;
+  let startScrollX = 0;
+  const wrapWidth = wrapRef.value!.offsetWidth;
+  const oldStartDate = timeLine.startDate;
+  const currentRowNode = rowNodeMap.get(rowId);
+
+  const onMouseMove = (event: MouseEvent) => {
+    let currentX = event.clientX;
+    const layerX = event.layerX;
+    const diffX = currentX - lastX;
+    const oldTranslateX = timeLine.translateX;
+    timeLineMove(timeLine, rowId, diffX);
+
+    const scrollDistance = 10;
+    const scrollLeft = wrapRef.value!.scrollLeft;
+
+    if (layerX <= scrollLeft + edgeSpacing || timeLine.translateX <= edgeSpacing) {
+      if (diffX < 0) {
+        if (!timeLineMoving) {
+          timeLineMoving = true;
+          startScrollX = lastX;
+          closeEdgeScroll(-scrollDistance, (moveSpacing) => {
+            timeLineMove(timeLine, rowId, moveSpacing);
+          });
+        }
+      } else if (currentX >= startScrollX) {
+        timeLineMoving = false;
+      }
+
+    } else if (layerX >= wrapWidth + scrollLeft - edgeSpacing || timeLine.translateX + timeLine.width >= ganttViewWidth - edgeSpacing) {
+      if (diffX > 0) {
+        if (!timeLineMoving) {
+          timeLineMoving = true;
+          startScrollX = lastX;
+          closeEdgeScroll(scrollDistance, (moveSpacing) => {
+            timeLineMove(timeLine, rowId, moveSpacing);
+          });
+        }
+      } else if (currentX <= startScrollX) {
+        timeLineMoving = false;
+      }
+
+    } else {
+      timeLineMoving = false;
+    }
+
+    lastX = currentX;
+
+  };
+  const onMouseUp = () => {
+    timeLine.moving = false;
+    timeLineMoving = false;
+    movingTimeLine = null;
+    movingTimeLineRowId = '';
+    if (!oldStartDate.isSame(timeLine.startDate)) {
+      freshRowNodeDateByTimeLine(rowId);
+      if (currentRowNode?.timeLineNodes) {
+        sortTimeLineNodes(currentRowNode.timeLineNodes);
+        currentRowNode.timeLineNodes = mergeOverlapTimeLine(currentRowNode.timeLineNodes);
+        const diffSecond = timeLine.startDate.diff(oldStartDate, 'second', true);
+        onTimeLineMoveChange(rowId, timeLine, diffSecond);
+        visibleTimeLineMap.value.delete(rowId);
+        freshVisibleTimeLines(false);
+      }
+    }
+    triggerRef(visibleTimeLineMap);
+    window.removeEventListener('mousemove', onMouseMove);
+    window.removeEventListener('mouseup', onMouseUp);
+  };
+  triggerRef(visibleTimeLineMap);
+  window.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('mouseup', onMouseUp);
+};
+
 const getDiffSecondByDistance = (distance: number, startDate: dayjs.Dayjs) => {
   const { perHourSpacing } = props;
 
@@ -613,6 +698,46 @@ const timeLineStretch = (timeLine: VisibleTimeLine, rowId: string, distance: num
       }
     }
   }
+  if (timeLine.translateX < edgeSpacing) {
+    emit('updateMinDate', timeLine.startDate);
+    timeLine.translateX = edgeSpacing;
+  } else if (timeLine.translateX + timeLine.width + edgeSpacing > ganttViewWidth) {
+    emit('updateMaxDate', timeLine.endDate);
+  }
+  updateParentTimeLine(rowId);
+  triggerRef(visibleTimeLineMap);
+};
+
+const timeLineMove = (timeLine: VisibleTimeLine, rowId: string, distance: number) => {
+  const { edgeSpacing, ganttViewWidth } = props;
+  const nextStartDate = getDiffSecondByDistance(distance, timeLine.startDate);
+  timeLine.startDate = nextStartDate;
+  timeLine.timeLineNode.startDate = nextStartDate;
+  const nextEndDate = getDiffSecondByDistance(distance, timeLine.endDate);
+  timeLine.endDate = nextEndDate;
+  timeLine.timeLineNode.endDate = nextEndDate;
+  if (timeLine.translateX === edgeSpacing && distance > 0) {
+    const { minStartDate } = getGanttMinAndMaxDate([rowId], true, false);
+    if (!minStartDate || nextStartDate.isBefore(minStartDate)) {
+      emit('updateMinDate', nextStartDate);
+      timeLine.translateX = edgeSpacing;
+      updateParentTimeLine(rowId);
+      return;
+    } else if (nextStartDate.isAfter(minStartDate)) {
+      emit('updateMinDate', minStartDate);
+    }
+  } else if (getRound(timeLine.translateX + timeLine.width + edgeSpacing) === getRound(ganttViewWidth) && distance < 0) {
+    const { maxEndDate } = getGanttMinAndMaxDate([rowId], false, true);
+    if (!maxEndDate || nextEndDate.isAfter(maxEndDate)) {
+      timeLine.translateX += distance;
+      emit('updateMaxDate', nextEndDate);
+      updateParentTimeLine(rowId);
+      return;
+    } else if (nextEndDate.isBefore(maxEndDate)) {
+      emit('updateMaxDate', maxEndDate);
+    }
+  }
+  timeLine.translateX += distance;
   if (timeLine.translateX < edgeSpacing) {
     emit('updateMinDate', timeLine.startDate);
     timeLine.translateX = edgeSpacing;
@@ -695,6 +820,35 @@ const onTimeLineStretchChange = (rowId: string, timeLine: VisibleTimeLine, direc
   timeLineStretchChange(rowId, timeLineIds, finalStartDate, finalEndDate);
 };
 
+const onTimeLineMoveChange = (rowId: string, timeLine: VisibleTimeLine, diffSecond: number) => {
+  const timeLineNode = timeLine.timeLineNode;
+  const timeLineIds: string[] = [timeLineNode.id];
+  const result: MovedTimeLineData[] = [
+    {
+      timeLineId: timeLineNode.id,
+      startDate: timeLineNode.startDate,
+      endDate: timeLineNode.endDate
+    }
+  ];
+
+  if (timeLineNode.isMerge) {
+    const mergedTimeLineNodes = timeLineNode.mergedTimeLineNodes;
+    for (let mergedTimeLineNode of mergedTimeLineNodes!) {
+      if (mergedTimeLineNode.id !== timeLineNode.id) {
+        timeLineIds.push(mergedTimeLineNode.id);
+        mergedTimeLineNode.startDate = mergedTimeLineNode.startDate.add(diffSecond, 'second');
+        mergedTimeLineNode.endDate = mergedTimeLineNode.endDate.add(diffSecond, 'second');
+        result.push({
+          timeLineId: mergedTimeLineNode.id,
+          startDate: mergedTimeLineNode.startDate,
+          endDate: mergedTimeLineNode.endDate
+        });
+      }
+    }
+  }
+  timeLineMoveChange(rowId, timeLineIds, result);
+};
+
 defineExpose({
   onScroll,
   onResize,
@@ -729,6 +883,10 @@ defineExpose({
         border-radius: 16px;
         border: 1px solid #000;
         background: #fff;
+        cursor: grab;
+        &.moving {
+          cursor: grabbing;
+        }
         .vg-time-line-normal-time-points {
           cursor: move;
           position: absolute;

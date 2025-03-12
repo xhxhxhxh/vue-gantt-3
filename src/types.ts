@@ -95,6 +95,7 @@ export interface VisibleTimeLine {
   startDate: dayjs.Dayjs,
   endDate: dayjs.Dayjs,
   timeLineNode: TimeLineNode,
+  moving?: boolean,
   icon?: string,
   label?: string,
   styleOption?: TimeLineStyle,
@@ -159,4 +160,10 @@ export interface MGanttStyleOption {
   barsLabeling?: 'none' | 'insideBarWithIcon' | 'insideBarWithoutIcon' | 'beforeTheBar' | 'afterTheBar',
   timePointSize?: number,
   showTimePoints?: boolean
+}
+
+export interface MovedTimeLineData {
+  timeLineId: string,
+  startDate: dayjs.Dayjs,
+  endDate: dayjs.Dayjs,
 }
