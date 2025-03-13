@@ -1,8 +1,8 @@
 <template>
-  <div ref="mGanttRef" class="vue3-gantt-chart" @contextmenu.prevent="onContextmenu">
-    <ExpandableBox :initWidth="defaultLeftTableWidth" :maxWidth="maxLeftTableWidth">
+  <div ref="vGanttRef" class="vue3-gantt-chart" @contextmenu.prevent="onContextmenu">
+    <ExpandableBox :initWidth="defaultTableViewWidth" :maxWidth="maxTableViewWidth">
       <TableView
-        ref="leftTableRef"
+        ref="tableViewRef"
         :getRowId="getRowId"
         :columns="columns"
         :defaultCol="defaultCol"
@@ -13,7 +13,7 @@
         :rows="rowDataList"
         :rowNodeMap="rowNodeMap"
         :getEmptyRows="getEmptyRows"
-        @trigger-right-gantt-scroll="triggerRightGanttScroll"
+        @trigger-gantt-view-scroll="triggerGanttViewScroll"
         @view-port-changed="onViewPortChanged"
         @cell-double-clicked="onCellDoubleClicked"
       >
@@ -21,7 +21,7 @@
     </ExpandableBox>
 
     <GanttView
-      ref="rightGanttRef"
+      ref="ganttViewRef"
       :getRowId="getRowId"
       :columns="columns"
       :rows="rows"
@@ -36,7 +36,7 @@
       :styleOption="styleOption"
       :timePointComp="timePointComp"
       :defaultPerHourSpacing="defaultPerHourSpacing"
-      @trigger-left-table-scroll="triggerLeftTableScroll"
+      @trigger-table-view-scroll="triggerTableViewScroll"
       @gantt-body-resize="onGanttBodyResize"
       @perHourSpacingChange="perHourSpacingChange"
     ></GanttView>
@@ -64,16 +64,16 @@ export interface GanttOption {
   headerHeight?: number, // 最顶部的行高
   rowBuffer?: number, // 缓冲行数，表示可视区域之外上下各渲染多少行
   rowSelection?: 'single' | 'multiple',
-  defaultLeftTableWidth?: number,
-  maxLeftTableWidth?: number,
+  defaultTableViewWidth?: number,
+  maxTableViewWidth?: number,
   styleOption?: MGanttStyleOption
   timePointComp?: any,
   defaultPerHourSpacing?: number
 }
 console.log('MGantt');
 const props = withDefaults(defineProps<GanttOption>(), {
-  defaultLeftTableWidth: 350,
-  maxLeftTableWidth: 1000,
+  defaultTableViewWidth: 350,
+  maxTableViewWidth: 1000,
   columns: () => [],
   rows: () => [],
   rowHeight: 25,
@@ -97,10 +97,10 @@ const emit = defineEmits<{
 
 }>();
 
-const rightGanttRef = ref<InstanceType<typeof RightGantt>>();
-const leftTableRef = ref<InstanceType<typeof LeftTable>>();
+const ganttViewRef = ref<InstanceType<typeof GanttView>>();
+const tableViewRef = ref<InstanceType<typeof TableView>>();
 const selectedRowIds = ref<Set<string>>(new Set());
-const mGanttRef = ref<HTMLDivElement>();
+const vGanttRef = ref<HTMLDivElement>();
 const rowNodeMap = shallowRef(new Map<string, GanttRowNode>());
 const rowNodeIds = ref<string[]>([]); // 所有行的id，需要维护顺序
 const visibleRowIds = ref<string[]>([]); // 不包含被折叠行的id，需要维护顺序
@@ -123,12 +123,12 @@ provide(
   showSecondLevel
 );
 
-const triggerLeftTableScroll = (options: ScrollToOptions, triggerScrollBar?: boolean) => {
-  leftTableRef.value?.scrollTo(options, triggerScrollBar);
+const triggerTableViewScroll = (options: ScrollToOptions, triggerScrollBar?: boolean) => {
+  tableViewRef.value?.scrollTo(options, triggerScrollBar);
 };
 
-const triggerRightGanttScroll = (options: ScrollToOptions) => {
-  rightGanttRef.value?.scrollTo(options);
+const triggerGanttViewScroll = (options: ScrollToOptions) => {
+  ganttViewRef.value?.scrollTo(options);
 };
 
 onBeforeMount(() => {
@@ -136,11 +136,11 @@ onBeforeMount(() => {
 });
 
 onMounted(() => {
-  mGanttRef.value?.addEventListener('mousedown', handleGanttMouseDown);
+  vGanttRef.value?.addEventListener('mousedown', handleGanttMouseDown);
 });
 
 onBeforeUnmount(() => {
-  mGanttRef.value?.removeEventListener('mousedown', handleGanttMouseDown);
+  vGanttRef.value?.removeEventListener('mousedown', handleGanttMouseDown);
 });
 
 watch(selectedRowIds, (val) => {
@@ -193,10 +193,10 @@ const onRowsChange = (newRows: RowData[], oldRows: RowData[]) => {
   }
   const needFreshTopNodes = topLevelRowNodeFromAdd.concat(topLevelRowNodeFromDelete);
   refreshRowNodeDate(needFreshTopNodes);
-  rightGanttRef.value && rightGanttRef.value.updateMinAndMaxDateByChangeRowNode(
+  ganttViewRef.value && ganttViewRef.value.updateMinAndMaxDateByChangeRowNode(
     { addedRowNodes: topLevelRowNodeFromAdd, deletedRowNodes: topLevelRowNodeFromOldDelete }, firstLevelRowNode.value);
   const allNeedFreshCellNodes = getAllChildren(needFreshTopNodes);
-  rightGanttRef.value && rightGanttRef.value.freshTimeLines(needFreshTopNodes);
+  ganttViewRef.value && ganttViewRef.value.freshTimeLines(needFreshTopNodes);
   refreshCells(allNeedFreshCellNodes.map(item => item.id), true);
   const displayRows = getDisplayRows();
   if (displayRows) {
@@ -350,8 +350,8 @@ const freshRowNodes = (rows: RowData[]) => {
 
   const needUpdateTopRowNodeList = [...needUpdateTopRowNodes];
   refreshRowNodeDate(needUpdateTopRowNodeList);
-  rightGanttRef.value && rightGanttRef.value.freshTimeLines(needUpdateTopRowNodeList);
-  rightGanttRef.value && rightGanttRef.value.updateMinAndMaxDateByChangeRowNode({ updatedRowNodes: needUpdateTopRowNodeList }, firstLevelRowNode.value);
+  ganttViewRef.value && ganttViewRef.value.freshTimeLines(needUpdateTopRowNodeList);
+  ganttViewRef.value && ganttViewRef.value.updateMinAndMaxDateByChangeRowNode({ updatedRowNodes: needUpdateTopRowNodeList }, firstLevelRowNode.value);
   refreshCells([...rowIds], true);
 };
 
@@ -363,7 +363,7 @@ const freshTimeLines = (rowIds: string[]) => {
       rowNodes.push(currentRowNode);
     }
   });
-  rightGanttRef.value && rightGanttRef.value.freshTimeLines(rowNodes);
+  ganttViewRef.value && ganttViewRef.value.freshTimeLines(rowNodes);
 };
 
 // 返回最顶层的RowNode
@@ -433,13 +433,13 @@ const setExpand = (id: string, expand: boolean) => {
     affectChildren.forEach(node => node.hide = !expand);
     visibleRowIds.value = newVisibleRowIds;
     currentRowNode.expand = expand;
-    leftTableRef.value?.onFilterChanged();
+    tableViewRef.value?.onFilterChanged();
     refreshCells([id], true);
   }
 };
 
 const refreshCells = (ids: string[], force = false) => {
-  leftTableRef.value?.refreshCells(ids, force);
+  tableViewRef.value?.refreshCells(ids, force);
 };
 
 const expandAll = () => {
@@ -452,7 +452,7 @@ const expandAll = () => {
       currentRowNode.expand = true;
     }
   }
-  leftTableRef.value?.onFilterChanged();
+  tableViewRef.value?.onFilterChanged();
   refreshCells([...unExpandRowIds], true);
   unExpandRowIds.clear();
   emit('expandChange', [...unExpandRowIds]);
@@ -566,12 +566,12 @@ function handleGanttMouseMove(event: MouseEvent) {
 }
 
 function handleGanttMouseUp() {
-  mGanttRef.value?.removeEventListener('mousemove', handleGanttMouseMove);
+  vGanttRef.value?.removeEventListener('mousemove', handleGanttMouseMove);
   document.removeEventListener('mouseup', handleGanttMouseUp);
 }
 
 const onGanttBodyResize = (target: HTMLDivElement) => {
-  leftTableRef.value?.handleEmptyRowChanged(target);
+  tableViewRef.value?.handleEmptyRowChanged(target);
 
 };
 
@@ -648,8 +648,8 @@ provide(
 );
 
 const getDisplayRows = () => {
-  const firstRowIndex = leftTableRef.value?.getFirstDisplayedRow();
-  const lastRowIndex = leftTableRef.value?.getLastDisplayedRow();
+  const firstRowIndex = tableViewRef.value?.getFirstDisplayedRow();
+  const lastRowIndex = tableViewRef.value?.getLastDisplayedRow();
 
   if (firstRowIndex !== undefined && lastRowIndex !== undefined) {
     return rowDataList.value.slice(firstRowIndex, lastRowIndex + 1);
@@ -742,10 +742,10 @@ defineOptions({
     }
     margin-right: 4px;
   }
-  .vg-left-table {
+  .vg-table-view {
     border-right: 1px solid #e9e9e9;
   }
-  .vg-right-gantt {
+  .vg-gantt-view {
     flex: 1;
     border-left: 1px solid #e9e9e9;
   }

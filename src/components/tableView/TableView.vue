@@ -1,5 +1,5 @@
 <template>
-  <div ref="leftTableRef" class="vg-left-table">
+  <div ref="tableViewRef" class="vg-table-view">
     <div v-show="showSecondLevel" class="first-level-header" :style="{height: headerHeight + 1 + 'px'}"></div>
     <ag-grid-vue
       class="ag-theme-alpine ag-theme-mgantttheme"
@@ -52,7 +52,7 @@ export interface Props {
   getEmptyRows?: (count: number) => RowData[],
 
 }
-console.log('leftTable');
+console.log('tableView');
 
 const props = defineProps<Props>();
 const emit = defineEmits<{
@@ -60,10 +60,10 @@ const emit = defineEmits<{
   (e: 'cellDoubleClicked', rowData: RowData | undefined, columnData?: ColumnData): void,
   (e: 'selectionChanged', data: SelectionChangedEvent<RowData>): void,
   (e: 'cellContextMenu', data: CellContextMenuEvent<RowData>): void,
-  (e: 'triggerRightGanttScroll', options: ScrollToOptions): void,
+  (e: 'triggerGanttViewScroll', options: ScrollToOptions): void,
 }>();
 
-const leftTableRef = ref<HTMLDivElement>();
+const tableViewRef = ref<HTMLDivElement>();
 const columns = toRef(props, 'columns');
 const columnDefs = shallowRef<ColumnNode[]>([]);
 const visibleRowDataList = toRef(props, 'rows');
@@ -72,7 +72,7 @@ const emptyRows = shallowRef<RowData[]>([]);
 const tableRef = ref<GridApi<RowData>>();
 const tableBodyView = ref<HTMLDivElement | null>(null);
 const tableBodyVerticalScrollViewport = ref<HTMLDivElement | null>(null);
-const scrollFromRightGantt = ref(false);
+const scrollFromGanttView = ref(false);
 const selectedRowIds = inject('selectedRowIds') as Ref<Set<string>>;
 const firstColumnCellRenderComp = markRaw(FirstColumnCellRender);
 const showSecondLevel = inject('showSecondLevel') as Ref<boolean>;
@@ -115,9 +115,9 @@ watch(emptyRows, () => {
 
 const onGridReady = (params: GridReadyEvent<RowData>) => {
   tableRef.value = params.api;
-  tableBodyView.value = leftTableRef.value!.querySelector('.ag-body-viewport');
+  tableBodyView.value = tableViewRef.value!.querySelector('.ag-body-viewport');
   tableBodyView.value?.addEventListener('wheel', bodyWheel, { passive: false });
-  tableBodyVerticalScrollViewport.value = leftTableRef.value!.querySelector('.ag-body-vertical-scroll-viewport');
+  tableBodyVerticalScrollViewport.value = tableViewRef.value!.querySelector('.ag-body-vertical-scroll-viewport');
   tableBodyVerticalScrollViewport.value?.addEventListener('scroll', verticalScrollViewportScroll);
   console.log('tableRef.value', tableRef.value);
 };
@@ -173,10 +173,10 @@ const getRowNode = (row?: RowData) => {
 };
 
 const handleScroll = (options: ScrollToOptions) => {
-  if (scrollFromRightGantt.value) {
-    scrollFromRightGantt.value = false;
+  if (scrollFromGanttView.value) {
+    scrollFromGanttView.value = false;
   } else {
-    emit('triggerRightGanttScroll', options);
+    emit('triggerGanttViewScroll', options);
   }
 };
 
@@ -193,7 +193,7 @@ const bodyWheel = (e: WheelEvent) => {
   e.preventDefault();
   if (!tableBodyVerticalScrollViewport.value) return;
   if (Math.abs(e.deltaY) < 3) return;
-  scrollFromRightGantt.value = false;
+  scrollFromGanttView.value = false;
   const scrollSpeed = 100;
   const scrollDistance = e.deltaY > 0 ? scrollSpeed : -scrollSpeed;
   const scrollTop = tableBodyVerticalScrollViewport.value?.scrollTop + scrollDistance;
@@ -324,7 +324,7 @@ const onFilterChanged = () => {
 };
 
 const scrollTo = (options: ScrollToOptions, triggerScrollBar?: boolean) => {
-  scrollFromRightGantt.value = true;
+  scrollFromGanttView.value = true;
   if (triggerScrollBar) {
     tableBodyVerticalScrollViewport.value?.scrollTo(options);
   } else {
@@ -369,7 +369,7 @@ defineExpose({
 
 </script>
 <style lang="scss">
-.vg-left-table {
+.vg-table-view {
   height: 100%;
   display: flex;
   flex-direction: column;

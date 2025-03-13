@@ -1,5 +1,5 @@
 <template>
-  <div ref="ganttRightGantt" class="vg-right-gantt">
+  <div ref="ganttGanttView" class="vg-gantt-view">
     <GanttHeader
       ref="ganttHeaderRef"
       :edgeSpacing="edgeSpacing"
@@ -64,13 +64,13 @@ export interface Props {
   styleOption?: MGanttStyleOption,
   timePointComp?: any
 }
-console.log('RightGantt');
+console.log('GanttView');
 const props = withDefaults(defineProps<Props>(), {
   defaultPerHourSpacing: 0.1
 });
 
 const emit = defineEmits<{
-  (event: 'triggerLeftTableScroll', options: ScrollToOptions, triggerScrollBar?: boolean): void,
+  (event: 'triggerTableViewScroll', options: ScrollToOptions, triggerScrollBar?: boolean): void,
   (event: 'ganttBodyResize', target: HTMLDivElement): void,
   (event: 'perHourSpacingChange', perHourSpacing: number): void,
 }>();
@@ -83,13 +83,13 @@ const perHourSpacing = ref(props.defaultPerHourSpacing); // 每个小时之间�
 const ganttBodyRef = ref<InstanceType<typeof GanttBody>>();
 const ganttHeaderRef = ref<InstanceType<typeof GanttHeader>>();
 const scrollBarRef = ref<InstanceType<typeof ScrollBar>>();
-const ganttRightGantt = ref<HTMLDivElement>();
+const ganttGanttView = ref<HTMLDivElement>();
 const verticalScrollThumb = ref<HTMLDivElement>();
 const perHourSpacingScale = 1.2;
 const minPerHourSpacing = ref(0.007);
 const maxPerHourSpacing = ref(1400);
 const ganttViewWidth = ref(0);
-const scrollFromLeftTable = ref(false);
+const scrollFromTableView = ref(false);
 
 onBeforeMount(() => {
   updateMinAndMaxDate();
@@ -252,10 +252,10 @@ const updateMinAndMaxDateByChangeRowNode = ({ addedRowNodes = [], deletedRowNode
 };
 
 const onScroll = ({ scrollTop, scrollLeft }: {scrollTop: number, scrollLeft: number}) => {
-  if (scrollFromLeftTable.value) {
-    scrollFromLeftTable.value = false;
+  if (scrollFromTableView.value) {
+    scrollFromTableView.value = false;
   } else {
-    emit('triggerLeftTableScroll', { top: scrollTop });
+    emit('triggerTableViewScroll', { top: scrollTop });
   }
   if (ganttBodyRef.value) {
     ganttBodyRef.value.onScroll({ scrollTop, scrollLeft });
@@ -272,8 +272,8 @@ const onWheel = (e: WheelEvent) => {
   const scrollDistance = e.deltaY > 0 ? scrollSpeed : -scrollSpeed;
   const scrollTop = verticalScrollThumb.value?.scrollTop + scrollDistance;
   verticalScrollThumb.value?.scrollTo({ top: scrollTop });
-  scrollFromLeftTable.value = true;
-  emit('triggerLeftTableScroll', { top: scrollTop }, true);
+  scrollFromTableView.value = true;
+  emit('triggerTableViewScroll', { top: scrollTop }, true);
 };
 
 const onResize = (target: HTMLDivElement) => {
@@ -305,8 +305,8 @@ const onVerticalScrollBarShow = ({ show, scrollbarWidth }: {show: boolean, scrol
 };
 
 const scrollTo = (options: ScrollToOptions) => {
-  scrollFromLeftTable.value = true;
-  // 此处需要使用triggerScrollFromOutSide，防止lefttable滚动过快导致timelineview白屏
+  scrollFromTableView.value = true;
+  // 此处需要使用triggerScrollFromOutSide，防止tableView滚动过快导致timelineview白屏
   scrollBarRef.value?.triggerScrollFromOutSide(options);
 };
 
@@ -324,7 +324,7 @@ defineExpose({
 
 </script>
 <style lang="scss">
-.vg-right-gantt {
+.vg-gantt-view {
   display: flex;
   flex-direction: column;
   height: 100%;
