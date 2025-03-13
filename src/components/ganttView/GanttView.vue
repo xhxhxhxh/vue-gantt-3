@@ -37,9 +37,9 @@
   </div>
 </template>
 <script lang="ts" setup>
-import ScrollBar from './scrollbar/ScrollBar.vue';
-import GanttHeader from './GanttHeader.vue';
-import type { RowData, ColumnData, DefaultCol, GanttRowNode, MGanttStyleOption } from '../types';
+import ScrollBar from '../scrollbar/ScrollBar.vue';
+import GanttHeader from './ganttHeader/GanttHeader.vue';
+import type { RowData, ColumnData, DefaultCol, GanttRowNode, MGanttStyleOption } from '@/types';
 import dayjs from 'dayjs';
 import { ref, onBeforeMount, computed, onMounted, onBeforeUnmount, watch, shallowRef, inject, toRef, provide } from 'vue';
 import minMax from 'dayjs/plugin/minMax';

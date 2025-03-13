@@ -35,8 +35,8 @@
         </div>
         <div v-if="timeLine.type === 'parentTimeLineNode'" class="vg-time-line-parentNode">
           <div class="vg-time-line-parentNode-bar"></div>
-          <img class="vg-time-line-parentNode-triangle vg-time-line-parentNode-triangle-left" width="12" src="../../../../assets/images/BlackTriangle.svg">
-          <img class="vg-time-line-parentNode-triangle vg-time-line-parentNode-triangle-right" width="12" src="../../../../assets/images/BlackTriangle.svg">
+          <img class="vg-time-line-parentNode-triangle vg-time-line-parentNode-triangle-left" width="12" src="../../../../../assets/images/BlackTriangle.svg">
+          <img class="vg-time-line-parentNode-triangle vg-time-line-parentNode-triangle-right" width="12" src="../../../../../assets/images/BlackTriangle.svg">
         </div>
         <div v-if="timeLine.type === 'sameDateTimeLineNode'" class="vg-time-line-sameNode"></div>
       </div>

@@ -1,7 +1,7 @@
 <template>
   <div ref="mGanttRef" class="vue3-gantt-chart" @contextmenu.prevent="onContextmenu">
     <ExpandableBox :initWidth="defaultLeftTableWidth" :maxWidth="maxLeftTableWidth">
-      <LeftTable
+      <TableView
         ref="leftTableRef"
         :getRowId="getRowId"
         :columns="columns"
@@ -17,10 +17,10 @@
         @view-port-changed="onViewPortChanged"
         @cell-double-clicked="onCellDoubleClicked"
       >
-      </LeftTable>
+      </TableView>
     </ExpandableBox>
 
-    <RightGantt
+    <GanttView
       ref="rightGanttRef"
       :getRowId="getRowId"
       :columns="columns"
@@ -39,15 +39,15 @@
       @trigger-left-table-scroll="triggerLeftTableScroll"
       @gantt-body-resize="onGanttBodyResize"
       @perHourSpacingChange="perHourSpacingChange"
-    ></RightGantt>
+    ></GanttView>
   </div>
 </template>
 <script lang="ts" setup>
-import LeftTable from "./components/LeftTable.vue";
-import RightGantt from "./components/RightGantt.vue";
-import type { RowData, ColumnData, DefaultCol, GanttRowNode, MGanttStyleOption, TimePoint, MovedTimeLineData } from './types';
+import TableView from "./components/tableView/TableView.vue";
+import GanttView from "./components/ganttView/GanttView.vue";
+import type { RowData, ColumnData, DefaultCol, GanttRowNode, MGanttStyleOption, TimePoint, MovedTimeLineData } from '@/types';
 import { ref, provide, onMounted, onBeforeUnmount, onBeforeMount, shallowRef, watch } from 'vue';
-import ExpandableBox from './components/ExpandableBox.vue';
+import ExpandableBox from './components/common/ExpandableBox.vue';
 import dayjs from 'dayjs';
 import { treeForEachSkipChildren } from "@/utils/common";
 import minMax from 'dayjs/plugin/minMax';

@@ -26,7 +26,7 @@ import { ref, inject, onMounted, computed, watch, onBeforeUnmount, shallowRef } 
 import type { Ref } from 'vue';
 
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
-import type { GanttHeaderUnit, BlockItem } from '../types';
+import type { GanttHeaderUnit, BlockItem } from '@/types';
 import { getRound } from '@/utils/common';
 
 dayjs.extend(quarterOfYear);

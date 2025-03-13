@@ -31,8 +31,8 @@
 import dayjs from 'dayjs';
 import { ref, inject, toRef, computed, watch } from 'vue';
 import type { Ref } from 'vue';
-import GanttGrid from './GanttGrid.vue';
-import GanttTimeLineView from './GanttTimeLineView.vue';
+import GanttGrid from './ganttGrid/GanttGrid.vue';
+import GanttTimeLineView from './ganttTimeLineView/GanttTimeLineView.vue';
 import { RowData, GanttRowNode, MGanttStyleOption } from '@/types';
 
 export interface Props {
