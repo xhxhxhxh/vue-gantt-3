@@ -35,8 +35,8 @@
         </div>
         <div v-if="timeLine.type === 'parentTimeLineNode'" class="vg-time-line-parentNode">
           <div class="vg-time-line-parentNode-bar"></div>
-          <img class="vg-time-line-parentNode-triangle vg-time-line-parentNode-triangle-left" src="../../../../assets/images/BlackTriangle.svg">
-          <img class="vg-time-line-parentNode-triangle vg-time-line-parentNode-triangle-right" src="../../../../assets/images/BlackTriangle.svg">
+          <img class="vg-time-line-parentNode-triangle vg-time-line-parentNode-triangle-left" width="12" src="../../../../assets/images/BlackTriangle.svg">
+          <img class="vg-time-line-parentNode-triangle vg-time-line-parentNode-triangle-right" width="12" src="../../../../assets/images/BlackTriangle.svg">
         </div>
         <div v-if="timeLine.type === 'sameDateTimeLineNode'" class="vg-time-line-sameNode"></div>
       </div>
@@ -880,7 +880,7 @@ defineExpose({
         top: 50%;
         transform: translateY(-50%);
         height: 16px;
-        border-radius: 16px;
+        border-radius: 6px;
         border: 1px solid #000;
         background: #fff;
         cursor: grab;
@@ -932,7 +932,7 @@ defineExpose({
           position: absolute;
           width: 100%;
           top: 3px;
-          height: 7px;
+          height: 5px;
           background-color: #000;
         }
         .vg-time-line-parentNode-triangle {
