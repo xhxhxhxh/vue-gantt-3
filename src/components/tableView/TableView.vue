@@ -36,15 +36,15 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { toRef, ref, shallowRef, inject, watch, onMounted, onBeforeUnmount, onBeforeMount, markRaw, nextTick } from 'vue';
 import type { Ref } from 'vue';
-import type { RowData, ColumnData, DefaultCol, ColumnNode, FirstColumnCellRenderParams, GanttRowNode } from '@/types';
+import type { RowData, ColDef, DefaultColDef, ColumnNode, FirstColumnCellRenderParams, GanttRowNode } from '@/types';
 import FirstColumnCellRender from "./FirstColumnCellRender.vue";
 
 export interface Props {
   getRowId: (rowData: RowData) => string,
-  columns: ColumnData[],
+  columns: ColDef[],
   rows: RowData[],
   rowNodeMap: Map<string, GanttRowNode>,
-  defaultCol?: DefaultCol,
+  defaultCol?: DefaultColDef,
   rowHeight: number,
   headerHeight: number,
   rowBuffer: number,
@@ -57,7 +57,7 @@ console.log('tableView');
 const props = defineProps<Props>();
 const emit = defineEmits<{
   (e: 'viewPortChanged', data: RowData[]): void,
-  (e: 'cellDoubleClicked', rowData: RowData | undefined, columnData?: ColumnData): void,
+  (e: 'cellDoubleClicked', rowData: RowData | undefined, columnData?: ColDef): void,
   (e: 'selectionChanged', data: SelectionChangedEvent<RowData>): void,
   (e: 'cellContextMenu', data: CellContextMenuEvent<RowData>): void,
   (e: 'triggerGanttViewScroll', options: ScrollToOptions): void,
@@ -136,7 +136,7 @@ const getTableRowId = (params: IRowNode<RowData>) => {
   }
 };
 
-function formatColumnDefs (columnDatas: ColumnData[]) {
+function formatColumnDefs (columnDatas: ColDef[]) {
   firstColumId = columnDatas[0]?.field || '';
   const newColumnDefs: ColumnNode[] = [];
   for (let columnData of columnDatas) {
@@ -292,7 +292,7 @@ const getVisibleRowCount = (limitCount: number) => {
 };
 
 const onCellDoubleClicked = (data: CellDoubleClickedEvent<RowData>) => {
-  emit('cellDoubleClicked', data.data, data.colDef as ColumnData);
+  emit('cellDoubleClicked', data.data, data.colDef as ColDef);
 };
 
 const onSelectionChanged = (data: SelectionChangedEvent<RowData>) => {

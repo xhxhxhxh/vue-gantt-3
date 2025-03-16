@@ -1,9 +1,6 @@
 import dayjs from 'dayjs';
-import type { ILoadingCellRendererParams, LoadingCellRendererSelectorResult } from "ag-grid-community";
-
-interface CellStyle {
-  [cssProperty: string]: string | number;
-}
+import type { ILoadingCellRendererParams, LoadingCellRendererSelectorResult, ColDef } from "ag-grid-community";
+export type * from "ag-grid-community";
 
 export interface TimeLineStyle {
   [cssProperty: string]: string | number;
@@ -103,19 +100,7 @@ export interface VisibleTimeLine {
   type: 'parentTimeLineNode' | 'sameDateTimeLineNode' | 'normal'
 }
 
-export interface ColumnData {
-  headerName?: string,
-  field: string,
-  width?: number,
-  flex?: number,
-  resizable?: boolean,
-  cellStyle?: CellStyle,
-  cellRenderer?: any,
-  cellRendererParams?: Record<string, any>,
-  suppressMovable?: boolean,
-}
-
-export interface ColumnNode extends ColumnData {
+export interface ColumnNode extends ColDef {
   cellRendererSelector?: (params: ILoadingCellRendererParams<RowData>) => LoadingCellRendererSelectorResult | undefined,
 }
 
@@ -125,7 +110,7 @@ export interface FirstColumnCellRenderParams {
   [key: string]: any
 }
 
-export type DefaultCol = Omit<ColumnData, 'field'>
+export type DefaultColDef = Omit<ColDef, 'field'>
 
 export interface VerticalLine {
   id: number,
@@ -137,7 +122,7 @@ export interface GanttBodyStartInfo{
   startMonthDate: dayjs.Dayjs;
 }
 
-export type GanttHeaderUnit = | 'hour' | 'day' | 'month' | 'year' | "week" | "quarter"
+export type GanttHeaderUnit = 'hour' | 'day' | 'month' | 'year' | "week" | "quarter"
 
 declare module 'dayjs' {
   interface Dayjs {

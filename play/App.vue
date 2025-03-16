@@ -1,7 +1,7 @@
 <template>
   <div class="gantt-container">
     <Vue3GanttChart
-      ref="mGanttRef"
+      ref="vgGanttRef"
       :getRowId="getRowId"
       :columns="columns"
       :rows="rows"
@@ -15,41 +15,62 @@
 </template>
 <script lang="ts" setup>
 import { ref, onBeforeMount, shallowRef, markRaw } from 'vue';
-import { ColumnData, DefaultCol, RowData } from 'vue3-gantt-chart/types';
+import { ColDef, DefaultColDef, RowData, ValueSetterParams } from 'vue3-gantt-chart/types';
 import { getSingleRow, getMultiRows, getLargeNumRows, getEmptyRows } from './utils/mockData';
+import CellRender from './components/CellRender.vue';
+import Vue3GanttChart from 'vue3-gantt-chart';
+
+const vgGanttRef = ref<InstanceType<typeof Vue3GanttChart> | undefined>();
 
 const getRowId = (rowData: RowData) => (rowData as RowData).id;
-const columns = ref<ColumnData[]>([
+const columns = ref<ColDef[]>([
   {
     field: 'name',
     headerName: '名称',
     resizable: true,
-    cellRendererParams: { expandable: true }
+    cellRendererParams: { expandable: true },
   },
   {
     field: 'displayStartDate',
     headerName: '开始时间',
-    resizable: true
+    resizable: true,
   },
   {
     field: 'displayEndDate',
     headerName: '结束时间',
-    resizable: true
+    resizable: true,
   }
 ]);
 const selectedRowIds = ref<string[]>([]);
 const unExpandRowIds = ref<string[]>([]);
 
-const defaultCol = ref<DefaultCol>({
+const rows = shallowRef<RowData[]>([]); // 对于数据量大的情况此处需要用shallowRef，可极大提高初始打开甘特图性能
+const defaultCol = ref<DefaultColDef>({
   resizable: true,
   suppressMovable: true,
-  width: 150
+  width: 150,
+  cellRenderer: markRaw(CellRender),
+  valueSetter: (params: ValueSetterParams<RowData, any>) => {
+    const field = params.colDef.field || '';
+    const newValue = params.newValue;
+    const row = params.data;
+    row[field] = newValue;
+    if (field === 'displayStartDate' || field === 'displayEndDate') {
+      const timeLines = row.timeLines;
+      if (timeLines) {
+        if (field === 'displayStartDate') {
+          timeLines[0].startDate = newValue;
+        } else {
+          timeLines[timeLines.length - 1].endDate = newValue;
+        }
+        vgGanttRef.value.freshRowNodes([row]);
+      }
+    }
+    return true;
+  }
 });
-
-const rows = shallowRef<RowData[]>([]); // 对于数据量大的情况此处需要用shallowRef，可极大提高初始打开甘特图性能
-
 onBeforeMount(() => {
-  rows.value = getLargeNumRows();
+  rows.value = getMultiRows();
 });
 
 const onSelectChange = (selectedIds: string[]) => {

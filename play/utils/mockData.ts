@@ -1,4 +1,4 @@
-import { RowData } from 'vue3-gantt-chart/types';
+import { RowData, TimeLine } from 'vue3-gantt-chart/types';
 import dayjs from 'dayjs';
 
 type TimeSpanUnit = 'day' | 'month' | 'year'
@@ -29,18 +29,18 @@ const createRows = (number: number, timeLineNum: number, timeSpanUnit: TimeSpanU
 };
 
 const createSingleRow = (id: string | number, timeLineNum: number, timeSpanUnit: TimeSpanUnit): RowData => {
-  const randomDay = getRandomTimeSpan('day');
+  const timeLines = createTimeLine(timeLineNum, timeSpanUnit);
   return {
     id: id.toString(),
     name: 'person' + id,
-    displayStartDate: dayjs().format('YYYY-MM-DD'),
-    displayEndDate: dayjs().add(randomDay, 'day').format('YYYY-MM-DD'),
-    timeLines: createTimeLine(timeLineNum, timeSpanUnit),
+    displayStartDate: timeLines[0].startDate,
+    displayEndDate: timeLines[timeLines.length - 1].endDate,
+    timeLines,
   };
 };
 
 const createTimeLine = (num = 10, timeSpanUnit: TimeSpanUnit) => {
-  const timeLines: any[] = [];
+  const timeLines: TimeLine[] = [];
   let firstTimeSpan = getRandomTimeSpan(timeSpanUnit);
   for (let i = 1; i <= num; i++) {
     const startDate = dayjs().add(firstTimeSpan, timeSpanUnit).format('YYYY-MM-DD');
