@@ -108,8 +108,8 @@ provide(
   showSecondLevel
 );
 
-const triggerTableViewScroll = (options: ScrollToOptions, triggerScrollBar?: boolean) => {
-  tableViewRef.value?.scrollTo(options, triggerScrollBar);
+const triggerTableViewScroll = (options: ScrollToOptions, onWheel?: boolean) => {
+  tableViewRef.value?.scrollTo(options, onWheel);
 };
 
 const triggerGanttViewScroll = (options: ScrollToOptions) => {

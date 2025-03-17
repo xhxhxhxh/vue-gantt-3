@@ -11,7 +11,6 @@ export const useTableScroll = ({
   emitTriggerGanttViewScroll: (options: ScrollToOptions) => void
 }) => {
   const scrollFromGanttView = ref(false);
-  let scrollFromTableBody = false;
 
   onBeforeUnmount(() => {
     tableBodyView.value?.removeEventListener('wheel', bodyWheel);
@@ -20,28 +19,15 @@ export const useTableScroll = ({
 
   /**
    * per scroll will trigger this function
-   * @param options
-   */
-  const handleScroll = (options: ScrollToOptions) => {
-    console.log('handleScroll');
-    if (scrollFromGanttView.value) {
-      scrollFromGanttView.value = false;
-    } else {
-      emitTriggerGanttViewScroll(options);
-    }
-  };
-
-  /**
-   * per scroll will trigger this function
    * @returns
    */
   const verticalScrollViewportScroll = () => {
-    console.log('verticalScrollViewportScroll');
-    if (scrollFromTableBody) {
-      scrollFromTableBody = false;
-      return;
+
+    if (scrollFromGanttView.value) {
+      scrollFromGanttView.value = false;
+    } else {
+      emitTriggerGanttViewScroll({ top: tableBodyVerticalScrollViewport.value?.scrollTop });
     }
-    handleScroll({ top: tableBodyVerticalScrollViewport.value?.scrollTop });
   };
 
   /**
@@ -61,16 +47,16 @@ export const useTableScroll = ({
     tableBodyVerticalScrollViewport.value?.scrollTo({ top: scrollTop });
   };
 
-  const scrollTo = (options: ScrollToOptions, triggerScrollBar?: boolean) => {
+  const scrollTo = (options: ScrollToOptions, onWheel?: boolean) => {
     scrollFromGanttView.value = true;
-    if (triggerScrollBar) {
+
+    if (onWheel) {
       tableBodyVerticalScrollViewport.value?.scrollTo(options);
     } else {
-      scrollFromTableBody = true;
       tableBodyView.value?.scrollTo(options);
       // 当新的options值与现有滚动条位置一致时，不会再次触发scroll事件，需要手动将scrollFromTableBody设为false
       if (tableBodyVerticalScrollViewport.value?.scrollTop === options.top) {
-        scrollFromTableBody = false;
+        scrollFromGanttView.value = false;
       }
     }
   };

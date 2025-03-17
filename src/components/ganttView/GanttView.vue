@@ -70,7 +70,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  (event: 'triggerTableViewScroll', options: ScrollToOptions, triggerScrollBar?: boolean): void,
+  (event: 'triggerTableViewScroll', options: ScrollToOptions, onWheel?: boolean): void,
   (event: 'ganttBodyResize', target: HTMLDivElement): void,
   (event: 'perHourSpacingChange', perHourSpacing: number): void,
 }>();
