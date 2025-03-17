@@ -22,7 +22,7 @@
   </svg>
 </template>
 <script lang="ts" setup>
-import { MGanttStyleOption, GanttBodyStartInfo } from '@/types';
+import { GanttStyleOption, GanttBodyStartInfo } from '@/types';
 import { ref, inject, Ref, onMounted, computed, watch, toRef, onBeforeUnmount } from 'vue';
 import { getRound } from '@/utils/common';
 import dayjs from 'dayjs';
@@ -33,7 +33,7 @@ export interface Props {
   rowBuffer: number,
   edgeSpacing: number,
   ganttMinDate: dayjs.Dayjs,
-  styleOption?: MGanttStyleOption
+  styleOption?: GanttStyleOption
 }
 console.log('ganttGrid');
 const props = defineProps<Props>();

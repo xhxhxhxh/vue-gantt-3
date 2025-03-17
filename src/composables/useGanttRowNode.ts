@@ -1,9 +1,9 @@
-import { ref, provide, onMounted, onBeforeUnmount, onBeforeMount, shallowRef, watch } from 'vue';
+import { ref, provide, onBeforeMount, shallowRef, watch } from 'vue';
 import type { Ref } from 'vue';
 import type GanttView from "@/components/ganttView/GanttView.vue";
 import type TableView from "@/components/tableView/TableView.vue";
 
-import type { RowData, DefaultColDef, GanttRowNode, MGanttStyleOption, TimePoint, MovedTimeLineData } from '@/types';
+import type { RowData, GanttRowNode } from '@/types';
 import dayjs from 'dayjs';
 import { treeForEachSkipChildren } from "@/utils/common";
 
@@ -299,9 +299,9 @@ export const useGanttRowNode = ({
   };
 
   /**
- * a recursion function, fresh RowNodes' date
- * @param rowNodes
- */
+   * a recursion function, fresh RowNodes' date
+   * @param rowNodes
+   */
   const refreshRowNodeDate = (rowNodes: GanttRowNode[]) => {
     for (let rowNode of rowNodes) {
       const startDateArr: dayjs.Dayjs[] = [];
@@ -328,7 +328,7 @@ export const useGanttRowNode = ({
   };
 
   /**
-   * usdate row node date when time line changed by move or stretch
+   * update row node date when time line changed by move or stretch
    * @param rowId
    */
   const freshRowNodeDateByTimeLine = (rowId: string) => {
@@ -359,10 +359,10 @@ export const useGanttRowNode = ({
   );
 
   /**
- * get rowNode all children ,include children's children
- * @param rowNodes
- * @returns
- */
+   * get rowNode all children ,include children's children
+   * @param rowNodes
+   * @returns
+   */
   const getAllChildren = (rowNodes: GanttRowNode[]) => {
     const result: GanttRowNode[] = [];
     treeForEachSkipChildren(rowNodes, (currentRowNode) => {
@@ -373,9 +373,9 @@ export const useGanttRowNode = ({
   };
 
   /**
- * get data from rows which are showing in visual area
- * @returns
- */
+   * get data from rows which are showing in visual area
+   * @returns
+   */
   const getDisplayRows = () => {
     const firstRowIndex = tableViewRef.value?.getFirstDisplayedRow();
     const lastRowIndex = tableViewRef.value?.getLastDisplayedRow();

@@ -39,7 +39,7 @@
 <script lang="ts" setup>
 import ScrollBar from '../scrollbar/ScrollBar.vue';
 import GanttHeader from './ganttHeader/GanttHeader.vue';
-import type { RowData, ColDef, DefaultColDef, GanttRowNode, MGanttStyleOption } from '@/types';
+import type { RowData, ColDef, DefaultColDef, GanttRowNode, GanttStyleOption } from '@/types';
 import dayjs from 'dayjs';
 import { ref, onBeforeMount, computed, onMounted, onBeforeUnmount, watch, shallowRef, inject, toRef, provide } from 'vue';
 import minMax from 'dayjs/plugin/minMax';
@@ -61,7 +61,7 @@ export interface Props {
   firstLevelRowNode: GanttRowNode[],
   visibleRowIds: string[],
   defaultPerHourSpacing?: number,
-  styleOption?: MGanttStyleOption,
+  styleOption?: GanttStyleOption,
   timePointComp?: any
 }
 console.log('GanttView');

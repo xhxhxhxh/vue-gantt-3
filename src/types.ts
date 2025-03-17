@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import type { ILoadingCellRendererParams, LoadingCellRendererSelectorResult, ColDef } from "ag-grid-community";
-export type * from "ag-grid-community";
+export type { ColDef } from "ag-grid-community";
 
 export interface TimeLineStyle {
   [cssProperty: string]: string | number;
@@ -75,10 +75,6 @@ export interface GanttRowNode {
   timeLineNodes?: TimeLineNode[],
 }
 
-export interface MGanttRowNode<TData extends RowData> extends GanttRowNode {
-  data: TData
-}
-
 export interface VisibleRow {
   id: string,
   rowNode: GanttRowNode,
@@ -139,7 +135,7 @@ export interface BlockItem{
   tip: string
 }
 
-export interface MGanttStyleOption {
+export interface GanttStyleOption {
   barColor?: string,
   showHorizontalGridLines?: boolean,
   barsLabeling?: 'none' | 'insideBarWithIcon' | 'insideBarWithoutIcon' | 'beforeTheBar' | 'afterTheBar',

@@ -15,7 +15,8 @@
 </template>
 <script lang="ts" setup>
 import { ref, onBeforeMount, shallowRef, markRaw } from 'vue';
-import { ColDef, DefaultColDef, RowData, ValueSetterParams } from 'vue3-gantt-chart/types';
+import { ColDef, DefaultColDef, RowData } from 'vue3-gantt-chart/types';
+import type { ValueSetterParams } from 'ag-grid-community';
 import { getSingleRow, getMultiRows, getLargeNumRows, getEmptyRows } from './utils/mockData';
 import CellRender from './components/CellRender.vue';
 import Vue3GanttChart from 'vue3-gantt-chart';
@@ -70,7 +71,7 @@ const defaultCol = ref<DefaultColDef>({
   }
 });
 onBeforeMount(() => {
-  rows.value = getMultiRows();
+  rows.value = getLargeNumRows();
 });
 
 const onSelectChange = (selectedIds: string[]) => {

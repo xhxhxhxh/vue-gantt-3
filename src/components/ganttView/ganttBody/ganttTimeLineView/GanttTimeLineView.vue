@@ -46,7 +46,7 @@
 <script lang="ts" setup>
 import { ref, inject, Ref, onMounted, computed, watch, toRef, onBeforeUnmount, shallowRef, triggerRef, nextTick } from 'vue';
 import dayjs, { Dayjs } from 'dayjs';
-import { GanttRowNode, VisibleRow, TimeLine, TimeLineNode, VisibleTimeLine, MGanttStyleOption, TimePointNode, TimePoint, RowData, MovedTimeLineData } from '@/types';
+import { GanttRowNode, VisibleRow, TimeLine, TimeLineNode, VisibleTimeLine, GanttStyleOption, TimePointNode, TimePoint, RowData, MovedTimeLineData } from '@/types';
 import minMax from 'dayjs/plugin/minMax';
 import isBetween from 'dayjs/plugin/isBetween';
 import { getRound, toMap, treeForEach } from '@/utils/common';
@@ -64,7 +64,7 @@ export interface Props {
   rowNodeMap: Map<string, GanttRowNode>,
   ganttViewWidth: number,
   edgeSpacing: number,
-  styleOption?: MGanttStyleOption,
+  styleOption?: GanttStyleOption,
   timePointComp?: any
 }
 console.log('ganttTimeLine');

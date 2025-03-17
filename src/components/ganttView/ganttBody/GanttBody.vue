@@ -33,7 +33,7 @@ import { ref, inject, toRef, computed, watch } from 'vue';
 import type { Ref } from 'vue';
 import GanttGrid from './ganttGrid/GanttGrid.vue';
 import GanttTimeLineView from './ganttTimeLineView/GanttTimeLineView.vue';
-import { RowData, GanttRowNode, MGanttStyleOption } from '@/types';
+import { RowData, GanttRowNode, GanttStyleOption } from '@/types';
 
 export interface Props {
   rowHeight: number,
@@ -46,7 +46,7 @@ export interface Props {
   rows: RowData[],
   rowNodeMap: Map<string, GanttRowNode>,
   visibleRowIds: string[],
-  styleOption?: MGanttStyleOption,
+  styleOption?: GanttStyleOption,
   timePointComp?: any
 }
 console.log('ganttBody');
