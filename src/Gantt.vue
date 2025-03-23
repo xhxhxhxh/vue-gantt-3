@@ -45,7 +45,7 @@
 import TableView from "./components/tableView/TableView.vue";
 import GanttView from "./components/ganttView/GanttView.vue";
 import type { RowData, ColDef, DefaultColDef, GanttRowNode, GanttStyleOption, TimePoint, MovedTimeLineData } from '@/types';
-import { ref, provide } from 'vue';
+import { ref, provide, toRef } from 'vue';
 import ExpandableBox from './components/common/ExpandableBox.vue';
 import dayjs from 'dayjs';
 import minMax from 'dayjs/plugin/minMax';
@@ -100,6 +100,7 @@ const emit = defineEmits<{
 const ganttViewRef = ref<InstanceType<typeof GanttView>>();
 const tableViewRef = ref<InstanceType<typeof TableView>>();
 const vGanttRef = ref<HTMLDivElement>();
+const rows = toRef(props, 'rows');
 const showSecondLevel = ref(true);
 const rowClass = 'vg-row';
 
@@ -230,7 +231,7 @@ const {
 } = useGanttRowNode({
   ganttViewRef,
   tableViewRef,
-  rows: props.rows,
+  rows: rows,
   getRowId: props.getRowId,
   setExpand,
   setSelect,

@@ -19,7 +19,7 @@ export const useGanttRowNode = ({
 }: {
   ganttViewRef: Ref<InstanceType<typeof GanttView>| undefined>,
   tableViewRef: Ref<InstanceType<typeof TableView>| undefined>,
-  rows: RowData[],
+  rows: Ref<RowData[], RowData[]>,
   getRowId: (row: RowData) => string,
   setExpand: (id: string, expand: boolean) => void,
   setSelect: (id: string) => void,
@@ -37,7 +37,7 @@ export const useGanttRowNode = ({
     initRowNode();
   });
 
-  watch(() => rows, (newRows, oldRows) => {
+  watch(rows, (newRows, oldRows) => {
     console.log('rows change');
     onRowsChange(newRows, oldRows);
   }, { deep: false });
@@ -54,7 +54,7 @@ export const useGanttRowNode = ({
     const newVisibleRowIds: string[] = [];
     const newRowDataList: RowData[] = [];
     const newFirstLevelRowNode: GanttRowNode[] = [];
-    convertALLRows(rows, oldRowNodeMap, newRowNodeMap, newRowNodeIds, newRowDataList);
+    convertALLRows(rows.value, oldRowNodeMap, newRowNodeMap, newRowNodeIds, newRowDataList);
     rowNodeIds.value = newRowNodeIds;
     rowNodeMap.value = newRowNodeMap;
     rowDataList.value = newRowDataList;
