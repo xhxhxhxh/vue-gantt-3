@@ -297,7 +297,7 @@ const onWheel = (e: WheelEvent) => {
 
 const onResize = (target: HTMLDivElement) => {
   if (ganttBodyRef.value) {
-    ganttBodyRef.value.onResize(target);
+    ganttBodyRef.value.onResize();
   }
   if (ganttHeaderRef.value) {
     ganttHeaderRef.value.onResize();

@@ -104,7 +104,7 @@ const onScroll = ({ scrollTop, scrollLeft }: {scrollTop: number, scrollLeft: num
   }
 };
 
-const onResize = (target: HTMLDivElement) => {
+const onResize = () => {
   console.log('ganttbody resize');
   getGanttBodyWidth();
   getGanttBodyHeight();
@@ -112,7 +112,7 @@ const onResize = (target: HTMLDivElement) => {
     ganttGridRef.value.onResize();
   }
   if (ganttTimeLineViewRef.value) {
-    ganttTimeLineViewRef.value.onResize(target);
+    ganttTimeLineViewRef.value.onResize();
   }
 };
 
