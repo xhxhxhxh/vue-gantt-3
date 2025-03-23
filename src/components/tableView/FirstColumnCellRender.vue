@@ -12,7 +12,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, watch, computed, onBeforeMount, markRaw, toRef, shallowRef } from "vue";
+import { ref, shallowRef } from "vue";
 import type { FirstColumnCellRenderParams } from '@/types';
 
 const props = defineProps<{

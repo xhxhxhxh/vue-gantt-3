@@ -107,7 +107,6 @@ const setTableRowSelected = () => {
 };
 
 const onViewPortChanged = (data: ViewportChangedEvent<RowData>) => {
-  // console.log('data', data);
   const firstRow = data.firstRow;
   const lastRow = data.lastRow;
 

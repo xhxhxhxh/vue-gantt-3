@@ -27,7 +27,7 @@ export interface Props {
   scrollbarHeight?: number,
   scrollbarWidth?: number
 }
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   scrollbarHeight: 0,
   scrollbarWidth: 0
 });

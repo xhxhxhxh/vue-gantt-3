@@ -41,7 +41,7 @@ import ScrollBar from '../scrollbar/ScrollBar.vue';
 import GanttHeader from './ganttHeader/GanttHeader.vue';
 import type { RowData, ColDef, DefaultColDef, GanttRowNode, GanttStyleOption } from '@/types';
 import dayjs from 'dayjs';
-import { ref, onBeforeMount, computed, onMounted, onBeforeUnmount, watch, shallowRef, inject, toRef, provide } from 'vue';
+import { ref, onBeforeMount, onMounted, watch, inject, provide } from 'vue';
 import minMax from 'dayjs/plugin/minMax';
 import GanttBody from './ganttBody/GanttBody.vue';
 import { getRound, treeForEach } from '@/utils/common';
@@ -78,8 +78,8 @@ const emit = defineEmits<{
 const ganttMinDate = ref<dayjs.Dayjs>(dayjs());
 const ganttMaxDate = ref<dayjs.Dayjs | null>(null);
 
-const edgeSpacing = ref(20); // 时间线与显示区域边界的保持20px的间距
-const perHourSpacing = ref(props.defaultPerHourSpacing); // 每个小时之间的间距
+const edgeSpacing = ref(20); // Keep a 20px gap between the timeline and the display edge
+const perHourSpacing = ref(props.defaultPerHourSpacing);
 const ganttBodyRef = ref<InstanceType<typeof GanttBody>>();
 const ganttHeaderRef = ref<InstanceType<typeof GanttHeader>>();
 const scrollBarRef = ref<InstanceType<typeof ScrollBar>>();
@@ -107,6 +107,12 @@ watch(() => props.defaultPerHourSpacing, (val) => {
 
 const getTopLevelRow = inject('getTopLevelRow') as (rowId: string, currentRowNodeMap: Map<string, GanttRowNode>) => GanttRowNode;
 
+/**
+ * calculate the min and max date of the gantt chart
+ * @param excludeRowIds
+ * @param freshStartDate
+ * @param freshEndDate
+ */
 const getGanttMinAndMaxDate = (excludeRowIds: string[] = [], freshStartDate = true, freshEndDate = true) => {
   const excludeRowIdSet = new Set(excludeRowIds);
   const excludeFirstLevelRowId = excludeRowIds.map((rowId) => getTopLevelRow(rowId, props.rowNodeMap).id);
@@ -170,18 +176,27 @@ const updateMaxDate = (maxDate: dayjs.Dayjs) => {
   ganttMaxDate.value = maxDate;
 };
 
+/**
+ * calculate the width of the gantt chart by the min and max date
+ */
 const updateGanttViewWidth = () => {
   const diffHour = ganttMaxDate.value?.diff(ganttMinDate.value, 'hour', true) || 0;
   if (diffHour > 0) {
     ganttViewWidth.value = getRound(diffHour * perHourSpacing.value + edgeSpacing.value * 2);
   }
 
-  // 设置maxPerHourSpacing， 浏览器最大支持16777200宽度显示
+  // browser max width is 16777200
   maxPerHourSpacing.value = Math.floor((16777200 - edgeSpacing.value * 2) / diffHour);
 };
 
 watch([perHourSpacing, ganttMinDate, ganttMaxDate, edgeSpacing], updateGanttViewWidth);
 
+/**
+ * calculate the min and max date from the rowNodes
+ * @param expectRowNodes
+ * @param freshStartDate
+ * @param freshEndDate
+ */
 const getMinAndMaxDate = (expectRowNodes: GanttRowNode[], freshStartDate = true, freshEndDate = true) => {
   const startDateArr: dayjs.Dayjs[] = [];
   const endDateArr: dayjs.Dayjs[] = [];
@@ -203,12 +218,15 @@ const getMinAndMaxDate = (expectRowNodes: GanttRowNode[], freshStartDate = true,
   };
 };
 
-// addedRowNodes中都是最新数据，deletedRowNodes都是旧数据，updatedRowNodes包含新旧数据
+/**
+ * trigger when rowNode change
+ * @param param0 addedRowNodes is new, deletedRowNodes is old, updatedRowNodes include new and old
+ * @param freshRowNodes
+ */
 const updateMinAndMaxDateByChangeRowNode = ({ addedRowNodes = [], deletedRowNodes = [], updatedRowNodes = [] }:
 {addedRowNodes?: GanttRowNode[], deletedRowNodes?: GanttRowNode[], updatedRowNodes?: GanttRowNode[]}, freshRowNodes: GanttRowNode[]) => {
   let freshStartDate = false;
   let freshEndDate = false;
-  // updatedRowNodes其实就是先删除旧数据，再新增新数据
   for (let updatedRowNode of updatedRowNodes) {
     addedRowNodes.push({
       ...updatedRowNode,
@@ -268,7 +286,7 @@ const onScroll = ({ scrollTop, scrollLeft }: {scrollTop: number, scrollLeft: num
 
 const onWheel = (e: WheelEvent) => {
   if (!scrollbarWrap.value) return;
-  if (Math.abs(e.deltaY) < 3) return; // 防止笔记本触摸板一直滚动
+  if (Math.abs(e.deltaY) < 3) return; // prevent the touchpad from scrolling continuously
   const scrollSpeed = 100;
   const scrollDistance = e.deltaY > 0 ? scrollSpeed : -scrollSpeed;
   const scrollTop = scrollbarWrap.value?.scrollTop + scrollDistance;
@@ -307,10 +325,14 @@ const onVerticalScrollBarShow = ({ show, scrollbarWidth }: {show: boolean, scrol
 
 const scrollTo = (options: ScrollToOptions) => {
   scrollFromTableView.value = true;
-  // 此处需要使用triggerScrollFromOutSide，防止tableView滚动过快导致timelineview白屏
+  // use triggerScrollFromOutSide to prevent the tableView from scrolling too fast and causing the timelineView to white screen
   scrollBarRef.value?.triggerScrollFromOutSide(options);
 };
 
+/**
+ * trigger by user to fresh time lines
+ * @param rowNodes
+ */
 const freshTimeLines = (rowNodes: GanttRowNode[]) => {
   if (ganttBodyRef.value) {
     ganttBodyRef.value.freshTimeLines(rowNodes);
