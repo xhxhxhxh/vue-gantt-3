@@ -25,7 +25,7 @@ export const useTimePoint = ({
 }: {
   timePointSize: ComputedRef<number>,
   perHourSpacing: Ref<number>,
-  rowNodeMap: Map<string, GanttRowNode>,
+  rowNodeMap: Ref<Map<string, GanttRowNode>, Map<string, GanttRowNode>>,
   visibleTimeLineMap: ShallowRef<Map<string, VisibleTimeLine[]>, Map<string, VisibleTimeLine[]>>
 }) => {
 
@@ -43,7 +43,7 @@ export const useTimePoint = ({
       return timePointNode.date.isBetween(minDate, maxDate);
     }) || [];
     const selectedTimePointsData = selectedTimePoints.map(timePointNode => timePointNode.data);
-    timePointContextMenu(e, selectedTimePointsData, rowNodeMap.get(rowId));
+    timePointContextMenu(e, selectedTimePointsData, rowNodeMap.value.get(rowId));
   };
 
   const timePointMoveFinished = inject('timePointMoveFinished') as (timePoint: TimePoint, date: Dayjs) => void;

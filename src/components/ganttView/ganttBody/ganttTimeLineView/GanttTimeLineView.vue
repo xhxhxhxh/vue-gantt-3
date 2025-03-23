@@ -5,7 +5,7 @@
          class="vg-time-line-row vg-row"
          :data-row-id="row.id"
          :class="{'vg-selected-row': selectedRowIds.has(row.id)}"
-         :style="{height: rowHeight + 'px', transform: `translateY(${row.translateY}px)`}">
+         :style="{height: rowHeightRef + 'px', transform: `translateY(${row.translateY}px)`}">
       <div v-for="timeLine in visibleTimeLineMap.get(row.id)"
            :key="timeLine.id"
            :style="{width: timeLine.width + 'px', transform: `translateX(${timeLine.translateX}px)`}"
@@ -87,8 +87,10 @@ const selectedRowIds = inject('selectedRowIds') as Ref<Set<string>>;
 const timeLineMoving = ref(false);
 const movingTimeLine: Ref<VisibleTimeLine | null> = ref(null);
 const movingTimeLineRowId = ref('');
-const perHourSpacing = toRef(props, 'perHourSpacing');
-const ganttViewWidth = toRef(props, 'ganttViewWidth');
+const perHourSpacingRef = toRef(props, 'perHourSpacing');
+const ganttViewWidthRef = toRef(props, 'ganttViewWidth');
+const rowHeightRef = toRef(props, 'rowHeight');
+const rowNodeMapRef = toRef(props, 'rowNodeMap');
 const timePointSize = computed(() => {
   return props.styleOption?.timePointSize || 28;
 });
@@ -153,12 +155,12 @@ const {
   visibleRows,
   updateParentTimeLine
 } = useTimeLine({
-  rowHeight: props.rowHeight,
+  rowHeight: rowHeightRef,
   rowBuffer: props.rowBuffer,
-  perHourSpacing: perHourSpacing,
+  perHourSpacing: perHourSpacingRef,
   scrollViewScrollTop,
   scrollViewScrollLeft,
-  rowNodeMap: props.rowNodeMap,
+  rowNodeMap: rowNodeMapRef,
   currentVisibleRowIds,
   startInfo,
   movingTimeLineRowId,
@@ -174,15 +176,15 @@ const {
   onTimePointMouseDown
 } = useTimePoint({
   timePointSize,
-  perHourSpacing: perHourSpacing,
-  rowNodeMap: props.rowNodeMap,
+  perHourSpacing: perHourSpacingRef,
+  rowNodeMap: rowNodeMapRef,
   visibleTimeLineMap
 });
 
 const { startTimeLineStretch } = useTimeLineStretch({
   edgeSpacing: props.edgeSpacing,
-  ganttViewWidth: ganttViewWidth,
-  rowNodeMap: props.rowNodeMap,
+  ganttViewWidth: ganttViewWidthRef,
+  rowNodeMap: rowNodeMapRef,
   movingTimeLineRowId,
   movingTimeLine,
   timeLineMoving,
@@ -199,8 +201,8 @@ const { startTimeLineStretch } = useTimeLineStretch({
 
 const { startTimeLineMove } = useTimeLineMove({
   edgeSpacing: props.edgeSpacing,
-  ganttViewWidth: ganttViewWidth,
-  rowNodeMap: props.rowNodeMap,
+  ganttViewWidth: ganttViewWidthRef,
+  rowNodeMap: rowNodeMapRef,
   movingTimeLineRowId,
   movingTimeLine,
   timeLineMoving,

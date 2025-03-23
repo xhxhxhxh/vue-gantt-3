@@ -23,7 +23,7 @@ export const useTimeLineStretch = ({
 }: {
   edgeSpacing: number,
   ganttViewWidth: Ref<number>,
-  rowNodeMap: Map<string, GanttRowNode>,
+  rowNodeMap: Ref<Map<string, GanttRowNode>, Map<string, GanttRowNode>>,
   movingTimeLineRowId: Ref<string>,
   movingTimeLine: Ref<VisibleTimeLine | null>,
   timeLineMoving: Ref<boolean>,
@@ -48,7 +48,7 @@ export const useTimeLineStretch = ({
     const oldWidth = timeLine.width;
     const minWidth = 4;
     const wrapWidth = wrapRef.value!.offsetWidth;
-    const currentRowNode = rowNodeMap.get(rowId);
+    const currentRowNode = rowNodeMap.value.get(rowId);
     let invalidDistance = 0;
     let startScrollX = 0;
     movingTimeLine.value = timeLine;

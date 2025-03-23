@@ -6,7 +6,7 @@
         :getRowId="getRowId"
         :columns="columns"
         :defaultCol="defaultCol"
-        :rowHeight="rowHeight"
+        :rowHeight="rowHeightRef"
         :headerHeight="headerHeight"
         :rowBuffer="rowBuffer"
         :rowSelection="rowSelection"
@@ -23,9 +23,9 @@
       ref="ganttViewRef"
       :getRowId="getRowId"
       :columns="columns"
-      :rows="rows"
+      :rows="rowsRef"
       :defaultCol="defaultCol"
-      :rowHeight="rowHeight"
+      :rowHeight="rowHeightRef"
       :headerHeight="headerHeight"
       :rowBuffer="rowBuffer"
       :rowSelection="rowSelection"
@@ -100,7 +100,8 @@ const emit = defineEmits<{
 const ganttViewRef = ref<InstanceType<typeof GanttView>>();
 const tableViewRef = ref<InstanceType<typeof TableView>>();
 const vGanttRef = ref<HTMLDivElement>();
-const rows = toRef(props, 'rows');
+const rowsRef = toRef(props, 'rows');
+const rowHeightRef = toRef(props, 'rowHeight');
 const showSecondLevel = ref(true);
 const rowClass = 'vg-row';
 
@@ -231,7 +232,7 @@ const {
 } = useGanttRowNode({
   ganttViewRef,
   tableViewRef,
-  rows: rows,
+  rows: rowsRef,
   getRowId: props.getRowId,
   setExpand,
   setSelect,
@@ -243,7 +244,7 @@ const {
   handleSetSelect,
   selectRows,
   getTargetElementInfo
-} = useGanttSelect({ vGanttRef, visibleRowIds, rowHeight: props.rowHeight, rowClass, emitGanttMouseDown, emitSelectChange });
+} = useGanttSelect({ vGanttRef, visibleRowIds, rowHeight: rowHeightRef, rowClass, emitGanttMouseDown, emitSelectChange });
 
 const {
   handleSetExpand,

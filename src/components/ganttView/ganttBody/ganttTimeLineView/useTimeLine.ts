@@ -17,12 +17,12 @@ export const useTimeLine = ({
   movingTimeLine,
   createTimePointNodes
 }: {
-  rowHeight: number,
+  rowHeight: Ref<number>,
   rowBuffer: number,
   perHourSpacing: Ref<number>,
   scrollViewScrollTop: Ref<number>,
   scrollViewScrollLeft: Ref<number>,
-  rowNodeMap: Map<string, GanttRowNode>,
+  rowNodeMap: Ref<Map<string, GanttRowNode>, Map<string, GanttRowNode>>,
   currentVisibleRowIds: Ref<string[], string[]>,
   startInfo: ComputedRef<{
     startDate: dayjs.Dayjs;
@@ -50,9 +50,9 @@ export const useTimeLine = ({
     if (!wrapRef.value) return;
     console.log('freshVisibleRows');
     const wrapHeight = wrapRef.value.offsetHeight;
-    const bufferHeight = rowHeight * rowBuffer;
-    const startNumInView = Math.floor((scrollViewScrollTop.value - bufferHeight) / rowHeight);
-    const endNumInView = Math.ceil((scrollViewScrollTop.value + wrapHeight + bufferHeight) / rowHeight);
+    const bufferHeight = rowHeight.value * rowBuffer;
+    const startNumInView = Math.floor((scrollViewScrollTop.value - bufferHeight) / rowHeight.value);
+    const endNumInView = Math.ceil((scrollViewScrollTop.value + wrapHeight + bufferHeight) / rowHeight.value);
 
     const newVisibleRows: VisibleRow[] = [];
     const start = Math.max(0, startNumInView);
@@ -60,12 +60,12 @@ export const useTimeLine = ({
 
     for (let i = start; i <= end; i++) {
       const currentRowId = currentVisibleRowIds.value[i];
-      const currentRowNode = rowNodeMap.get(currentRowId);
+      const currentRowNode = rowNodeMap.value.get(currentRowId);
       if (currentRowNode) {
         newVisibleRows.push({
           id: currentRowId,
           rowNode: currentRowNode,
-          translateY: i * rowHeight
+          translateY: i * rowHeight.value
         });
 
         // 对timeLineNodes按照startdate先后进行排序，以方便timeline在画布中的位置计算
@@ -290,7 +290,7 @@ export const useTimeLine = ({
     if (rowNodes.length === 0) return;
     treeForEach(rowNodes, (rowNode) => {
       const currentRowId = rowNode.id;
-      const currentRowNode = rowNodeMap.get(currentRowId);
+      const currentRowNode = rowNodeMap.value.get(currentRowId);
       currentRowNode && (currentRowNode.timeLineNodes = undefined);
       visibleTimeLineMap.value.delete(currentRowId);
     });
@@ -298,7 +298,7 @@ export const useTimeLine = ({
   };
 
   const updateParentTimeLine = (rowId: string) => {
-    const parentRowNode = rowNodeMap.get(rowId);
+    const parentRowNode = rowNodeMap.value.get(rowId);
     const { startDate } = startInfo.value;
     if (parentRowNode) {
       const parentTimeLineNode = parentRowNode.timeLineNodes?.[0];

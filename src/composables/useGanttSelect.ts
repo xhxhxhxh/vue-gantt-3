@@ -11,7 +11,7 @@ export const useGanttSelect = ({
 }: {
   vGanttRef: Ref<HTMLDivElement | undefined>,
   visibleRowIds: Ref<string[], string[]>,
-  rowHeight: number,
+  rowHeight: Ref<number>,
   rowClass: string,
   emitGanttMouseDown: (event: MouseEvent, rowId: string | null) => void,
   emitSelectChange: (ids: string[]) => void
@@ -144,7 +144,7 @@ export const useGanttSelect = ({
         const transformY = parseFloat(transformYStr);
         // Rounding is required here to prevent the last bit of the browser's scientific count from being intercepted
         // when the value is too large, resulting in incorrect calculation of the rowIndex
-        rowIndex = parseInt((transformY / rowHeight).toFixed(0));
+        rowIndex = parseInt((transformY / rowHeight.value).toFixed(0));
       }
     }
 

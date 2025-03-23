@@ -23,7 +23,7 @@ export const useTimeLineMove = ({
 }: {
   edgeSpacing: number,
   ganttViewWidth: Ref<number>,
-  rowNodeMap: Map<string, GanttRowNode>,
+  rowNodeMap: Ref<Map<string, GanttRowNode>, Map<string, GanttRowNode>>,
   movingTimeLineRowId: Ref<string>,
   movingTimeLine: Ref<VisibleTimeLine | null>,
   timeLineMoving: Ref<boolean>,
@@ -51,7 +51,7 @@ export const useTimeLineMove = ({
     let startScrollX = 0;
     const wrapWidth = wrapRef.value!.offsetWidth;
     const oldStartDate = timeLine.startDate;
-    const currentRowNode = rowNodeMap.get(rowId);
+    const currentRowNode = rowNodeMap.value.get(rowId);
 
     const onMouseMove = (event: MouseEvent) => {
       let currentX = event.clientX;
