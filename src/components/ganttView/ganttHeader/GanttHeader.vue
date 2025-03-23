@@ -22,7 +22,7 @@
 </template>
 <script lang="ts" setup>
 import dayjs from 'dayjs';
-import { ref, inject, onMounted, computed, watch, onBeforeUnmount, shallowRef } from 'vue';
+import { ref, inject, computed, watch, shallowRef } from 'vue';
 import type { Ref } from 'vue';
 
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
@@ -49,6 +49,7 @@ const bufferWidth = 200;
 const ganttHeaderRef = ref<HTMLDivElement>();
 const scrollLeftOffset = ref(0);
 const showSecondLevel = inject('showSecondLevel') as Ref<boolean>;
+
 const ganttHeaderLevelWidth = computed(() => {
   if (!ganttHeaderRef.value) return '100%';
   const minWidth = ganttHeaderRef.value.offsetWidth as number;
@@ -112,10 +113,10 @@ const freshBlocks = () => {
 
   const { firstLevelUnit, secondLevelUnit, canShowSecondLevel } = getUnit.value;
 
-  // 一级header
+  // first header
   firstLevelBlocks.value = getNewBlocks(firstLevelStartLeft, firstLevelStartUnitDate, firstLevelUnit);
 
-  // 二级header
+  // second header
   showSecondLevel.value = canShowSecondLevel;
   if (canShowSecondLevel) {
     secondLevelBlocks.value = getNewBlocks(secondLevelStartLeft, secondLevelStartUnitDate, secondLevelUnit);
@@ -123,6 +124,12 @@ const freshBlocks = () => {
   console.timeEnd('freshBlocks');
 };
 
+/**
+ * calculate blocks' size by startLeft and startDate
+ * @param startLeft
+ * @param startDate
+ * @param currentUnit
+ */
 const getNewBlocks = (startLeft: number, startDate: dayjs.Dayjs, currentUnit: GanttHeaderUnit) => {
   const ganttHeaderWidth = ganttHeaderRef.value!.offsetWidth;
   const startLeftInView = scrollViewScrollLeft.value - bufferWidth;
@@ -147,8 +154,6 @@ const getNewBlocks = (startLeft: number, startDate: dayjs.Dayjs, currentUnit: Ga
   let blockSpacing = getBlockSpacingByUnit(currentLevelStartDateInView, currentUnit);
 
   while ((levelStart - blockSpacing) <= endLeftInView) {
-    console.log(111);
-
     let width = blockSpacing;
     let offset = width;
     if (levelStart > limitMinLeft && (levelStart - blockSpacing) < limitMinLeft) {
@@ -210,7 +215,6 @@ const getBlockTip = (date: dayjs.Dayjs, unit: GanttHeaderUnit) => {
 
 };
 
-// 该date必须是一段时间的末尾例如2020-12-31 23.59
 const getBlockSpacingByUnit = (date: dayjs.Dayjs, unit: GanttHeaderUnit) => {
   const { perHourSpacing } = props;
 
@@ -233,23 +237,9 @@ watch([startInfo, scrollViewScrollLeft], freshBlocks);
 const onScroll = ({ scrollLeft }: { scrollLeft: number}) => {
   scrollViewScrollLeft.value = scrollLeft;
   ganttHeaderRef.value && (ganttHeaderRef.value.scrollLeft = scrollLeft);
-  console.log('scrollLeft', scrollLeft, ganttHeaderRef.value?.scrollLeft);
-
 };
 
 const updateGanttHeaderWidth = (show: boolean, scrollbarWidth: number) => {
-  // if (show) {
-  //   mGanttHeaderWidth.value = `calc(100% - ${scrollbarWidth}px)`;
-  // } else {
-  //   mGanttHeaderWidth.value = '100%';
-  // }
-  // if (ganttHeaderRef.value) {
-  //   if (show) {
-  //     ganttHeaderRef.value.style.overflowY = `scroll`;
-  //   } else {
-  //     ganttHeaderRef.value.style.overflowY = 'unset';
-  //   }
-  // }
   if (show) {
     scrollLeftOffset.value = scrollbarWidth;
   } else {
@@ -257,7 +247,7 @@ const updateGanttHeaderWidth = (show: boolean, scrollbarWidth: number) => {
   }
 };
 
-const onResize = (target: HTMLDivElement) => {
+const onResize = () => {
   freshBlocks();
 
 };

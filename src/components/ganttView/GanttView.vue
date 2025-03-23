@@ -300,7 +300,7 @@ const onResize = (target: HTMLDivElement) => {
     ganttBodyRef.value.onResize(target);
   }
   if (ganttHeaderRef.value) {
-    ganttHeaderRef.value.onResize(target);
+    ganttHeaderRef.value.onResize();
   }
   emit('ganttBodyResize', target);
 };
