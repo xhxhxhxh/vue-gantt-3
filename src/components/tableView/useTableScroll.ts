@@ -22,7 +22,6 @@ export const useTableScroll = ({
    * @returns
    */
   const verticalScrollViewportScroll = () => {
-
     if (scrollFromGanttView.value) {
       scrollFromGanttView.value = false;
     } else {
@@ -53,8 +52,9 @@ export const useTableScroll = ({
     if (onWheel) {
       tableBodyVerticalScrollViewport.value?.scrollTo(options);
     } else {
-      tableBodyView.value?.scrollTo(options);
-      // 当新的options值与现有滚动条位置一致时，不会再次触发scroll事件，需要手动将scrollFromTableBody设为false
+      tableBodyVerticalScrollViewport.value?.scrollTo(options);
+      // if the new options value is consistent with the current scrollbar position, the scroll event will not be triggered again,
+      // and you need to manually set scrollFromTableBody to false
       if (tableBodyVerticalScrollViewport.value?.scrollTop === options.top) {
         scrollFromGanttView.value = false;
       }

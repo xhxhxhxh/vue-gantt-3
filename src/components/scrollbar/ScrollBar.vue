@@ -117,8 +117,6 @@ const onResize = () => {
   horizontalWidth.value = resizeRefWidth;
   verticalHeight.value = resizeRefHeight;
 
-  console.log(resizeRefWidth, wrapRefOffsetWidth, resizeRefHeight, wrapRefOffsetHeight);
-
   if (resizeRefWidth > wrapRefOffsetWidth) {
     horizontalVisible.value = true;
   } else {

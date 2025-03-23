@@ -153,7 +153,6 @@ const refreshCells = (rowIds: string[], force = false) => {
     rowNode && rowNodes.push(rowNode);
   });
   if (rowNodes.length) {
-    console.log('refreshCells');
     tableRef.value?.refreshCells({ rowNodes: rowNodes, force });
   }
 

@@ -84,7 +84,8 @@ const ganttBodyRef = ref<InstanceType<typeof GanttBody>>();
 const ganttHeaderRef = ref<InstanceType<typeof GanttHeader>>();
 const scrollBarRef = ref<InstanceType<typeof ScrollBar>>();
 const ganttGanttView = ref<HTMLDivElement>();
-const verticalScrollThumb = ref<HTMLDivElement>();
+const scrollbarWrap = ref<HTMLDivElement>();
+
 const perHourSpacingScale = 1.2;
 const minPerHourSpacing = ref(0.007);
 const maxPerHourSpacing = ref(1400);
@@ -97,7 +98,7 @@ onBeforeMount(() => {
 });
 
 onMounted(() => {
-  verticalScrollThumb.value = scrollBarRef.value?.$el.querySelector('.m-scrollbar-thumb-wrap.is-vertical') as HTMLDivElement;
+  scrollbarWrap.value = scrollBarRef.value?.$el.querySelector('.m-scrollbar-wrap') as HTMLDivElement;
 });
 
 watch(() => props.defaultPerHourSpacing, (val) => {
@@ -266,12 +267,12 @@ const onScroll = ({ scrollTop, scrollLeft }: {scrollTop: number, scrollLeft: num
 };
 
 const onWheel = (e: WheelEvent) => {
-  if (!verticalScrollThumb.value) return;
+  if (!scrollbarWrap.value) return;
   if (Math.abs(e.deltaY) < 3) return; // 防止笔记本触摸板一直滚动
   const scrollSpeed = 100;
   const scrollDistance = e.deltaY > 0 ? scrollSpeed : -scrollSpeed;
-  const scrollTop = verticalScrollThumb.value?.scrollTop + scrollDistance;
-  verticalScrollThumb.value?.scrollTo({ top: scrollTop });
+  const scrollTop = scrollbarWrap.value?.scrollTop + scrollDistance;
+  scrollBarRef.value?.triggerScrollFromOutSide({ top: scrollTop });
   scrollFromTableView.value = true;
   emit('triggerTableViewScroll', { top: scrollTop }, true);
 };
