@@ -29,7 +29,7 @@
 </template>
 <script lang="ts" setup>
 import dayjs from 'dayjs';
-import { ref, inject, toRef, computed, watch } from 'vue';
+import { ref, inject, toRef, watch } from 'vue';
 import type { Ref } from 'vue';
 import GanttGrid from './ganttGrid/GanttGrid.vue';
 import GanttTimeLineView from './ganttTimeLineView/GanttTimeLineView.vue';
@@ -83,7 +83,6 @@ const getGanttBodyHeight = () => {
     ganttBodyHeight.value = contentHeight + 'px';
   } else {
     const wrapHeight = wrapRef.value.offsetHeight as number;
-    console.log('getGanttBodyHeight', contentHeight, wrapHeight);
     ganttBodyHeight.value = Math.max(contentHeight, wrapHeight) + 'px';
   }
 };
@@ -110,7 +109,7 @@ const onResize = (target: HTMLDivElement) => {
   getGanttBodyWidth();
   getGanttBodyHeight();
   if (ganttGridRef.value) {
-    ganttGridRef.value.onResize(target);
+    ganttGridRef.value.onResize();
   }
   if (ganttTimeLineViewRef.value) {
     ganttTimeLineViewRef.value.onResize(target);

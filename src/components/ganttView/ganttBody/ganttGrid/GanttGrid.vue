@@ -23,7 +23,7 @@
 </template>
 <script lang="ts" setup>
 import { GanttStyleOption, GanttBodyStartInfo } from '@/types';
-import { ref, inject, Ref, onMounted, computed, watch, toRef, onBeforeUnmount } from 'vue';
+import { ref, inject, Ref, computed, watch, toRef } from 'vue';
 import { getRound } from '@/utils/common';
 import dayjs from 'dayjs';
 
@@ -59,7 +59,7 @@ const freshGrid = () => {
   console.timeEnd('freshGrid');
 };
 
-// 获取第一条月份竖线的left位置
+// get the left position of the first month vertical line
 const startInfo = computed<GanttBodyStartInfo>(() => {
   const { perHourSpacing, edgeSpacing, ganttMinDate } = props;
   const diffHour = edgeSpacing / perHourSpacing;
@@ -145,7 +145,7 @@ const onScroll = ({ scrollTop, scrollLeft }: {scrollTop: number, scrollLeft: num
   scrollViewScrollLeft.value = scrollLeft;
 };
 
-const onResize = (target: HTMLDivElement) => {
+const onResize = () => {
   freshGrid();
 
 };
