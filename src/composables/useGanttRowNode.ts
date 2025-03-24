@@ -140,7 +140,6 @@ export const useGanttRowNode = ({
       expand: true,
       level: 0
     };
-
     return baseNode;
   };
 

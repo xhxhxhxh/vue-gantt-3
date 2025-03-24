@@ -15,11 +15,12 @@
 </template>
 <script lang="ts" setup>
 import { ref, onBeforeMount, shallowRef, markRaw } from 'vue';
-import { ColDef, DefaultColDef, RowData } from 'vue3-gantt-chart/types';
+import { ColDef, DefaultColDef } from 'vue3-gantt-chart/types';
 import type { ValueSetterParams } from 'ag-grid-community';
 import { getSingleRow, getMultiRows, getLargeNumRows, getEmptyRows } from './utils/mockData';
 import CellRender from './components/CellRender.vue';
 import Vue3GanttChart from 'vue3-gantt-chart';
+import { RowData } from './types';
 
 const vgGanttRef = ref<InstanceType<typeof Vue3GanttChart> | undefined>();
 
@@ -51,7 +52,7 @@ const defaultCol = ref<DefaultColDef>({
   suppressMovable: true,
   width: 150,
   cellRenderer: markRaw(CellRender),
-  valueSetter: (params: ValueSetterParams<RowData, any>) => {
+  valueSetter: (params: ValueSetterParams<Omit<RowData, 'children'>, any>) => {
     const field = params.colDef.field || '';
     const newValue = params.newValue;
     const row = params.data;

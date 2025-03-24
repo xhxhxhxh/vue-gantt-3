@@ -11,15 +11,16 @@ export interface TimePoint {
   id: string,
   icon?: string,
   useTimePointComp?: boolean,
-  compParams?: any,
-  [propName: string]: any,
+  compParams?: any
 }
 
-export interface TimePointNode {
+export type GanttTimePoint<T extends TimePoint> = T
+
+export interface TimePointNode<T extends TimePoint = TimePoint> {
   translateX: number,
   date: dayjs.Dayjs,
   id: string,
-  data: TimePoint,
+  data: T,
   icon?: string,
   useTimePointComp?: boolean,
   compParams?: any,
@@ -49,17 +50,18 @@ export interface TimeLineNode {
   label?: string,
 }
 
-export interface RowData {
-  [propName: string]: any,
+export interface RowData<T = any> {
   timeLines?: TimeLine[],
-  children?: RowData[],
-  isEmpty?: boolean
+  isEmpty?: boolean,
+  children?: RowData<T>[]
 }
 
-export interface GanttRowNode {
+export type GanttRowData<T extends RowData<T>> = T
+
+export interface GanttRowNode<T extends RowData<T> = RowData> {
   id: string,
   level: number,
-  data: RowData,
+  data: RowData<T>,
   startDate: dayjs.Dayjs | null,
   endDate: dayjs.Dayjs | null,
   oldStartDate?: dayjs.Dayjs | null,
@@ -71,7 +73,7 @@ export interface GanttRowNode {
   parentId?: string,
   hide?: boolean,
   readOnly?: boolean,
-  children?: GanttRowNode[],
+  children?: GanttRowNode<T>[],
   timeLineNodes?: TimeLineNode[],
 }
 

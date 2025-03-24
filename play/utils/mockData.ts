@@ -1,5 +1,6 @@
-import { RowData, TimeLine } from 'vue3-gantt-chart/types';
+import { TimeLine } from 'vue3-gantt-chart/types';
 import dayjs from 'dayjs';
+import { RowData } from '../types';
 
 type TimeSpanUnit = 'day' | 'month' | 'year'
 

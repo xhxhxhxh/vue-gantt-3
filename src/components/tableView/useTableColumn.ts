@@ -41,7 +41,7 @@ export const useTableColumns = ({
    * @param params
    * @returns
    */
-  function cellRendererSelector (params: ILoadingCellRendererParams<RowData>) {
+  function cellRendererSelector (params: ILoadingCellRendererParams<Omit<RowData, 'children'>>) {
     const field = params.colDef?.field;
     const cellRendererParams = params.colDef?.cellRendererParams;
     if (firstColumId && field === firstColumId && cellRendererParams?.expandable) {
