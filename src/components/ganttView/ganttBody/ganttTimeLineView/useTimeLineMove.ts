@@ -146,7 +146,7 @@ export const useTimeLineMove = ({
     const nextEndDate = getDiffSecondByDistance(distance, timeLine.endDate);
     timeLine.endDate = nextEndDate;
     timeLine.timeLineNode.endDate = nextEndDate;
-    if (timeLine.translateX === edgeSpacing && distance > 0) {
+    if (getRound(timeLine.translateX) === edgeSpacing && distance > 0) {
       const { minStartDate } = getGanttMinAndMaxDate([rowId], true, false);
       if (!minStartDate || nextStartDate.isBefore(minStartDate)) {
         emitUpdateMinDate(nextStartDate);

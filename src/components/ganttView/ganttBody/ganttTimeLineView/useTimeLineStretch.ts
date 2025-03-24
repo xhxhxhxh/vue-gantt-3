@@ -164,6 +164,7 @@ export const useTimeLineStretch = ({
    * @returns
    */
   const timeLineStretch = (timeLine: VisibleTimeLine, rowId: string, distance: number, minWidth: number, direction: 'left' | 'right') => {
+    console.log('ganttViewWidth.value', ganttViewWidth.value);
     const oldWidth = timeLine.width;
     if (direction === 'left') {
       timeLine.width -= distance;
@@ -178,7 +179,7 @@ export const useTimeLineStretch = ({
       const nextStartDate = getDiffSecondByDistance(diffWidth, timeLine.startDate);
       timeLine.timeLineNode.startDate = nextStartDate;
       timeLine.startDate = nextStartDate;
-      if (timeLine.translateX === edgeSpacing && diffWidth > 0) {
+      if (getRound(timeLine.translateX) === edgeSpacing && diffWidth > 0) {
         const { minStartDate } = getGanttMinAndMaxDate([rowId], true, false);
         if (!minStartDate || nextStartDate.isBefore(minStartDate)) {
           emitUpdateMinDate(nextStartDate);
