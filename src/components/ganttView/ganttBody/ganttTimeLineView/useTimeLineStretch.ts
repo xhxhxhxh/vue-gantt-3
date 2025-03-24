@@ -66,7 +66,8 @@ export const useTimeLineStretch = ({
       const diffX = currentX - lastX;
       console.log('onMouseMove');
 
-      // make sure
+      // keep stretch if timeline width is less than minWidth, it will produce invalid distance,
+      // then stretch on reverse direction, it will reduce invalid distance, stretch will be effected until invalid distance is 0
       const perInvalidDistance = calcPerInvalidDistance(timeLine.width, diffX, minWidth, direction);
       if (invalidDistance === 0) {
         timeLineStretch(timeLine, rowId, diffX, minWidth, direction);
@@ -130,11 +131,17 @@ export const useTimeLineStretch = ({
       movingTimeLine.value = null;
       movingTimeLineRowId.value = '';
       if (timeLine.width !== oldWidth) {
+        // update row node date
         freshRowNodeDateByTimeLine(rowId);
         if (currentRowNode?.timeLineNodes) {
+          // if time line overlap, merge them
           sortTimeLineNodes(currentRowNode.timeLineNodes);
           currentRowNode.timeLineNodes = mergeOverlapTimeLine(currentRowNode.timeLineNodes);
+
+          // if timeline is a merge node, update all merged nodes' date
           onTimeLineStretchChange(rowId, timeLine, direction);
+
+          // fresh visible time lines
           visibleTimeLineMap.value.delete(rowId);
           freshVisibleTimeLines(false);
         }
@@ -147,6 +154,15 @@ export const useTimeLineStretch = ({
     window.addEventListener('mouseup', onMouseUp);
   };
 
+  /**
+   * calculate time line position, date and gantt min and max date
+   * @param timeLine
+   * @param rowId
+   * @param distance
+   * @param minWidth
+   * @param direction
+   * @returns
+   */
   const timeLineStretch = (timeLine: VisibleTimeLine, rowId: string, distance: number, minWidth: number, direction: 'left' | 'right') => {
     const oldWidth = timeLine.width;
     if (direction === 'left') {
@@ -207,6 +223,12 @@ export const useTimeLineStretch = ({
     }
   };
 
+  /**
+   * update merged time line nodes' date, and notice user
+   * @param rowId
+   * @param timeLine
+   * @param direction
+   */
   const onTimeLineStretchChange = (rowId: string, timeLine: VisibleTimeLine, direction: 'left' | 'right') => {
     const timeLineNode = timeLine.timeLineNode;
     const timeLineIds: string[] = [timeLineNode.id];

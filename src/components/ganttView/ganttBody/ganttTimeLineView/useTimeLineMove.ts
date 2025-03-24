@@ -43,6 +43,12 @@ export const useTimeLineMove = ({
   => { minStartDate: dayjs.Dayjs | null, maxEndDate: dayjs.Dayjs | null };
   const timeLineMoveChange = inject('timeLineMoveChange') as (rowId: string, timeLineIds: string[], movedTimeData: MovedTimeLineData[]) => void;
 
+  /**
+   * handle time line move
+   * @param e
+   * @param timeLine
+   * @param rowId
+   */
   const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: string) => {
     timeLine.moving = true;
     movingTimeLine.value = timeLine;
@@ -101,12 +107,18 @@ export const useTimeLineMove = ({
       movingTimeLine.value = null;
       movingTimeLineRowId.value = '';
       if (!oldStartDate.isSame(timeLine.startDate)) {
+        // update row node date
         freshRowNodeDateByTimeLine(rowId);
         if (currentRowNode?.timeLineNodes) {
+          // if time line overlap, merge them
           sortTimeLineNodes(currentRowNode.timeLineNodes);
           currentRowNode.timeLineNodes = mergeOverlapTimeLine(currentRowNode.timeLineNodes);
+
+          // if timeline is a merge node, update all merged nodes' date
           const diffSecond = timeLine.startDate.diff(oldStartDate, 'second', true);
           onTimeLineMoveChange(rowId, timeLine, diffSecond);
+
+          // fresh visible time lines
           visibleTimeLineMap.value.delete(rowId);
           freshVisibleTimeLines(false);
         }
@@ -120,6 +132,13 @@ export const useTimeLineMove = ({
     window.addEventListener('mouseup', onMouseUp);
   };
 
+  /**
+   * calculate time line position, date and gantt min and max date
+   * @param timeLine
+   * @param rowId
+   * @param distance
+   * @returns
+   */
   const timeLineMove = (timeLine: VisibleTimeLine, rowId: string, distance: number) => {
     const nextStartDate = getDiffSecondByDistance(distance, timeLine.startDate);
     timeLine.startDate = nextStartDate;
@@ -160,6 +179,12 @@ export const useTimeLineMove = ({
     triggerRef(visibleTimeLineMap);
   };
 
+  /**
+   * update merged time line nodes' date, and notice user
+   * @param rowId
+   * @param timeLine
+   * @param diffSecond
+   */
   const onTimeLineMoveChange = (rowId: string, timeLine: VisibleTimeLine, diffSecond: number) => {
     const timeLineNode = timeLine.timeLineNode;
     const timeLineIds: string[] = [timeLineNode.id];
