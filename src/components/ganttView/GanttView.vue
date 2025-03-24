@@ -98,7 +98,7 @@ onBeforeMount(() => {
 });
 
 onMounted(() => {
-  scrollbarWrap.value = scrollBarRef.value?.$el.querySelector('.m-scrollbar-wrap') as HTMLDivElement;
+  scrollbarWrap.value = scrollBarRef.value?.$el.querySelector('.vg-scrollbar-wrap') as HTMLDivElement;
 });
 
 watch(() => props.defaultPerHourSpacing, (val) => {
@@ -352,7 +352,7 @@ defineExpose({
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-  .m-scrollbar {
+  .vg-scrollbar {
     flex: 1;
   }
 }

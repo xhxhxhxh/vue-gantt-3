@@ -1,9 +1,9 @@
 <template>
-  <div class="m-scrollbar"
+  <div class="vg-scrollbar"
        :style="{paddingBottom: horizontalVisible ? `${scrollbarHeight}px` : 0,
                 paddingRight: verticalVisible ? `${scrollbarWidth}px` : 0}">
     <div ref="wrapRef"
-         class="m-scrollbar-wrap"
+         class="vg-scrollbar-wrap"
          :class="wrapClass"
          :style="wrapStyle"
          @wheel="handleWheel"
@@ -11,7 +11,7 @@
       <component
         :is="tag"
         ref="resizeRef"
-        class="m-scrollbar-view"
+        class="vg-scrollbar-view"
         :class="viewClass"
         :style="viewStyle"
       >
@@ -190,17 +190,17 @@ defineExpose({
 
 </script>
 <style lang="scss">
-.m-scrollbar {
+.vg-scrollbar {
   position: relative;
   overflow: hidden;
-  .m-scrollbar-wrap {
+  .vg-scrollbar-wrap {
     width: 100%;
     height: 100%;
     overflow: auto;
     &::-webkit-scrollbar {
       display: none;
     }
-    .m-scrollbar-view {
+    .vg-scrollbar-view {
       width: fit-content;
       height: fit-content;
     }

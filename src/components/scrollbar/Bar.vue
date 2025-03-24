@@ -59,7 +59,7 @@ defineExpose({
 
 </script>
 <style lang="scss" >
-.m-scrollbar-thumb-wrap {
+.vg-scrollbar-thumb-wrap {
   position: absolute;
   overflow: auto;
   &.is-horizontal {

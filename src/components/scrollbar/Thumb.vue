@@ -1,11 +1,11 @@
 <template>
   <div ref="thumbRef"
-       class="m-scrollbar-thumb-wrap"
+       class="vg-scrollbar-thumb-wrap"
        :class="isHorizontal ? 'is-horizontal' : 'is-vertical'"
        @scroll="onScroll"
        @mouseenter="mouseHover = true"
        @mouseleave="mouseHover = false">
-    <div class="m-scrollbar-thumb" :style="{width: width + 'px', height: height + 'px'}"></div>
+    <div class="vg-scrollbar-thumb" :style="{width: width + 'px', height: height + 'px'}"></div>
   </div>
 </template>
 <script lang="ts" setup>

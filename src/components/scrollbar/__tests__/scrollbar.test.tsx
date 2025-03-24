@@ -18,7 +18,7 @@ describe('scrollbar', () => {
       }
     });
 
-    const scrollView = wrapper.find('.m-scrollbar-view').element;
+    const scrollView = wrapper.find('.vg-scrollbar-view').element;
     const nodeName = scrollView.nodeName;
     expect(nodeName).toBe('P');
   });
@@ -33,8 +33,8 @@ describe('scrollbar', () => {
       },
     });
 
-    const scrollWrap = wrapper.find('.m-scrollbar-wrap').element as VueNode<HTMLDivElement>;
-    const scrollView = wrapper.find('.m-scrollbar-view').element as VueNode<HTMLDivElement>;
+    const scrollWrap = wrapper.find('.vg-scrollbar-wrap').element as VueNode<HTMLDivElement>;
+    const scrollView = wrapper.find('.vg-scrollbar-view').element as VueNode<HTMLDivElement>;
 
     expect(scrollView.classList.contains('view-class')).toBeTruthy();
     expect(scrollView.style.background).toBe('red');
@@ -55,10 +55,10 @@ describe('scrollbar', () => {
         default: `<div style="width: ${innerWidth}px; height: ${innerHeight}px;"></div>`
       }
     });
-    const horizontalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-horizontal');
-    const verticalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-vertical');
-    const wrapView = wrapper.find('.m-scrollbar-wrap').element as VueNode<HTMLDivElement>;
-    const scrollView = wrapper.find('.m-scrollbar-view').element as VueNode<HTMLDivElement>;
+    const horizontalThumb = wrapper.find('.vg-scrollbar-thumb-wrap.is-horizontal');
+    const verticalThumb = wrapper.find('.vg-scrollbar-thumb-wrap.is-vertical');
+    const wrapView = wrapper.find('.vg-scrollbar-wrap').element as VueNode<HTMLDivElement>;
+    const scrollView = wrapper.find('.vg-scrollbar-view').element as VueNode<HTMLDivElement>;
 
     defineGetter(wrapView, 'offsetWidth', outWidth);
     defineGetter(wrapView, 'offsetHeight', outHeight);
@@ -83,10 +83,10 @@ describe('scrollbar', () => {
         default: `<div style="width: ${innerWidth}px; height: ${innerHeight}px;"></div>`
       }
     });
-    const horizontalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-horizontal');
-    const verticalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-vertical');
-    const wrapView = wrapper.find('.m-scrollbar-wrap').element as VueNode<HTMLDivElement>;
-    const scrollView = wrapper.find('.m-scrollbar-view').element as VueNode<HTMLDivElement>;
+    const horizontalThumb = wrapper.find('.vg-scrollbar-thumb-wrap.is-horizontal');
+    const verticalThumb = wrapper.find('.vg-scrollbar-thumb-wrap.is-vertical');
+    const wrapView = wrapper.find('.vg-scrollbar-wrap').element as VueNode<HTMLDivElement>;
+    const scrollView = wrapper.find('.vg-scrollbar-view').element as VueNode<HTMLDivElement>;
 
     defineGetter(wrapView, 'offsetWidth', outWidth);
     defineGetter(wrapView, 'offsetHeight', outHeight);
@@ -115,10 +115,10 @@ describe('scrollbar', () => {
         default: `<div style="width: ${innerWidth}px; height: ${innerHeight}px;"></div>`
       }
     });
-    const horizontalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-horizontal');
-    const verticalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-vertical');
-    const wrapView = wrapper.find('.m-scrollbar-wrap').element as VueNode<HTMLDivElement>;
-    const scrollView = wrapper.find('.m-scrollbar-view').element as VueNode<HTMLDivElement>;
+    const horizontalThumb = wrapper.find('.vg-scrollbar-thumb-wrap.is-horizontal');
+    const verticalThumb = wrapper.find('.vg-scrollbar-thumb-wrap.is-vertical');
+    const wrapView = wrapper.find('.vg-scrollbar-wrap').element as VueNode<HTMLDivElement>;
+    const scrollView = wrapper.find('.vg-scrollbar-view').element as VueNode<HTMLDivElement>;
 
     defineGetter(wrapView, 'offsetWidth', outWidth);
     defineGetter(wrapView, 'offsetHeight', outHeight);
@@ -143,10 +143,10 @@ describe('scrollbar', () => {
         default: `<div style="width: ${innerWidth}px; height: ${innerHeight}px;"></div>`
       }
     });
-    const horizontalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-horizontal') as DOMWrapper<HTMLDivElement>;
-    const verticalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-vertical') as DOMWrapper<HTMLDivElement>;
-    const wrapView = wrapper.find('.m-scrollbar-wrap') as DOMWrapper<HTMLDivElement>;
-    const scrollView = wrapper.find('.m-scrollbar-view') as DOMWrapper<HTMLDivElement>;
+    const horizontalThumb = wrapper.find('.vg-scrollbar-thumb-wrap.is-horizontal') as DOMWrapper<HTMLDivElement>;
+    const verticalThumb = wrapper.find('.vg-scrollbar-thumb-wrap.is-vertical') as DOMWrapper<HTMLDivElement>;
+    const wrapView = wrapper.find('.vg-scrollbar-wrap') as DOMWrapper<HTMLDivElement>;
+    const scrollView = wrapper.find('.vg-scrollbar-view') as DOMWrapper<HTMLDivElement>;
 
     const wrapViewElement = wrapView.element;
     const scrollViewElement = scrollView.element;
@@ -183,10 +183,10 @@ describe('scrollbar', () => {
         default: `<div style="width: ${innerWidth}px; height: ${innerHeight}px;"></div>`
       }
     });
-    const horizontalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-horizontal') as DOMWrapper<HTMLDivElement>;
-    const verticalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-vertical') as DOMWrapper<HTMLDivElement>;
-    const wrapView = wrapper.find('.m-scrollbar-wrap') as DOMWrapper<HTMLDivElement>;
-    const scrollView = wrapper.find('.m-scrollbar-view') as DOMWrapper<HTMLDivElement>;
+    const horizontalThumb = wrapper.find('.vg-scrollbar-thumb-wrap.is-horizontal') as DOMWrapper<HTMLDivElement>;
+    const verticalThumb = wrapper.find('.vg-scrollbar-thumb-wrap.is-vertical') as DOMWrapper<HTMLDivElement>;
+    const wrapView = wrapper.find('.vg-scrollbar-wrap') as DOMWrapper<HTMLDivElement>;
+    const scrollView = wrapper.find('.vg-scrollbar-view') as DOMWrapper<HTMLDivElement>;
 
     const wrapViewElement = wrapView.element;
     const scrollViewElement = scrollView.element;
@@ -223,10 +223,10 @@ describe('scrollbar', () => {
         default: `<div style="width: ${innerWidth}px; height: ${innerHeight}px;"></div>`
       }
     });
-    const horizontalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-horizontal') as DOMWrapper<HTMLDivElement>;
-    const verticalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-vertical') as DOMWrapper<HTMLDivElement>;
-    const wrapView = wrapper.find('.m-scrollbar-wrap') as DOMWrapper<HTMLDivElement>;
-    const scrollView = wrapper.find('.m-scrollbar-view') as DOMWrapper<HTMLDivElement>;
+    const horizontalThumb = wrapper.find('.vg-scrollbar-thumb-wrap.is-horizontal') as DOMWrapper<HTMLDivElement>;
+    const verticalThumb = wrapper.find('.vg-scrollbar-thumb-wrap.is-vertical') as DOMWrapper<HTMLDivElement>;
+    const wrapView = wrapper.find('.vg-scrollbar-wrap') as DOMWrapper<HTMLDivElement>;
+    const scrollView = wrapper.find('.vg-scrollbar-view') as DOMWrapper<HTMLDivElement>;
 
     const wrapViewElement = wrapView.element;
     const scrollViewElement = scrollView.element;
@@ -263,10 +263,10 @@ describe('scrollbar', () => {
         default: `<div style="width: ${innerWidth}px; height: ${innerHeight}px;"></div>`
       }
     });
-    const horizontalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-horizontal') as DOMWrapper<HTMLDivElement>;
-    const verticalThumb = wrapper.find('.m-scrollbar-thumb-wrap.is-vertical') as DOMWrapper<HTMLDivElement>;
-    const wrapView = wrapper.find('.m-scrollbar-wrap') as DOMWrapper<HTMLDivElement>;
-    const scrollView = wrapper.find('.m-scrollbar-view') as DOMWrapper<HTMLDivElement>;
+    const horizontalThumb = wrapper.find('.vg-scrollbar-thumb-wrap.is-horizontal') as DOMWrapper<HTMLDivElement>;
+    const verticalThumb = wrapper.find('.vg-scrollbar-thumb-wrap.is-vertical') as DOMWrapper<HTMLDivElement>;
+    const wrapView = wrapper.find('.vg-scrollbar-wrap') as DOMWrapper<HTMLDivElement>;
+    const scrollView = wrapper.find('.vg-scrollbar-view') as DOMWrapper<HTMLDivElement>;
 
     const wrapViewElement = wrapView.element;
     const scrollViewElement = scrollView.element;
