@@ -48,6 +48,12 @@ export const useTimePoint = ({
 
   const timePointMoveFinished = inject('timePointMoveFinished') as (timePoint: TimePoint, date: Dayjs) => void;
 
+  /**
+   * handle time point move
+   * @param e
+   * @param timeLine
+   * @param timePoint
+   */
   const onTimePointMouseDown = (e: MouseEvent, timeLine: VisibleTimeLine, timePoint: TimePointNode) => {
     const startX = e.clientX;
     const startTranslateX = timePoint.translateX;

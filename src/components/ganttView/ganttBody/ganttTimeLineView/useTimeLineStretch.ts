@@ -43,6 +43,13 @@ export const useTimeLineStretch = ({
   => { minStartDate: dayjs.Dayjs | null, maxEndDate: dayjs.Dayjs | null };
   const timeLineStretchChange = inject('timeLineStretchChange') as (rowId: string, timeLineIds: string[], startDate: dayjs.Dayjs | null, endDate: dayjs.Dayjs | null) => void;
 
+  /**
+   * handle time line stretch
+   * @param e
+   * @param timeLine
+   * @param rowId
+   * @param direction
+   */
   const startTimeLineStretch = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: string, direction: 'left' | 'right') => {
     let lastX = e.clientX;
     const oldWidth = timeLine.width;
@@ -59,6 +66,7 @@ export const useTimeLineStretch = ({
       const diffX = currentX - lastX;
       console.log('onMouseMove');
 
+      // make sure
       const perInvalidDistance = calcPerInvalidDistance(timeLine.width, diffX, minWidth, direction);
       if (invalidDistance === 0) {
         timeLineStretch(timeLine, rowId, diffX, minWidth, direction);

@@ -68,7 +68,7 @@ export const useTimeLine = ({
           translateY: i * rowHeight.value
         });
 
-        // 对timeLineNodes按照startdate先后进行排序，以方便timeline在画布中的位置计算
+        // sort timeline node for convenience of calculating the position of timeline in the canvas
         const timeLineNodes = sortTimeLinesInRowNode(currentRowNode);
 
         if (timeLineNodes) {
@@ -129,7 +129,7 @@ export const useTimeLine = ({
     });
   };
 
-  // 如果时间线之间有重叠区域需要将两个时间线合并
+  // if timeLineNodes have overlap area, merge them
   const mergeOverlapTimeLine = (timeLineNodes: TimeLineNode[]) => {
     const newTimeLineNodes: TimeLineNode[] = [];
     for (let timeLineNode of timeLineNodes) {
@@ -138,7 +138,7 @@ export const useTimeLine = ({
         lastTimeLineNode.isMerge = true;
         const maxEndDate = dayjs.max([lastTimeLineNode.endDate, timeLineNode.endDate]);
         maxEndDate && (lastTimeLineNode.endDate = maxEndDate);
-        // 时间线中如果有时间点应该不支持合并
+        // if timeLineNode has timePointNodes, not merge
         // if (lastTimeLineNode.timePointNodes && timeLineNode.timePointNodes) {
         //   lastTimeLineNode.timePointNodes = lastTimeLineNode.timePointNodes.concat(timeLineNode.timePointNodes)
         // }
@@ -184,6 +184,11 @@ export const useTimeLine = ({
     return baseNode;
   };
 
+  /**
+   * core function to show time lines
+   * @param freshAll
+   * @returns
+   */
   const freshVisibleTimeLines = (freshAll = true) => {
     if (!wrapRef.value) return;
     const wrapWidth = wrapRef.value.offsetWidth;
@@ -267,7 +272,7 @@ export const useTimeLine = ({
     visibleTimeLineMap.value = newVisibleTimeLineMap;
   };
 
-  // 查找显示区域内时间线的索引(二分法),timeLineNodes经过排序和合并，每个node的开始时间必然不相同
+  // find the index of the time line in the display area (binary search), timeLineNodes are sorted and merged, and the start time of each node must be different
   const getTimeLineIndexInView = (timeLineNodes: TimeLineNode[], targetDate: dayjs.Dayjs, type: 'min' | 'max') => {
     let minIndex = 0;
     let maxIndex = timeLineNodes.length - 1;
@@ -286,6 +291,11 @@ export const useTimeLine = ({
     return minIndex;
   };
 
+  /**
+   *  user can call this function to refresh the time lines of the specified row
+   * @param rowNodes
+   * @returns
+   */
   const freshTimeLines = (rowNodes: GanttRowNode[]) => {
     if (rowNodes.length === 0) return;
     treeForEach(rowNodes, (rowNode) => {
@@ -297,6 +307,10 @@ export const useTimeLine = ({
     freshTimeLineViewAfterScrollTop();
   };
 
+  /**
+   * update the parent time line date if child time line date is changed
+   * @param rowId
+   */
   const updateParentTimeLine = (rowId: string) => {
     const parentRowNode = rowNodeMap.value.get(rowId);
     const { startDate } = startInfo.value;
