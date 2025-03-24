@@ -134,7 +134,7 @@ export const useTimeLineMove = ({
         timeLine.translateX = edgeSpacing;
         updateParentTimeLine(rowId);
         return;
-      } else if (nextStartDate.isAfter(minStartDate)) {
+      } else if (nextStartDate.isAfter(minStartDate) || nextStartDate.isSame(minStartDate)) {
         emitUpdateMinDate(minStartDate);
       }
     } else if (getRound(timeLine.translateX + timeLine.width + edgeSpacing) === getRound(ganttViewWidth.value) && distance < 0) {
@@ -144,7 +144,7 @@ export const useTimeLineMove = ({
         emitUpdateMaxDate(nextEndDate);
         updateParentTimeLine(rowId);
         return;
-      } else if (nextEndDate.isBefore(maxEndDate)) {
+      } else if (nextEndDate.isBefore(maxEndDate) || nextEndDate.isSame(maxEndDate)) {
         emitUpdateMaxDate(maxEndDate);
 
       }

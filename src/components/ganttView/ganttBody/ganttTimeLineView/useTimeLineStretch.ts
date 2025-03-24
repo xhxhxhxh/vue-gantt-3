@@ -161,7 +161,7 @@ export const useTimeLineStretch = ({
           timeLine.translateX = edgeSpacing;
           updateParentTimeLine(rowId);
           return;
-        } else if (nextStartDate.isAfter(minStartDate)) {
+        } else if (nextStartDate.isAfter(minStartDate) || nextStartDate.isSame(minStartDate)) {
           emitUpdateMinDate(minStartDate);
         }
       }
@@ -176,7 +176,7 @@ export const useTimeLineStretch = ({
           emitUpdateMaxDate(nextEndDate);
           updateParentTimeLine(rowId);
           return;
-        } else if (nextEndDate.isBefore(maxEndDate)) {
+        } else if (nextEndDate.isBefore(maxEndDate) || nextEndDate.isSame(maxEndDate)) {
           emitUpdateMaxDate(maxEndDate);
         }
       }
