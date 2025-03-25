@@ -40,7 +40,7 @@
 <script lang="ts" setup>
 import ScrollBar from '../scrollbar/ScrollBar.vue';
 import GanttHeader from './ganttHeader/GanttHeader.vue';
-import type { RowData, ColDef, DefaultColDef, GanttRowNode, GanttStyleOption } from '@/types';
+import type { RowData, ColDef, DefaultColDef, GanttRowNode, GanttStyleOption, TimeScale } from '@/types';
 import dayjs from 'dayjs';
 import { ref, onBeforeMount, onMounted, watch, inject, provide } from 'vue';
 import minMax from 'dayjs/plugin/minMax';
@@ -62,6 +62,7 @@ export interface Props {
   firstLevelRowNode: GanttRowNode[],
   visibleRowIds: string[],
   defaultPerHourSpacing?: number,
+  defaultTimeScale?: TimeScale,
   styleOption?: GanttStyleOption,
   timePointComp?: any,
   locale?: string
@@ -103,9 +104,31 @@ onMounted(() => {
   scrollbarWrap.value = scrollBarRef.value?.$el.querySelector('.vg-scrollbar-wrap') as HTMLDivElement;
 });
 
-watch(() => props.defaultPerHourSpacing, (val) => {
-  perHourSpacing.value = val;
-});
+watch([() => props.defaultPerHourSpacing, () => props.defaultTimeScale], ([currentPerHourSpacing, currentTimeScale]) => {
+  if (currentTimeScale) {
+    switch (currentTimeScale) {
+      case 'day':
+        perHourSpacing.value = 2;
+        break;
+      case 'week':
+        perHourSpacing.value = 0.6;
+        break;
+      case 'month':
+        perHourSpacing.value = 0.1;
+        break;
+      case 'quarter':
+        perHourSpacing.value = 0.05;
+        break;
+      case 'year':
+        perHourSpacing.value = 0.02;
+        break;
+      default:
+        break;
+    }
+  } else {
+    perHourSpacing.value = currentPerHourSpacing;
+  }
+}, { immediate: true });
 
 const getTopLevelRow = inject('getTopLevelRow') as (rowId: string, currentRowNodeMap: Map<string, GanttRowNode>) => GanttRowNode;
 

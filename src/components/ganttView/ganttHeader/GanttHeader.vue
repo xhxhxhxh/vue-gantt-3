@@ -1,6 +1,6 @@
 <template>
   <div ref="ganttHeaderRef" class="vg-header">
-    <div class="vg-header-first-level " :style="{width: ganttHeaderLevelWidth, height: `${headerHeight + 1}px`}">
+    <div v-show="showFirstLevel || !showSecondLevel" class="vg-header-first-level " :style="{width: ganttHeaderLevelWidth, height: `${headerHeight + 1}px`}">
       <div v-for="item in firstLevelBlocks"
            :key="item.key"
            class="vg-header-block"
@@ -51,6 +51,7 @@ const bufferWidth = 200;
 const ganttHeaderRef = ref<HTMLDivElement>();
 const scrollLeftOffset = ref(0);
 const showSecondLevel = inject('showSecondLevel') as Ref<boolean>;
+const showFirstLevel = inject('showFirstLevel') as Ref<boolean>;
 
 const localeRef = computed(() => {
   if (props.locale) {

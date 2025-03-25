@@ -150,3 +150,5 @@ export interface MovedTimeLineData {
   startDate: dayjs.Dayjs,
   endDate: dayjs.Dayjs,
 }
+
+export type TimeScale = 'day' | 'week' | 'month' | 'quarter'| 'year'

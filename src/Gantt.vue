@@ -35,6 +35,7 @@
       :styleOption="styleOption"
       :timePointComp="timePointComp"
       :defaultPerHourSpacing="defaultPerHourSpacing"
+      :defaultTimeScale="defaultTimeScale"
       :locale="locale"
       @trigger-table-view-scroll="triggerTableViewScroll"
       @gantt-body-resize="onGanttBodyResize"
@@ -45,7 +46,7 @@
 <script lang="ts" setup>
 import TableView from "./components/tableView/TableView.vue";
 import GanttView from "./components/ganttView/GanttView.vue";
-import type { RowData, ColDef, DefaultColDef, GanttRowNode, GanttStyleOption, TimePoint, MovedTimeLineData } from '@/types';
+import type { RowData, ColDef, DefaultColDef, GanttRowNode, GanttStyleOption, TimePoint, MovedTimeLineData, TimeScale } from '@/types';
 import { ref, provide, toRef } from 'vue';
 import ExpandableBox from './components/common/ExpandableBox.vue';
 import dayjs from 'dayjs';
@@ -70,8 +71,10 @@ export interface GanttOption {
   maxTableViewWidth?: number,
   styleOption?: GanttStyleOption
   timePointComp?: any,
-  defaultPerHourSpacing?: number
-  locale?: string
+  defaultPerHourSpacing?: number,
+  defaultTimeScale?: TimeScale,
+  locale?: string,
+  defaultShowFirstLevel?: boolean
 }
 console.log('Gantt');
 const props = withDefaults(defineProps<GanttOption>(), {
@@ -83,6 +86,7 @@ const props = withDefaults(defineProps<GanttOption>(), {
   rowBuffer: 5,
   rowSelection: 'multiple',
   headerHeight: 25,
+  defaultShowFirstLevel: true,
 });
 
 const emit = defineEmits<{
@@ -104,12 +108,18 @@ const tableViewRef = ref<InstanceType<typeof TableView>>();
 const vGanttRef = ref<HTMLDivElement>();
 const rowsRef = toRef(props, 'rows');
 const rowHeightRef = toRef(props, 'rowHeight');
+const showFirstLevel = toRef(props, 'defaultShowFirstLevel');
 const showSecondLevel = ref(true);
 const rowClass = 'vg-row';
 
 provide(
   'showSecondLevel',
   showSecondLevel
+);
+
+provide(
+  'showFirstLevel',
+  showFirstLevel
 );
 
 const triggerTableViewScroll = (options: ScrollToOptions, onWheel?: boolean) => {

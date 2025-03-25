@@ -1,6 +1,6 @@
 <template>
   <div ref="tableViewRef" class="vg-table-view">
-    <div v-show="showSecondLevel" class="first-level-header" :style="{height: headerHeight + 1 + 'px'}"></div>
+    <div v-show="showSecondLevel && showFirstLevel" class="first-level-header" :style="{height: headerHeight + 1 + 'px'}"></div>
     <ag-grid-vue
       class="ag-theme-alpine ag-theme-mgantttheme"
       :gridOptions="gridOptions"
@@ -71,6 +71,7 @@ const tableBodyView = ref<HTMLDivElement | null>(null);
 const tableBodyVerticalScrollViewport = ref<HTMLDivElement | null>(null);
 const selectedRowIds = inject('selectedRowIds') as Ref<Set<string>>;
 const showSecondLevel = inject('showSecondLevel') as Ref<boolean>;
+const showFirstLevel = inject('showFirstLevel') as Ref<boolean>;
 const domLayout = ref('normal');
 
 const gridOptions = {
