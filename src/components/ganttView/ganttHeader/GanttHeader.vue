@@ -28,6 +28,7 @@ import type { Ref } from 'vue';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import type { GanttHeaderUnit, BlockItem } from '@/types';
 import { getRound } from '@/utils/common';
+import lang from '@/locale';
 
 dayjs.extend(quarterOfYear);
 
@@ -36,7 +37,8 @@ export interface Props {
   edgeSpacing: number,
   perHourSpacing: number,
   ganttMinDate: dayjs.Dayjs,
-  ganttViewWidth: number
+  ganttViewWidth: number,
+  locale?: string
 }
 console.log('ganttHeader');
 const props = defineProps<Props>();
@@ -49,6 +51,19 @@ const bufferWidth = 200;
 const ganttHeaderRef = ref<HTMLDivElement>();
 const scrollLeftOffset = ref(0);
 const showSecondLevel = inject('showSecondLevel') as Ref<boolean>;
+
+const localeRef = computed(() => {
+  if (props.locale) {
+    return props.locale;
+  } else {
+    const language = navigator.language;
+    if (language.startsWith('zh')) {
+      return 'zh-cn';
+    } else {
+      return language;
+    }
+  }
+});
 
 const ganttHeaderLevelWidth = computed(() => {
   if (!ganttHeaderRef.value) return '100%';
@@ -180,37 +195,39 @@ const getNewBlocks = (startLeft: number, startDate: dayjs.Dayjs, currentUnit: Ga
 };
 
 const getBlockText = (date: dayjs.Dayjs, unit: GanttHeaderUnit) => {
+  const currentLang = lang[localeRef.value];
   switch (unit) {
     case 'hour':
       return date.hour();
     case 'day':
       return date.date();
     case 'month':
-      return date.month() + 1 + '月';
+      return currentLang.month[date.month() + 1];
     case 'year':
       return date.year();
     case 'week':
       return `${date.startOf('week').format('YYYY.MM.DD')}-${date.endOf('week').format('YYYY.MM.DD')}`;
     case 'quarter':
-      return `${date.startOf('quarter').month() + 1}月-${date.endOf('quarter').month() + 1}月`;
+      return `${currentLang.month[date.startOf('quarter').month() + 1]}-${currentLang.month[date.endOf('quarter').month() + 1]}`;
   }
 
 };
 
 const getBlockTip = (date: dayjs.Dayjs, unit: GanttHeaderUnit) => {
+  const dateFormat = lang[localeRef.value].dateFormat;
   switch (unit) {
     case 'hour':
-      return date.format('YYYY年MM月DD日 HH时');
+      return date.format(dateFormat['hour']);
     case 'day':
-      return date.format('YYYY年MM月DD日');
+      return date.format(dateFormat['day']);
     case 'month':
-      return date.format('YYYY年MM月');
+      return date.format(dateFormat['month']);
     case 'year':
-      return date.format('YYYY年');
+      return date.format(dateFormat['year']);
     case 'week':
       return `${date.startOf('week').format('YYYY.MM.DD')}-${date.endOf('week').format('YYYY.MM.DD')}`;
     case 'quarter':
-      return `${date.startOf('quarter').format('YYYY年MM月')}-${date.endOf('quarter').format('YYYY年MM月')}`;
+      return `${date.startOf('quarter').format(dateFormat['month'])}-${date.endOf('quarter').format(dateFormat['month'])}`;
   }
 
 };
@@ -232,7 +249,7 @@ const getBlockSpacingByUnit = (date: dayjs.Dayjs, unit: GanttHeaderUnit) => {
   return diffHour * perHourSpacing;
 };
 
-watch([startInfo, scrollViewScrollLeft], freshBlocks);
+watch([localeRef, startInfo, scrollViewScrollLeft], freshBlocks);
 
 const onScroll = ({ scrollLeft }: { scrollLeft: number}) => {
   scrollViewScrollLeft.value = scrollLeft;

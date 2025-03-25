@@ -35,6 +35,7 @@
       :styleOption="styleOption"
       :timePointComp="timePointComp"
       :defaultPerHourSpacing="defaultPerHourSpacing"
+      :locale="locale"
       @trigger-table-view-scroll="triggerTableViewScroll"
       @gantt-body-resize="onGanttBodyResize"
       @perHourSpacingChange="perHourSpacingChange"
@@ -62,14 +63,15 @@ export interface GanttOption {
   getEmptyRows?: (count: number) => RowData[],
   defaultCol?: DefaultColDef,
   rowHeight?: number,
-  headerHeight?: number, // 最顶部的行高
-  rowBuffer?: number, // 缓冲行数，表示可视区域之外上下各渲染多少行
+  headerHeight?: number, // table and gantt view header height
+  rowBuffer?: number, // The number of rows rendered outside the viewable area the gantt renders
   rowSelection?: 'single' | 'multiple',
   defaultTableViewWidth?: number,
   maxTableViewWidth?: number,
   styleOption?: GanttStyleOption
   timePointComp?: any,
   defaultPerHourSpacing?: number
+  locale?: string
 }
 console.log('Gantt');
 const props = withDefaults(defineProps<GanttOption>(), {
@@ -80,7 +82,7 @@ const props = withDefaults(defineProps<GanttOption>(), {
   rowHeight: 25,
   rowBuffer: 5,
   rowSelection: 'multiple',
-  headerHeight: 25
+  headerHeight: 25,
 });
 
 const emit = defineEmits<{

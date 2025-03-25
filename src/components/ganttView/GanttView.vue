@@ -7,6 +7,7 @@
       :ganttMinDate="ganttMinDate"
       :ganttViewWidth="ganttViewWidth"
       :headerHeight="headerHeight"
+      :locale="locale"
     ></GanttHeader>
     <ScrollBar ref="scrollBarRef"
                :intercept-shift-scroll="true"
@@ -62,7 +63,8 @@ export interface Props {
   visibleRowIds: string[],
   defaultPerHourSpacing?: number,
   styleOption?: GanttStyleOption,
-  timePointComp?: any
+  timePointComp?: any,
+  locale?: string
 }
 console.log('GanttView');
 const props = withDefaults(defineProps<Props>(), {
