@@ -46,7 +46,8 @@ const columns = ref<ColDef[]>([
 const selectedRowIds = ref<string[]>([]);
 const unExpandRowIds = ref<string[]>([]);
 
-const rows = shallowRef<RowData[]>([]); // 对于数据量大的情况此处需要用shallowRef，可极大提高初始打开甘特图性能
+// For a large amount of data, shallowRef should be used here, which can greatly improve the performance of initial Gantt chart
+const rows = shallowRef<RowData[]>([]);
 const defaultCol = ref<DefaultColDef>({
   resizable: true,
   suppressMovable: true,

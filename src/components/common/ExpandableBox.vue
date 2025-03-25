@@ -1,9 +1,15 @@
 <template>
   <div class="c-expandable-box">
-    <div :style="boxStyle" style="overflow:hidden;height:100%" :class="contentClass" class="c-expandable-box-body">
+    <div :style="boxStyle"
+         style="overflow:hidden;height:100%"
+         :class="contentClass"
+         class="c-expandable-box-body">
       <slot/>
     </div>
-    <div v-if="draglineShow" class="_drag-line" :class="{indragging}"  @mousedown="handleMouseDown" />
+    <div v-if="draglineShow"
+         class="_drag-line"
+         :class="{indragging}"
+         @mousedown="handleMouseDown" />
   </div>
 </template>
 <script lang="ts">
@@ -84,13 +90,6 @@ export default defineComponent({
       this.width = Math.max(this.minWidth, Math.min(this.maxWidth, width));
 
       this.$emit('width-change', this.width);
-
-      // if (width > this.maxWidth) {
-      //   width = this.maxWidth;
-      // } else if (width < this.minWidth) {
-      //   width = this.minWidth;
-      // }
-      // this.width = width;
     },
   },
 });

@@ -43,8 +43,8 @@ export interface Props {
   viewStyle?: StyleValue,
   wrapStyle?: StyleValue,
   interceptShiftScroll?: boolean,
-  alwayHorizontal?: boolean, // 水平滚动条总是显示
-  alwayVertical?: boolean // 垂直滚动条总是显示
+  alwayHorizontal?: boolean, // Horizontal scroll bar is always displayed
+  alwayVertical?: boolean // Vertical scroll bar is always displayed
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -107,7 +107,6 @@ watch(verticalVisible, (val) => {
 });
 
 const onResize = () => {
-  console.log('onResize');
   if (!resizeRef.value || !wrapRef.value) return;
   const resizeRefWidth = resizeRef.value?.offsetWidth;
   const resizeRefHeight = resizeRef.value?.offsetHeight;
@@ -129,11 +128,9 @@ const onResize = () => {
     verticalVisible.value = props.alwayVertical || false;
   }
 
-  // emit('resize', resizeRef.value);
 };
 
 const onWrapResize = () => {
-  console.log('onWrapResize');
   wrapRef.value && emit('resize', wrapRef.value);
 };
 

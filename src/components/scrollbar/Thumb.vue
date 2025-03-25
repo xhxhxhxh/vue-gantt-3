@@ -30,7 +30,6 @@ const scrollFromWrap = ref(false);
 const mouseHover = ref(false);
 
 const handleScroll = (option: {left: number, top: number}) => {
-  // console.log('option', option);
   if (thumbRef.value && !scrollFromThumb.value) {
     scrollFromWrap.value = true;
     thumbRef.value.scrollTo(option);

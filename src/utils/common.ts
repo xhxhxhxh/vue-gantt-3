@@ -4,10 +4,10 @@ export const getRound = (floatNum: number, num = 3) => {
 };
 
 /**
- * 遍历树结构，fn一旦返回false就会停止遍历
- * @param {Array} tree 树结构
- * @param {Function} fn 对每个节点执行一遍fn方法,如果return false就会停止遍历
- * @param {String} childrenKey  作为children的键
+ * Traversing the tree, function will stop traversing once it returns false
+ * @param {Array} tree
+ * @param {Function} fn
+ * @param {String} childrenKey
  * @param parent
  *
  */
@@ -35,10 +35,10 @@ export function treeForEachSkipChildren<T>(
 }
 
 /**
- * 遍历树结构，fn一旦返回false就会停止遍历
- * @param {Array} tree 树结构
- * @param {Function} fn 对每个节点执行一遍fn方法,如果return false就会停止遍历
- * @param {String} childrenKey  作为children的键
+ * Traversing the tree, function will stop traversing once it returns false
+ * @param {Array} tree
+ * @param {Function} fn
+ * @param {String} childrenKey
  * @param parent
  *
  */
@@ -62,7 +62,6 @@ export function treeForEach<T>(
   }
 }
 
-// 等待 单位秒
 export const sleep = (s = 0) => new Promise(r => setTimeout(r, s * 1000));
 
 export const toMap = <K=string, V=any>(items: Array<V> | Set<V>, idKey = 'id'): Map<K, V> => {

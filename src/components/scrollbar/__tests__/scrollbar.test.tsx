@@ -1,4 +1,4 @@
-import { DOMWrapper, mount, shallowMount } from '@vue/test-utils';
+import { DOMWrapper, mount } from '@vue/test-utils';
 import ScrollBar from '../ScrollBar.vue';
 import { describe, expect, test } from '@jest/globals';
 import { VueNode } from '@vue/test-utils/dist/types';
