@@ -1,24 +1,12 @@
 {
   "name": "vue3-gantt-chart",
-  "private": true,
   "version": "0.0.1",
   "description": "A gantt component for Vue 3",
-  "keywords": [
-    "gantt",
-    "gantt-chart",
-    "vue-gantt",
-    "vue",
-    "vue3"
-  ],
-  "homepage": "https://github.com/xhxhxhxh/vue3-gantt-chart/",
-  "bugs": {
-    "url": "https://github.com/xhxhxhxh/vue3-gantt-chart/issues"
-  },
   "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "build": "vue-tsc -p tsconfig.node.json --noEmit && vite build",
     "preview": "vite preview"
   },
   "peerDependencies": {
@@ -50,6 +38,7 @@
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.1.0",
+    "vite-plugin-dts": "^4.5.3",
     "vue": "^3.2.0",
     "vue-tsc": "^2.2.0"
   },

@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 .npmrc
+vue3-gantt-chart/*
+!vue3-gantt-chart/package.json
 
 # Editor directories and files
 .vscode/*

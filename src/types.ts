@@ -124,8 +124,8 @@ export type GanttHeaderUnit = 'hour' | 'day' | 'month' | 'year' | "week" | "quar
 
 declare module 'dayjs' {
   interface Dayjs {
-    add(value: number, unit: GanttHeaderUnit): Dayjs,
-    subtract(value: number, unit: GanttHeaderUnit): Dayjs
+    add(value: number, unit: GanttHeaderUnit): dayjs.Dayjs,
+    subtract(value: number, unit: GanttHeaderUnit):dayjs.Dayjs
   }
 }
 

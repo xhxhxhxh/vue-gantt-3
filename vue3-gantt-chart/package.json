@@ -1,0 +1,37 @@
+{
+  "name": "vue3-gantt-chart",
+  "version": "0.0.1",
+  "description": "A gantt component for Vue 3",
+  "keywords": [
+    "gantt",
+    "gantt-chart",
+    "vue-gantt",
+    "vue",
+    "vue3"
+  ],
+  "homepage": "https://github.com/xhxhxhxh/vue3-gantt-chart/",
+  "bugs": {
+    "url": "https://github.com/xhxhxhxh/vue3-gantt-chart/issues"
+  },
+  "license": "MIT",
+  "author": "XHXHXHXH",
+  "type": "module",
+  "main": "./lib/index.js",
+  "module": "./es/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./es/index.mjs",
+      "require": "./lib/index.js"
+    },
+    "./*": "./*"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.0"
+  },
+  "dependencies": {
+    "@vueuse/core": "^12.7.0",
+    "ag-grid-community": "~30.0.6",
+    "ag-grid-vue3": "~30.0.6",
+    "dayjs": "^1.11.10"
+  }
+}
