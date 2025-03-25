@@ -234,7 +234,7 @@ defineExpose({
     position: absolute;
     width: 100%;
     &.vg-selected-row {
-      background-color: #747AD0;
+      background-color: #0078d7;
     }
     .vg-time-line-row-time-line {
       position: absolute;

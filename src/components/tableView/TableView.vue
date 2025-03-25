@@ -226,7 +226,7 @@ defineExpose({
     --ag-header-column-resize-handle-color: #e9e9e9;
     --ag-header-background-color: #fff;
     --ag-cell-horizontal-padding: 9px;
-    --ag-selected-row-background-color: #747AD0;
+    --ag-selected-row-background-color: #0078d7;
     --ag-odd-row-background-color: #fff;
     .ag-row {
       .ag-cell:last-of-type {
