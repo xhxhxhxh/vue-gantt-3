@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import { fileURLToPath, URL } from 'node:url';
 import dts from "vite-plugin-dts";
 import { resolve } from 'path';
+import pkg from './package.json';
 
 const projectName = 'vue3-gantt-chart';
 const getTargetDir = (dir: string) => {
@@ -29,7 +30,15 @@ export default defineConfig({
     sourcemap: true,
     minify: false,
     rollupOptions: {
-      external: [/node_modules/],
+      external: [
+        ...Object.keys(pkg.peerDependencies),
+        ...Object.keys(pkg.dependencies),
+        "dayjs/plugin/minMax",
+        "dayjs/plugin/isBetween",
+        "dayjs/plugin/quarterOfYear",
+        "ag-grid-community/styles/ag-grid.css",
+        "ag-grid-community/styles/ag-theme-alpine.css"
+      ],
       output: [
         {
           format: "umd",
@@ -39,6 +48,13 @@ export default defineConfig({
           name: projectName,
           globals: {
             vue: "Vue",
+            '@vueuse/core': "VueUse",
+            dayjs: "dayjs",
+            'ag-grid-community': "agGrid",
+            'ag-grid-vue3': "agGridVue3",
+            'dayjs/plugin/minMax': 'minMax',
+            'dayjs/plugin/isBetween': 'isBetween',
+            'dayjs/plugin/quarterOfYear': 'quarterOfYear',
           },
         },
         {
