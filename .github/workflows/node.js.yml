@@ -46,4 +46,4 @@ jobs:
     - name: Build&publish
       run: sh ./scripts/publish.sh
       env:
-        NODE_AUTH_TOKEN: ${{secrets.xh_component}}
+        NODE_AUTH_TOKEN: ${{secrets.VUE3_GANTT_CHART}}

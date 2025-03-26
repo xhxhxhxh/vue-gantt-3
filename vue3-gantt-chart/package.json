@@ -1,6 +1,6 @@
 {
   "name": "vue3-gantt-chart",
-  "version": "0.0.1",
+  "version": "0.0.1-beta.1",
   "description": "A gantt component for Vue 3",
   "keywords": [
     "gantt",
