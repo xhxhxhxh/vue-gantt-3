@@ -10,6 +10,6 @@
     "play/**/*",
     "play/**/*.vue",
     "play/**/*.ts",
-    "play/**/*.tsx",
+    "play/**/*.tsx"
   ],
 }

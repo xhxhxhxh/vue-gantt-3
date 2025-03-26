@@ -1,5 +1,5 @@
 import Gantt from './Gantt.vue';
-import { withInstall } from '@/utils/withInstall';
+import { withInstall } from './utils/withInstall';
 
 export * from './types';
 

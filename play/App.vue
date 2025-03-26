@@ -19,10 +19,10 @@ import { ColDef, DefaultColDef } from 'vue-gantt-3/types';
 import type { ValueSetterParams } from 'ag-grid-community';
 import { getSingleRow, getMultiRows, getLargeNumRows, getEmptyRows } from './utils/mockData';
 import CellRender from './components/CellRender.vue';
-import Vue3Gantt from 'vue-gantt-3';
+import Vue3GanttInstance from 'vue-gantt-3';
 import { RowData } from './types';
 
-const vgGanttRef = ref<InstanceType<typeof Vue3Gantt> | undefined>();
+const vgGanttRef = ref<InstanceType<typeof Vue3GanttInstance> | undefined>();
 
 const getRowId = (rowData: RowData) => (rowData as RowData).id;
 const columns = ref<ColDef[]>([
@@ -66,7 +66,7 @@ const defaultCol = ref<DefaultColDef>({
         } else {
           timeLines[timeLines.length - 1].endDate = newValue;
         }
-        vgGanttRef.value.freshRowNodes([row]);
+        vgGanttRef.value && vgGanttRef.value.freshRowNodes([row]);
       }
     }
     return true;
