@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import type { ILoadingCellRendererParams, LoadingCellRendererSelectorResult, ColDef } from "ag-grid-community";
-export type { ColDef, ValueSetterParams } from "ag-grid-community";
+export type * from "ag-grid-community";
 
 export interface TimeLineStyle {
   [cssProperty: string]: string | number;
@@ -11,7 +11,8 @@ export interface TimePoint {
   id: string,
   icon?: string,
   useTimePointComp?: boolean,
-  compParams?: any
+  compParams?: any,
+  [propName: string]: any,
 }
 
 export type GanttTimePoint<T extends TimePoint> = T
@@ -53,7 +54,8 @@ export interface TimeLineNode {
 export interface RowData<T = any> {
   timeLines?: TimeLine[],
   isEmpty?: boolean,
-  children?: RowData<T>[]
+  children?: RowData<T>[],
+  [propName: string]: any,
 }
 
 export type GanttRowData<T extends RowData<T>> = T

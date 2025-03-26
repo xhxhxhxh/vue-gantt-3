@@ -140,5 +140,6 @@ defineExpose({
 <style lang="scss">
 .vg-body {
   position: relative;
+  font-size: 0;
 }
 </style>

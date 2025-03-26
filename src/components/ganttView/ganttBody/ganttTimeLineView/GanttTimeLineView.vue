@@ -230,6 +230,7 @@ defineExpose({
   left: 0;
   top: 0;
   position: absolute;
+  font-size: 16px;
   .vg-time-line-row {
     position: absolute;
     width: 100%;
