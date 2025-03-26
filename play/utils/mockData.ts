@@ -1,4 +1,4 @@
-import { TimeLine } from 'vue3-gantt-chart/types';
+import { TimeLine } from 'vue-gantt-3/types';
 import dayjs from 'dayjs';
 import { RowData } from '../types';
 

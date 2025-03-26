@@ -1,5 +1,5 @@
 <template>
-  <div ref="vGanttRef" class="vue3-gantt-chart" @contextmenu.prevent="onContextmenu">
+  <div ref="vGanttRef" class="vue-gantt-3" @contextmenu.prevent="onContextmenu">
     <ExpandableBox :initWidth="defaultTableViewWidth" :maxWidth="maxTableViewWidth">
       <TableView
         ref="tableViewRef"
@@ -283,12 +283,12 @@ defineExpose({
 });
 
 defineOptions({
-  name: 'Vue3GanttChart',
+  name: 'Vue3Gantt',
 });
 
 </script>
 <style lang="scss">
-.vue3-gantt-chart {
+.vue-gantt-3 {
   width: 100%;
   height: 100%;
   display: flex;

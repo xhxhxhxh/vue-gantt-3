@@ -1,4 +1,4 @@
-import { GanttRowData, TimeLine } from 'vue3-gantt-chart/types';
+import { GanttRowData, TimeLine } from 'vue-gantt-3/types';
 
 export interface Row {
   id: string;

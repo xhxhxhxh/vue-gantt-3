@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import type { ILoadingCellRendererParams, LoadingCellRendererSelectorResult, ColDef } from "ag-grid-community";
-export type { ColDef } from "ag-grid-community";
+export type { ColDef, ValueSetterParams } from "ag-grid-community";
 
 export interface TimeLineStyle {
   [cssProperty: string]: string | number;

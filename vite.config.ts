@@ -5,7 +5,7 @@ import dts from "vite-plugin-dts";
 import { resolve } from 'path';
 import pkg from './package.json';
 
-const projectName = 'vue3-gantt-chart';
+const projectName = 'vue-gantt-3';
 const getTargetDir = (dir: string) => {
   return resolve(projectName, dir);
 };
@@ -23,7 +23,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      'vue3-gantt-chart': fileURLToPath(new URL('./src', import.meta.url))
+      'vue-gantt-3': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
   build: {

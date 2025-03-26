@@ -1,6 +1,6 @@
 {
   "name": "vue-gantt-3",
-  "version": "0.0.1-beta.1",
+  "version": "0.0.1-beta.2",
   "description": "A gantt component for Vue 3",
   "keywords": [
     "gantt",
@@ -9,17 +9,19 @@
     "vue",
     "vue3"
   ],
-  "homepage": "https://github.com/xhxhxhxh/vue3-gantt-chart/",
+  "homepage": "https://github.com/xhxhxhxh/vue-gantt-3/",
   "bugs": {
-    "url": "https://github.com/xhxhxhxh/vue3-gantt-chart/issues"
+    "url": "https://github.com/xhxhxhxh/vue-gantt-3/issues"
   },
   "license": "MIT",
   "author": "XHXHXHXH",
   "type": "module",
   "main": "./lib/index.js",
   "module": "./es/index.mjs",
+  "types": "es/index.d.ts",
   "exports": {
     ".": {
+      "types": "./es/index.d.ts",
       "import": "./es/index.mjs",
       "require": "./lib/index.js"
     },

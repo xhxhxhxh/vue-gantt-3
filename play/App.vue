@@ -1,6 +1,6 @@
 <template>
   <div class="gantt-container">
-    <Vue3GanttChart
+    <Vue3Gantt
       ref="vgGanttRef"
       :getRowId="getRowId"
       :columns="columns"
@@ -10,19 +10,19 @@
       :getEmptyRows="getEmptyRows"
       @select-change="onSelectChange"
       @expand-change="onExpandChange"
-    ></Vue3GanttChart>
+    ></Vue3Gantt>
   </div>
 </template>
 <script lang="ts" setup>
 import { ref, onBeforeMount, shallowRef, markRaw } from 'vue';
-import { ColDef, DefaultColDef } from 'vue3-gantt-chart/types';
+import { ColDef, DefaultColDef } from 'vue-gantt-3/types';
 import type { ValueSetterParams } from 'ag-grid-community';
 import { getSingleRow, getMultiRows, getLargeNumRows, getEmptyRows } from './utils/mockData';
 import CellRender from './components/CellRender.vue';
-import Vue3GanttChart from 'vue3-gantt-chart';
+import Vue3Gantt from 'vue-gantt-3';
 import { RowData } from './types';
 
-const vgGanttRef = ref<InstanceType<typeof Vue3GanttChart> | undefined>();
+const vgGanttRef = ref<InstanceType<typeof Vue3Gantt> | undefined>();
 
 const getRowId = (rowData: RowData) => (rowData as RowData).id;
 const columns = ref<ColDef[]>([
@@ -46,7 +46,7 @@ const columns = ref<ColDef[]>([
 const selectedRowIds = ref<string[]>([]);
 const unExpandRowIds = ref<string[]>([]);
 
-// For a large amount of data, shallowRef should be used here, which can greatly improve the performance of initial Gantt chart
+// For a large amount of data, shallowRef should be used here, which can greatly improve the performance of initial Gantt
 const rows = shallowRef<RowData[]>([]);
 const defaultCol = ref<DefaultColDef>({
   resizable: true,

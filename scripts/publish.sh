@@ -6,9 +6,9 @@ pnpm install
 
 pnpm run build
 
-cp README.md ./vue3-gantt-chart/
+cp README.md ./vue-gantt-3/
 
-cd vue3-gantt-chart
+cd vue-gantt-3
 
 npm publish
 

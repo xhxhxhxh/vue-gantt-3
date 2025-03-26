@@ -2,8 +2,8 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "paths": {
-      "vue3-gantt-chart": ["./src"],
-      "vue3-gantt-chart/*": ["./src/*"]
+      "vue-gantt-3": ["./src"],
+      "vue-gantt-3/*": ["./src/*"]
     },
   },
   "include": [

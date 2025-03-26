@@ -133,7 +133,7 @@ watch([() => props.defaultPerHourSpacing, () => props.defaultTimeScale], ([curre
 const getTopLevelRow = inject('getTopLevelRow') as (rowId: string, currentRowNodeMap: Map<string, GanttRowNode>) => GanttRowNode;
 
 /**
- * calculate the min and max date of the gantt chart
+ * calculate the min and max date of the gantt
  * @param excludeRowIds
  * @param freshStartDate
  * @param freshEndDate
@@ -202,7 +202,7 @@ const updateMaxDate = (maxDate: dayjs.Dayjs) => {
 };
 
 /**
- * calculate the width of the gantt chart by the min and max date
+ * calculate the width of the gantt by the min and max date
  */
 const updateGanttViewWidth = () => {
   const diffHour = ganttMaxDate.value?.diff(ganttMinDate.value, 'hour', true) || 0;
