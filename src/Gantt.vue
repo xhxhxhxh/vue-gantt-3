@@ -46,7 +46,8 @@
 <script lang="ts" setup>
 import TableView from "./components/tableView/TableView.vue";
 import GanttView from "./components/ganttView/GanttView.vue";
-import type { RowData, ColDef, DefaultColDef, GanttRowNode, GanttStyleOption, TimePoint, MovedTimeLineData, TimeScale } from '@/types';
+import type { RowData, DefaultColDef, GanttRowNode, GanttStyleOption, TimePoint, MovedTimeLineData, TimeScale } from '@/types';
+import type { ColDef } from "ag-grid-community";
 import { ref, provide, toRef } from 'vue';
 import ExpandableBox from './components/common/ExpandableBox.vue';
 import dayjs from 'dayjs';
