@@ -1,6 +1,6 @@
-import { GanttRowData, TimeLine } from 'vue-gantt-3/types';
+import { TimeLine, RowData } from 'vue-gantt-3/types';
 
-export interface Row {
+export interface Row extends RowData {
   id: string;
   name?: string;
   displayStartDate?: string;
@@ -10,4 +10,3 @@ export interface Row {
   children?: Row[]
 }
 
-export type RowData = GanttRowData<Row>

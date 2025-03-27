@@ -1,6 +1,6 @@
 import { TimeLine } from 'vue-gantt-3/types';
 import dayjs from 'dayjs';
-import { RowData } from '../types';
+import { Row } from '../types';
 
 type TimeSpanUnit = 'day' | 'month' | 'year'
 
@@ -17,7 +17,7 @@ export const getLargeNumRows = () => {
 };
 
 const createRows = (number: number, timeLineNum: number, timeSpanUnit: TimeSpanUnit, createChildren = false) => {
-  const rowDatas: RowData[] = [];
+  const rowDatas: Row[] = [];
   for (let i = 0; i < number; i++) {
     const newRow = createSingleRow(i + 1, timeLineNum, timeSpanUnit);
     if (createChildren) {
@@ -29,7 +29,7 @@ const createRows = (number: number, timeLineNum: number, timeSpanUnit: TimeSpanU
   return rowDatas;
 };
 
-const createSingleRow = (id: string | number, timeLineNum: number, timeSpanUnit: TimeSpanUnit): RowData => {
+const createSingleRow = (id: string | number, timeLineNum: number, timeSpanUnit: TimeSpanUnit): Row => {
   const timeLines = createTimeLine(timeLineNum, timeSpanUnit);
   return {
     id: id.toString(),
@@ -70,7 +70,7 @@ const getRandomTimeSpan = (timeSpanUnit: 'day' | 'month' | 'year') => {
 };
 
 export const getEmptyRows = (emptyRowCount: number) => {
-  const newEmptyRows: RowData[] = [];
+  const newEmptyRows: Row[] = [];
   for (let i = 0; i < emptyRowCount; i++) {
     newEmptyRows.push({ id: 'empty-row-' + i });
   }

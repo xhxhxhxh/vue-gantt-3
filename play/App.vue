@@ -20,11 +20,11 @@ import type { ValueSetterParams } from 'ag-grid-community';
 import { getSingleRow, getMultiRows, getLargeNumRows, getEmptyRows } from './utils/mockData';
 import CellRender from './components/CellRender.vue';
 import Vue3GanttInstance from 'vue-gantt-3';
-import { RowData } from './types';
+import { Row } from './types';
 
 const vgGanttRef = ref<InstanceType<typeof Vue3GanttInstance> | undefined>();
 
-const getRowId = (rowData: RowData) => (rowData as RowData).id;
+const getRowId = (rowData: Row) => rowData.id;
 const columns = ref<ColDef[]>([
   {
     field: 'name',
@@ -47,13 +47,13 @@ const selectedRowIds = ref<string[]>([]);
 const unExpandRowIds = ref<string[]>([]);
 
 // For a large amount of data, shallowRef should be used here, which can greatly improve the performance of initial Gantt
-const rows = shallowRef<RowData[]>([]);
+const rows = shallowRef<Row[]>([]);
 const defaultCol = ref<DefaultColDef>({
   resizable: true,
   suppressMovable: true,
   width: 150,
   cellRenderer: markRaw(CellRender),
-  valueSetter: (params: ValueSetterParams<Omit<RowData, 'children'>, any>) => {
+  valueSetter: (params: ValueSetterParams<Omit<Row, 'children'>, any>) => {
     const field = params.colDef.field || '';
     const newValue = params.newValue;
     const row = params.data;
