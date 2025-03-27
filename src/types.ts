@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import type { ILoadingCellRendererParams, LoadingCellRendererSelectorResult, ColDef as AgColDef } from "ag-grid-community";
 export type { ValueSetterParams } from "ag-grid-community";
 
-export type ColDef = Omit<AgColDef, 'pivotValueColumn'>
+export type ColDef = Omit<AgColDef, 'pivotValueColumn' | 'columnsMenuParams'>
 export interface TimeLineStyle {
   [cssProperty: string]: string | number;
 }
