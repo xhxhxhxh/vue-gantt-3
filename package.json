@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -p tsconfig.node.json --noEmit && vite build",
-    "preview": "vite preview"
+    "build": "vue-tsc -p tsconfig.node.json --noEmit && vite build && npm run build-umd",
+    "preview": "vite preview",
+    "build-umd": "vite build --mode umd"
   },
   "peerDependencies": {
     "vue": "^3.2.0"

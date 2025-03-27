@@ -9,6 +9,46 @@ const projectName = 'vue-gantt-3';
 const getTargetDir = (dir: string) => {
   return resolve(projectName, dir);
 };
+const argv = process.argv;
+const isUmd = argv.includes('umd');
+
+const external = isUmd ? ['vue'] : [
+  ...Object.keys(pkg.peerDependencies),
+  ...Object.keys(pkg.dependencies),
+  "dayjs/plugin/minMax",
+  "dayjs/plugin/isBetween",
+  "dayjs/plugin/quarterOfYear",
+  "ag-grid-community/styles/ag-grid.css",
+  "ag-grid-community/styles/ag-theme-alpine.css"
+];
+
+const output: any[] = isUmd ?
+  [
+    {
+      format: "umd",
+      entryFileNames: "[name].js",
+      exports: "named",
+      dir: getTargetDir('dist'),
+      name: projectName,
+      globals: {
+        vue: "Vue",
+      },
+    },
+  ] : [
+    {
+      format: "es",
+      entryFileNames: "[name].mjs",
+      preserveModules: true,
+      dir: getTargetDir('es'),
+    },
+    {
+      format: "cjs",
+      entryFileNames: "[name].js",
+      preserveModules: true,
+      exports: "named",
+      dir: getTargetDir('lib'),
+    }
+  ];
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -30,47 +70,8 @@ export default defineConfig({
     sourcemap: true,
     minify: false,
     rollupOptions: {
-      external: [
-        ...Object.keys(pkg.peerDependencies),
-        ...Object.keys(pkg.dependencies),
-        "dayjs/plugin/minMax",
-        "dayjs/plugin/isBetween",
-        "dayjs/plugin/quarterOfYear",
-        "ag-grid-community/styles/ag-grid.css",
-        "ag-grid-community/styles/ag-theme-alpine.css"
-      ],
-      output: [
-        {
-          format: "umd",
-          entryFileNames: "[name].js",
-          exports: "named",
-          dir: getTargetDir('dist'),
-          name: projectName,
-          globals: {
-            vue: "Vue",
-            '@vueuse/core': "VueUse",
-            dayjs: "dayjs",
-            'ag-grid-community': "agGrid",
-            'ag-grid-vue3': "agGridVue3",
-            'dayjs/plugin/minMax': 'minMax',
-            'dayjs/plugin/isBetween': 'isBetween',
-            'dayjs/plugin/quarterOfYear': 'quarterOfYear',
-          },
-        },
-        {
-          format: "es",
-          entryFileNames: "[name].mjs",
-          preserveModules: true,
-          dir: getTargetDir('es'),
-        },
-        {
-          format: "cjs",
-          entryFileNames: "[name].js",
-          preserveModules: true,
-          exports: "named",
-          dir: getTargetDir('lib'),
-        },
-      ],
+      external,
+      output
     },
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
