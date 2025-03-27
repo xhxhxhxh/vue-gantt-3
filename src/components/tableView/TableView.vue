@@ -114,7 +114,7 @@ const onViewPortChanged = (data: ViewportChangedEvent<RowData>) => {
   emit('viewPortChanged', visibleRowDataList.value.slice(firstRow, lastRow + 1));
 };
 
-const onCellDoubleClicked = (data: CellDoubleClickedEvent<RowData>) => {
+const onCellDoubleClicked = (data: CellDoubleClickedEvent<Omit<RowData, 'children'>>) => {
   emit('cellDoubleClicked', data.data, data.colDef as ColDef);
 };
 
