@@ -1,32 +1,30 @@
 # vue-gantt-3 [![npm](https://img.shields.io/npm/v/vue-gantt-3.svg)](https://www.npmjs.com/package/vue-gantt-3) [![NPM downloads](https://img.shields.io/npm/dm/vue-gantt-3?style=flat)](https://www.npmjs.com/package/vue-gantt-3) [![license](https://img.shields.io/npm/l/vue-gantt-3.svg?maxAge=2592000)](http://www.opensource.org/licenses/mit-license.php)
 
-**English** | [中文](./README-CN.md)
-
-A Gantt component for vue3. High performance(global virtual scroll), support time line move and stretch, change the time scale arbitrarily etc. The table component bases on [ag-grid](https://github.com/ag-grid/ag-grid).
+一个基于vue3的甘特图组件。高性能(全局虚拟滚动), 支持时间线的拉伸和移动, 任意缩放时间尺度等。表格组件基于[ag-grid](https://github.com/ag-grid/ag-grid)。
 
 <div align="center">
   <img src="./public/gantt-preview.png" alt="gantt preview">
 </div>
 
-## Install
+## 安装
 
 ```
 npm install vue-gantt-3
 ```
-or
+或者
 
 ```
 yarn add vue-gantt-3
 ```
-or
+或者
 
 ```
 pnpm install vue-gantt-3
 ```
 
-## Usage
+## 使用
 
-Write the following in main.js:
+将以下内容写入到main.js:
 
 ```javascript
 import { createApp } from 'vue';
@@ -38,7 +36,7 @@ app.use(Vue3Gantt);
 app.mount('#app');
 ```
 
-Example for App.vue:
+App.vue例子:
 
 ```javascript
 <template>
