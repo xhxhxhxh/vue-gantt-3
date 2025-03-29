@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "vue-gantt-3": ["./src"],
+      "vue-gantt-3/*": ["./src/*"]
+    },
+  },
+  "include": [
+    "docs/**/*",
+    "docs/**/*.vue",
+    "docs/**/*.ts",
+    "docs/**/*.tsx"
+  ],
+}

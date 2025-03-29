@@ -14,6 +14,7 @@ dist-ssr
 .npmrc
 vue-gantt-3/*
 !vue-gantt-3/package.json
+docs/.vitepress/cache
 
 # Editor directories and files
 .vscode/*
