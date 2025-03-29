@@ -3,9 +3,8 @@
 layout: home
 
 hero:
-  name: "vue-gantt-3-docs"
-  text: "Docs for vue gantt"
-  tagline: My great project tagline
+  name: "vue-gantt-3"
+  text: "A Gantt component for vue3"
   actions:
     - theme: brand
       text: Markdown Examples
@@ -23,3 +22,4 @@ features:
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
 
+<GanttPreview/>

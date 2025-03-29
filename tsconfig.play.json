@@ -4,7 +4,7 @@
     "paths": {
       "vue-gantt-3": ["./src"],
       "vue-gantt-3/*": ["./src/*"]
-    },
+    }
   },
   "include": [
     "play/**/*",

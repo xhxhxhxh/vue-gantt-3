@@ -8,7 +8,8 @@
     "preview": "vitepress preview ."
   },
   "dependencies": {
-    
+    "vue-gantt-3": "workspace:*",
+    "vue-gantt-3-play": "workspace:*"
   },
   "devDependencies": { 
     "vitepress": "^1.6.3"

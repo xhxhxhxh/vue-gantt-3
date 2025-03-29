@@ -1,0 +1,19 @@
+{
+  "name": "vue-gantt-3-play",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite"
+  },
+  "exports": {
+    "./App.vue": {
+      "import": "./src/App.vue"
+    }
+  },
+  "dependencies": {
+    "vue-gantt-3": "workspace:*"
+  },
+  "devDependencies": { 
+    
+  }
+}

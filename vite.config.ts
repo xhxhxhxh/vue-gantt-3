@@ -63,7 +63,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      'vue-gantt-3': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
   build: {

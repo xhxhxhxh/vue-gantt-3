@@ -3,10 +3,13 @@
   "compilerOptions": {
     "paths": {
       "vue-gantt-3": ["./src"],
-      "vue-gantt-3/*": ["./src/*"]
+      "vue-gantt-3/*": ["./src/*"],
+      "vue-gantt-3-play": ["./play/src"],
+      "vue-gantt-3-play/*": ["./play/src/*"],
     },
   },
   "include": [
+    "docs/.vitepress/**/*.ts",
     "docs/**/*",
     "docs/**/*.vue",
     "docs/**/*.ts",

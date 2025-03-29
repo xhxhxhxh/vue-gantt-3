@@ -5,8 +5,9 @@
   "license": "MIT",
   "type": "module",
   "private": true,
+  "main": "./src/index.ts",
   "scripts": {
-    "dev": "vite",
+    "dev": "pnpm run -C play dev",
     "build": "vue-tsc -p tsconfig.node.json --noEmit && vite build && npm run build-umd",
     "preview": "vite preview",
     "build-umd": "vite build --mode umd",
@@ -15,7 +16,8 @@
     "docs:preview": "pnpm run -C docs preview"
   },
   "workspaces": [
-    "docs"
+    "docs",
+    "play"
   ],
   "peerDependencies": {
     "vue": "^3.2.0"

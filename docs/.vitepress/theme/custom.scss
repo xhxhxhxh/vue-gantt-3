@@ -1,0 +1,14 @@
+.VPHomeHero {
+  .heading {
+    display: flex;
+    align-items: center;
+    .text {
+      max-width: 100% !important;
+    }
+  }
+}
+
+.gantt-container {
+  height: 500px !important;
+  display: flex;
+}

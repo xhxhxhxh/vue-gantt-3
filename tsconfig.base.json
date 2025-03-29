@@ -20,12 +20,5 @@
     "noUncheckedSideEffectImports": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true
-  },
-  "include": [
-    "vite.config.ts",
-    "src/**/*",
-    "src/**/*.vue",
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
+  }
 }
