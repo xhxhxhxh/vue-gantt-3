@@ -291,9 +291,12 @@ defineOptions({
 .vue-gantt-3 {
   width: 100%;
   height: 100%;
+  min-height: 300px;
   display: flex;
   overflow: hidden;
   box-sizing: border-box;
+  border: 1px solid #e9e9e9;
+  background-color: #fff;
   *, :before, :after {
     box-sizing: border-box;
   }

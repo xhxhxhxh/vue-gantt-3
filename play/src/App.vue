@@ -28,19 +28,25 @@ const getRowId = (rowData: Row) => rowData.id;
 const columns = ref<ColDef[]>([
   {
     field: 'name',
-    headerName: '名称',
+    headerName: 'name',
     resizable: true,
     cellRendererParams: { expandable: true },
   },
   {
     field: 'displayStartDate',
-    headerName: '开始时间',
+    headerName: 'start date',
     resizable: true,
   },
   {
     field: 'displayEndDate',
-    headerName: '结束时间',
+    headerName: 'end date',
     resizable: true,
+  },
+  {
+    field: 'blank',
+    headerName: '',
+    resizable: false,
+    cellStyle: { borderRight: 0 }
   }
 ]);
 const selectedRowIds = ref<string[]>([]);

@@ -6,7 +6,7 @@ import './style.css';
 import './custom.scss';
 import Vue3Gantt from 'vue-gantt-3';
 import GanttPreview from 'vue-gantt-3-play/App.vue';
-console.log('GanttPreview', GanttPreview);
+
 export default {
   extends: DefaultTheme,
   Layout: () => {
@@ -15,6 +15,17 @@ export default {
     });
   },
   enhanceApp({ app, router, siteData }) {
+    // router.onBeforeRouteChange = (to) => {
+    //   console.log('to', to);
+    //   if (to === '/') {
+    //     router.go('/en'); // redirect to /en
+    //     return false;
+    //   } else {
+    //     return true;
+    //   }
+
+    // };
+
     app.component('Vue3Gantt', Vue3Gantt);
     app.component('GanttPreview', GanttPreview);
   }

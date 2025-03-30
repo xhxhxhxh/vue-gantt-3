@@ -4,6 +4,7 @@
       <div v-for="item in firstLevelBlocks"
            :key="item.key"
            class="vg-header-block"
+           :class="{'vg-header-block-hide-right-border': item.hideRightBorder}"
            :title="item.tip"
            :style="{width: item.width + 'px', left: item.left + 'px'}">
         <span class="vg-header-block-text">{{ item.text }}</span>
@@ -13,6 +14,7 @@
       <div v-for="item in secondLevelBlocks"
            :key="item.key"
            class="vg-header-block"
+           :class="{'vg-header-block-hide-right-border': item.hideRightBorder}"
            :title="item.tip"
            :style="{width: item.width + 'px', left: item.left + 'px'}">
         <span class="vg-header-block-text">{{ item.text }}</span>
@@ -172,20 +174,24 @@ const getNewBlocks = (startLeft: number, startDate: dayjs.Dayjs, currentUnit: Ga
   while ((levelStart - blockSpacing) <= endLeftInView) {
     let width = blockSpacing;
     let offset = width;
+    let hideRightBorder = false;
     if (levelStart > limitMinLeft && (levelStart - blockSpacing) < limitMinLeft) {
       offset = width = levelStart - limitMinLeft;
       if (width > ganttHeaderWidth) {
         width = ganttHeaderWidth;
+        hideRightBorder = true;
       }
     } else if (levelStart > limintMaxLeft && (levelStart - blockSpacing) < limintMaxLeft) {
       width = blockSpacing - (levelStart - limintMaxLeft);
+      hideRightBorder = true;
     }
     newLevelBlocks.push({
       left: getRound(levelStart - offset),
       width: getRound(width),
       text: getBlockText(currentLevelStartDateInView, currentUnit),
       key: getRound(levelStart),
-      tip: getBlockTip(currentLevelStartDateInView, currentUnit)
+      tip: getBlockTip(currentLevelStartDateInView, currentUnit),
+      hideRightBorder
     });
     currentLevelStartDateInView = currentLevelStartDateInView.add(1, currentUnit).endOf(currentUnit);
     blockSpacing = getBlockSpacingByUnit(currentLevelStartDateInView, currentUnit);
@@ -283,6 +289,7 @@ defineExpose({
   min-width: 100%;
   max-width: 100%;
   overflow: auto;
+  color: #000;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -301,6 +308,9 @@ defineExpose({
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+      }
+      &.vg-header-block-hide-right-border {
+        border-right: none;
       }
     }
   }

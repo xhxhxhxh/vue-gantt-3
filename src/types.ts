@@ -131,7 +131,8 @@ export interface BlockItem{
   width: number,
   text: number | string,
   key: number,
-  tip: string
+  tip: string,
+  hideRightBorder?: boolean,
 }
 
 export interface GanttStyleOption {
