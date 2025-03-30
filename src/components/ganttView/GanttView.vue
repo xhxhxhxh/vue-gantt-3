@@ -94,6 +94,7 @@ const minPerHourSpacing = ref(0.007);
 const maxPerHourSpacing = ref(1400);
 const ganttViewWidth = ref(0);
 const scrollFromTableView = ref(false);
+const maxAndMindateCache = new Map<string, dayjs.Dayjs>();
 
 onBeforeMount(() => {
   updateMinAndMaxDate();
@@ -139,6 +140,15 @@ const getTopLevelRow = inject('getTopLevelRow') as (rowId: string, currentRowNod
  * @param freshEndDate
  */
 const getGanttMinAndMaxDate = (excludeRowIds: string[] = [], freshStartDate = true, freshEndDate = true) => {
+  const isSingleExclude = excludeRowIds.length === 1;
+  if (isSingleExclude) {
+    if (maxAndMindateCache.has('minStartDate') && maxAndMindateCache.has('maxEndDate')) {
+      return {
+        minStartDate: maxAndMindateCache.get('minStartDate'),
+        maxEndDate: maxAndMindateCache.get('maxEndDate')
+      };
+    }
+  }
   const excludeRowIdSet = new Set(excludeRowIds);
   const excludeFirstLevelRowId = excludeRowIds.map((rowId) => getTopLevelRow(rowId, props.rowNodeMap).id);
   const excludeFirstLevelRowIdSet = new Set(excludeFirstLevelRowId);
@@ -169,15 +179,31 @@ const getGanttMinAndMaxDate = (excludeRowIds: string[] = [], freshStartDate = tr
       rowNode.endDate && allMaxEndDates.push(rowNode.endDate);
     }
   });
+
+  const finalMinStartDate = dayjs.min(allMinStartDates);
+  const finalMaxEndDate = dayjs.max(allMaxEndDates);
+  if (isSingleExclude && finalMinStartDate && finalMaxEndDate) {
+    maxAndMindateCache.set('minStartDate', finalMinStartDate);
+    maxAndMindateCache.set('maxEndDate', finalMaxEndDate);
+  }
   return {
-    minStartDate: dayjs.min(allMinStartDates),
-    maxEndDate: dayjs.max(allMaxEndDates)
+    minStartDate: finalMinStartDate,
+    maxEndDate: finalMaxEndDate
   };
 };
 
 provide(
   'getGanttMinAndMaxDate',
   getGanttMinAndMaxDate
+);
+
+const clearDateCache = () => {
+  maxAndMindateCache.clear();
+};
+
+provide(
+  'clearDateCache',
+  clearDateCache
 );
 
 const updateMinAndMaxDate = () => {

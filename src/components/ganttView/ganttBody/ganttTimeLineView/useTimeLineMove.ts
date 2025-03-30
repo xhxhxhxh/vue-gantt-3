@@ -42,6 +42,7 @@ export const useTimeLineMove = ({
   const getGanttMinAndMaxDate = inject('getGanttMinAndMaxDate') as (excludeRowIds?: string[], freshStartDate?: boolean, freshEndDate?: boolean)
   => { minStartDate: dayjs.Dayjs | null, maxEndDate: dayjs.Dayjs | null };
   const timeLineMoveChange = inject('timeLineMoveChange') as (rowId: string, timeLineIds: string[], movedTimeData: MovedTimeLineData[]) => void;
+  const clearDateCache = inject('clearDateCache') as () => void;
 
   /**
    * handle time line move
@@ -106,6 +107,7 @@ export const useTimeLineMove = ({
       timeLineMoving.value = false;
       movingTimeLine.value = null;
       movingTimeLineRowId.value = '';
+      clearDateCache();
       if (!oldStartDate.isSame(timeLine.startDate)) {
         // update row node date
         freshRowNodeDateByTimeLine(rowId);

@@ -103,7 +103,6 @@ const emit = defineEmits<{
   (event: 'timeLineMoveChange', rowId: string, timeLineIds: string[], movedTimeData: MovedTimeLineData[]): void,
   (event: 'viewPortChanged', data: RowData[]): void | Promise<void>,
 }>();
-
 const ganttViewRef = ref<InstanceType<typeof GanttView>>();
 const tableViewRef = ref<InstanceType<typeof TableView>>();
 const vGanttRef = ref<HTMLDivElement>();
@@ -112,7 +111,6 @@ const rowHeightRef = toRef(props, 'rowHeight');
 const showFirstLevel = toRef(props, 'defaultShowFirstLevel');
 const showSecondLevel = ref(true);
 const rowClass = 'vg-row';
-
 provide(
   'showSecondLevel',
   showSecondLevel
