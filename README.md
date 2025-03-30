@@ -2,7 +2,7 @@
 
 **English** | [中文](./README-CN.md)
 
-A Gantt component for vue3. High performance(global virtual scroll), support time line move and stretch, change the time scale arbitrarily etc. The table component bases on [ag-grid](https://github.com/ag-grid/ag-grid).
+A Gantt component for vue3. High performance(global virtual scroll), support time line move and stretch, change the time scale arbitrarily etc. The table part of the component bases on [ag-grid](https://github.com/ag-grid/ag-grid).
 
 <div align="center">
   <img src="./public/gantt-preview.png" alt="gantt preview">
