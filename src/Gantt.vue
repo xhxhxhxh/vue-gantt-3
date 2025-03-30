@@ -86,7 +86,8 @@ const props = withDefaults(defineProps<GanttOption>(), {
   rowBuffer: 5,
   rowSelection: 'multiple',
   headerHeight: 25,
-  defaultShowFirstLevel: true
+  defaultShowFirstLevel: true,
+  locale: 'en',
 });
 
 const emit = defineEmits<{
