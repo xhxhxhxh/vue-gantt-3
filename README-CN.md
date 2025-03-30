@@ -1,6 +1,6 @@
 # vue-gantt-3 [![npm](https://img.shields.io/npm/v/vue-gantt-3.svg)](https://www.npmjs.com/package/vue-gantt-3) [![NPM downloads](https://img.shields.io/npm/dm/vue-gantt-3?style=flat)](https://www.npmjs.com/package/vue-gantt-3) [![license](https://img.shields.io/npm/l/vue-gantt-3.svg?maxAge=2592000)](http://www.opensource.org/licenses/mit-license.php)
 
-一个基于vue3的甘特图组件。高性能(全局虚拟滚动), 支持时间线的拉伸和移动, 任意缩放时间尺度等。表格组件基于[ag-grid](https://github.com/ag-grid/ag-grid)。
+一个基于vue3的甘特图组件。高性能(全局虚拟滚动), 支持时间线的拉伸和移动, 任意缩放时间尺度等。组件的表格部分基于[ag-grid](https://github.com/ag-grid/ag-grid)。
 
 <div align="center">
   <img src="./public/gantt-preview.png" alt="gantt preview">
