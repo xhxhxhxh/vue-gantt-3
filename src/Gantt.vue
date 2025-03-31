@@ -65,7 +65,7 @@ export interface GanttOption {
   rowHeight?: number,
   headerHeight?: number, // table and gantt view header height
   rowBuffer?: number, // The number of rows rendered outside the viewable area the gantt renders
-  rowSelection?: 'single' | 'multiple',
+  rowSelection?: 'single' | 'multiple' | 'none',
   defaultTableViewWidth?: number,
   maxTableViewWidth?: number,
   styleOption?: GanttStyleOption

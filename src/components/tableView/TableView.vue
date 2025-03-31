@@ -50,7 +50,7 @@ export interface Props {
   rowHeight: number,
   headerHeight: number,
   rowBuffer: number,
-  rowSelection: 'single' | 'multiple',
+  rowSelection: 'single' | 'multiple' | 'none',
   getEmptyRows?: (count: number) => RowData[],
 
 }

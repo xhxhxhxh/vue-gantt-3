@@ -13,7 +13,7 @@ export const useGanttSelect = ({
   vGanttRef: Ref<HTMLDivElement | undefined>,
   visibleRowIds: Ref<string[], string[]>,
   rowHeight: Ref<number>,
-  rowSelection: Ref<'single' | 'multiple'>,
+  rowSelection: Ref<'single' | 'multiple' | 'none'>,
   rowClass: string,
   emitGanttMouseDown: (event: MouseEvent, rowId: string | null) => void,
   emitSelectChange: (ids: string[]) => void
@@ -41,6 +41,7 @@ export const useGanttSelect = ({
   });
 
   function handleGanttMouseDown (this: HTMLElement, event: MouseEvent) {
+    if (rowSelection.value === 'none') return;
     const { target, attributeValue: rowId, rowIndex } = getTargetElementInfo(event.target as HTMLElement | null, rowClass, 'data-row-id');
     emitGanttMouseDown(event, rowId);
     if (target) {
@@ -158,6 +159,7 @@ export const useGanttSelect = ({
   };
 
   const handleSetSelect = (id: string) => {
+    if (rowSelection.value === 'none') return;
     selectedRowIds.value.clear();
     selectedRowIds.value.add(id);
   };
