@@ -8,6 +8,9 @@
   "exports": {
     "./App.vue": {
       "import": "./src/App.vue"
+    },
+    ".": {
+      "import": "./src/main.ts"
     }
   },
   "dependencies": {

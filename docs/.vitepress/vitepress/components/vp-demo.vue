@@ -7,7 +7,7 @@
         <slot name="source" />
       </div>
       <div class="op-btns">
-        <span class="img-btn" title="Open in CodeSandBox">
+        <span class="img-btn" title="Open in CodeSandBox" @click="openCodeSandBox">
           <svg viewBox="0 0 1024 1024" fill="currentColor"><path d="M755 140.3l0.5-0.3h0.3L512 0 268.3 140h-0.3l0.8 0.4L68.6 256v512L512 1024l443.4-256V256L755 140.3z m-30 506.4v171.2L548 920.1V534.7L883.4 341v215.7l-158.4 90z m-584.4-90.6V340.8L476 534.4v385.7L300 818.5V646.7l-159.4-90.6zM511.7 280l171.1-98.3 166.3 96-336.9 194.5-337-194.6 165.7-95.7L511.7 280z"></path></svg>
         </span>
         <span class="img-btn" title="Edit on Github" @click="openGithub">
@@ -36,6 +36,14 @@ import { ref, computed } from 'vue';
 import SourceCode from './demo/vp-source-code.vue';
 import { isClient, useClipboard, useToggle } from '@vueuse/core';
 import pkg from 'vue-gantt-3/vue-gantt-3/package.json';
+import * as LZString from "lz-string";
+
+interface IFiles {
+  [key: string]: {
+    content: string | Record<string, any>;
+    isBinary?: boolean;
+  };
+}
 
 const props = defineProps<{
   source: string
@@ -52,8 +60,70 @@ const { copy } = useClipboard({
 });
 
 const openGithub = () => {
-  console.log('theme', pkg.homepage);
-  const url = pkg.homepage + `docs/examples/${props.path}.vue`;
+  const url = pkg.homepage + `tree/master/docs/examples/${props.path}.vue`;
+  window.open(url);
+};
+
+function compress(input: string) {
+  return LZString.compressToBase64(input)
+    .replace(/\+/g, `-`) // Convert '+' to '-'
+    .replace(/\//g, `_`) // Convert '/' to '_'
+    .replace(/=+$/, ``); // Remove ending '='
+}
+
+const getParameters = (parameters: {
+  files: IFiles;
+}) => {
+  return compress(JSON.stringify(parameters));
+};
+
+const openCodeSandBox = () => {
+  const parameters = getParameters({
+    files: {
+      'src/App.vue': {
+        content: decodeURIComponent(props.rawSource),
+      },
+      'src/index.ts': {
+        content: `import { createApp } from 'vue';
+import App from './App.vue';
+import Vue3Gantt from 'vue-gantt-3';
+import 'vue-gantt-3/es/vue-gantt-3.css';
+const app = createApp(App);
+app.use(Vue3Gantt);
+app.mount('#app');
+        `,
+      },
+      'index.html': {
+        content: `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>vue-gantt-3 demo</title>
+    <style>
+      body {
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>`
+      },
+      'package.json': {
+        content: {
+          dependencies: {
+            "vue": "^3.2.0",
+            "vue-gantt-3": `^${pkg.version}`
+          },
+          "devDependencies": {
+            "typescript": "~5.7.2",
+          }
+        },
+      },
+    },
+  });
+
+  const url = `https://codesandbox.io/api/v1/sandboxes/define?parameters=${parameters}`;
   window.open(url);
 };
 </script>
