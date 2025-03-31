@@ -8,10 +8,12 @@
     "preview": "vitepress preview ."
   },
   "dependencies": {
+    "@vueuse/core": "^12.7.0",
     "vue-gantt-3": "workspace:*",
     "vue-gantt-3-play": "workspace:*"
   },
-  "devDependencies": { 
+  "devDependencies": {
+    "markdown-it-container": "^4.0.0",
     "vitepress": "^1.6.3"
   }
 }

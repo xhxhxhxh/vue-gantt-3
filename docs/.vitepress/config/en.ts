@@ -31,7 +31,7 @@ function nav(): DefaultTheme.NavItem[] {
   return [
     {
       text: 'Guide',
-      link: '/guide/getting-start',
+      link: '/guide/introduction',
       activeMatch: '/guide/'
     },
     {

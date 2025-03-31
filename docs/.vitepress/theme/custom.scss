@@ -11,6 +11,17 @@
   }
 }
 
+.VPContent {
+  padding-right: 0 !important;
+  .VPDoc {
+    .content-container {
+      margin: 0 !important;
+      max-width: max-content !important;
+    }
+  }
+
+}
+
 .gantt-container {
   height: 400px !important;
   display: flex;

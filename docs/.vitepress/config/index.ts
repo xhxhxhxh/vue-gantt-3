@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress';
 import { fileURLToPath, URL } from 'node:url';
 import { en } from './en';
 import { zh } from './zh';
+import { mdPlugin } from './plugins';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -22,6 +23,9 @@ export default defineConfig({
   },
   rewrites: {
     'en/:rest*': ':rest*'
+  },
+  markdown: {
+    config: (md) => mdPlugin(md),
   },
   vite: {
     resolve: {
