@@ -75,7 +75,7 @@ const rows = shallowRef([
     displayStartDate: '2025-01-01',
     displayEndDate: '2025-05-01',
     timeLines: {
-      startDate: '2025-01-01'
+      startDate: '2025-01-01',
       endDate: '2025-05-01'
     }
   },
@@ -84,7 +84,7 @@ const rows = shallowRef([
     displayStartDate: '2025-03-01',
     displayEndDate: '2025-08-01',
     timeLines: {
-      startDate: '2025-03-01'
+      startDate: '2025-03-01',
       endDate: '2025-08-01'
     }
   },
@@ -93,7 +93,7 @@ const rows = shallowRef([
     displayStartDate: '2025-05-01',
     displayEndDate: '2025-12-01',
     timeLines: {
-      startDate: '2025-05-01'
+      startDate: '2025-05-01',
       endDate: '2025-12-01'
     }
   }
