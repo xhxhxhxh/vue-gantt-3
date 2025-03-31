@@ -57,7 +57,6 @@ export interface Props {
   rowHeight: number,
   headerHeight: number,
   rowBuffer: number,
-  rowSelection: 'single' | 'multiple',
   rowNodeMap: Map<string, GanttRowNode>,
   firstLevelRowNode: GanttRowNode[],
   visibleRowIds: string[],

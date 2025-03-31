@@ -5,6 +5,7 @@ export const useGanttSelect = ({
   vGanttRef,
   visibleRowIds,
   rowHeight,
+  rowSelection,
   rowClass,
   emitGanttMouseDown,
   emitSelectChange
@@ -12,6 +13,7 @@ export const useGanttSelect = ({
   vGanttRef: Ref<HTMLDivElement | undefined>,
   visibleRowIds: Ref<string[], string[]>,
   rowHeight: Ref<number>,
+  rowSelection: Ref<'single' | 'multiple'>,
   rowClass: string,
   emitGanttMouseDown: (event: MouseEvent, rowId: string | null) => void,
   emitSelectChange: (ids: string[]) => void
@@ -50,7 +52,7 @@ export const useGanttSelect = ({
         selectedRowIds.value.clear();
         return;
       }
-      if (isLeftMouse) {
+      if (isLeftMouse && rowSelection.value === 'multiple') {
         this.addEventListener('mousemove', handleGanttMouseMove);
         document.addEventListener('mouseup', handleGanttMouseUp);
       }

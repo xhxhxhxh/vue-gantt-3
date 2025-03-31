@@ -9,7 +9,7 @@
         :rowHeight="rowHeightRef"
         :headerHeight="headerHeight"
         :rowBuffer="rowBuffer"
-        :rowSelection="rowSelection"
+        :rowSelection="rowSelectionRef"
         :rows="rowDataList"
         :rowNodeMap="rowNodeMap"
         :getEmptyRows="getEmptyRows"
@@ -28,7 +28,6 @@
       :rowHeight="rowHeightRef"
       :headerHeight="headerHeight"
       :rowBuffer="rowBuffer"
-      :rowSelection="rowSelection"
       :rowNodeMap="rowNodeMap"
       :firstLevelRowNode="firstLevelRowNode"
       :visibleRowIds="visibleRowIds"
@@ -109,6 +108,7 @@ const vGanttRef = ref<HTMLDivElement>();
 const rowsRef = toRef(props, 'rows');
 const rowHeightRef = toRef(props, 'rowHeight');
 const showFirstLevel = toRef(props, 'defaultShowFirstLevel');
+const rowSelectionRef = toRef(props, 'rowSelection');
 const showSecondLevel = ref(true);
 const rowClass = 'vg-row';
 provide(
@@ -255,7 +255,15 @@ const {
   handleSetSelect,
   selectRows,
   getTargetElementInfo
-} = useGanttSelect({ vGanttRef, visibleRowIds, rowHeight: rowHeightRef, rowClass, emitGanttMouseDown, emitSelectChange });
+} = useGanttSelect({
+  vGanttRef,
+  visibleRowIds,
+  rowHeight: rowHeightRef,
+  rowSelection: rowSelectionRef,
+  rowClass,
+  emitGanttMouseDown,
+  emitSelectChange
+});
 
 const {
   handleSetExpand,
