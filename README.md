@@ -70,32 +70,38 @@ Example for App.vue:
   }
 ]);
 const rows = shallowRef([
-  {
+   {
+    id: '1',
     name: 'person 01',
     displayStartDate: '2025-01-01',
     displayEndDate: '2025-05-01',
-    timeLines: {
+    timeLines: [{
+      id: '1',
       startDate: '2025-01-01',
       endDate: '2025-05-01'
-    }
+    }]
   },
   {
+    id: '2',
     name: 'person 02',
     displayStartDate: '2025-03-01',
     displayEndDate: '2025-08-01',
-    timeLines: {
+    timeLines: [{
+      id: '2',
       startDate: '2025-03-01',
       endDate: '2025-08-01'
-    }
+    }]
   },
   {
+    id: '3',
     name: 'person 03',
     displayStartDate: '2025-05-01',
     displayEndDate: '2025-12-01',
-    timeLines: {
+    timeLines: [{
+      id: '3',
       startDate: '2025-05-01',
       endDate: '2025-12-01'
-    }
+    }]
   }
 ]);
 </script>

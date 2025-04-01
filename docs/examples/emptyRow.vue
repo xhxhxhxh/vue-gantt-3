@@ -4,6 +4,7 @@
       :getRowId="getRowId"
       :columns="columns"
       :rows="rows"
+      :getEmptyRows="getEmptyRows"
     ></Vue3Gantt>
   </div>
 </template>
@@ -78,9 +79,17 @@ const rows = shallowRef<Row[]>([
   }
 ]);
 
+const getEmptyRows = (emptyRowCount: number) => {
+  const newEmptyRows: Row[] = [];
+  for (let i = 0; i < emptyRowCount; i++) {
+    newEmptyRows.push({ id: 'empty-row-' + i });
+  }
+  return newEmptyRows;
+};
+
 </script>
 <style lang="scss" scoped>
 .vg-doc-gantt-container {
-  height: 200px;
+  height: 300px;
 }
 </style>

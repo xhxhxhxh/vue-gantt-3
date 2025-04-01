@@ -4,12 +4,13 @@
       :getRowId="getRowId"
       :columns="columns"
       :rows="rows"
+      :styleOption="styleOption"
     ></Vue3Gantt>
   </div>
 </template>
 <script lang="ts" setup>
 import { ref, shallowRef } from 'vue';
-import { ColDef, TimeLine, RowData } from 'vue-gantt-3/types';
+import { ColDef, TimeLine, RowData, GanttStyleOption } from 'vue-gantt-3/types';
 
 export interface Row extends RowData {
   id: string;
@@ -51,7 +52,8 @@ const rows = shallowRef<Row[]>([
     timeLines: [{
       id: '1',
       startDate: '2025-01-01',
-      endDate: '2025-05-01'
+      endDate: '2025-05-01',
+      label: 'label 1'
     }]
   },
   {
@@ -62,7 +64,8 @@ const rows = shallowRef<Row[]>([
     timeLines: [{
       id: '2',
       startDate: '2025-03-01',
-      endDate: '2025-08-01'
+      endDate: '2025-08-01',
+      label: 'label 2'
     }]
   },
   {
@@ -73,10 +76,17 @@ const rows = shallowRef<Row[]>([
     timeLines: [{
       id: '3',
       startDate: '2025-05-01',
-      endDate: '2025-12-01'
+      endDate: '2025-12-01',
+      label: 'label 3'
     }]
   }
 ]);
+
+const styleOption = ref<GanttStyleOption>({
+  barColor: '#42b883',
+  showHorizontalGridLines: true,
+  barsLabeling: 'insideBarWithoutIcon',
+});
 
 </script>
 <style lang="scss" scoped>

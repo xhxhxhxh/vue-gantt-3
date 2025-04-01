@@ -4,6 +4,7 @@
       :getRowId="getRowId"
       :columns="columns"
       :rows="rows"
+      :rowHeight="40"
     ></Vue3Gantt>
   </div>
 </template>
@@ -81,6 +82,6 @@ const rows = shallowRef<Row[]>([
 </script>
 <style lang="scss" scoped>
 .vg-doc-gantt-container {
-  height: 200px;
+  height: 250px;
 }
 </style>

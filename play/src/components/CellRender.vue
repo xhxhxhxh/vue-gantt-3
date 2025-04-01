@@ -45,7 +45,9 @@ const handleBlur = (e: FocusEvent) => {
 </script>
 <style lang="scss">
 .vg-play-cell {
-  line-height: 22px;
+  height: 100%;
+  display: flex;
+  align-items: center;
   input {
     width: 100%;
     outline: none;

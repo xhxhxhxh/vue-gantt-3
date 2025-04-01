@@ -16,7 +16,7 @@ export const zh = defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/xhxhxhxh/vue-gantt-3/edit/main/docs/:path',
+      pattern: 'https://github.com/xhxhxhxh/vue-gantt-3/blob/master/docs/:path',
       text: '在GitHub上编辑此页面'
     },
 
