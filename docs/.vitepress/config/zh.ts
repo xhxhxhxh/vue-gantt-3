@@ -12,7 +12,7 @@ export const zh = defineConfig({
     nav: nav(),
 
     sidebar: {
-      '/guide/': { base: '/guide/', items: sidebarGuide() },
+      '/zh/guide/': { base: '/zh/guide/', items: sidebarGuide() },
     },
 
     editLink: {
@@ -31,8 +31,8 @@ function nav(): DefaultTheme.NavItem[] {
   return [
     {
       text: '指南',
-      link: '/guide/getting-start',
-      activeMatch: '/guide/'
+      link: '/zh/guide/introduction',
+      activeMatch: '/zh/guide/'
     },
     {
       text: pkg.version,
@@ -53,39 +53,20 @@ function nav(): DefaultTheme.NavItem[] {
 function sidebarGuide(): DefaultTheme.SidebarItem[] {
   return [
     {
-      text: 'Introduction',
-      collapsed: false,
-      items: [
-        { text: 'What is VitePress?', link: 'what-is-vitepress' },
-        { text: 'Getting Started', link: 'getting-started' },
-        { text: 'Routing', link: 'routing' },
-        { text: 'Deploy', link: 'deploy' }
-      ]
+      text: '介绍',
+      link: 'introduction'
     },
     {
-      text: 'Writing',
-      collapsed: false,
-      items: [
-        { text: 'Markdown Extensions', link: 'markdown' },
-        { text: 'Asset Handling', link: 'asset-handling' },
-        { text: 'Frontmatter', link: 'frontmatter' },
-        { text: 'Using Vue in Markdown', link: 'using-vue' },
-        { text: 'Internationalization', link: 'i18n' }
-      ]
+      text: '安装',
+      link: 'installation',
     },
     {
-      text: 'Customization',
-      collapsed: false,
-      items: [
-        { text: 'Using a Custom Theme', link: 'custom-theme' },
-        {
-          text: 'Extending the Default Theme',
-          link: 'extending-default-theme'
-        },
-        { text: 'Build-Time Data Loading', link: 'data-loading' },
-        { text: 'SSR Compatibility', link: 'ssr-compat' },
-        { text: 'Connecting to a CMS', link: 'cms' }
-      ]
+      text: '用法',
+      link: 'usage',
+    },
+    {
+      text: 'API',
+      link: 'api',
     }
   ];
 }

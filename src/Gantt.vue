@@ -85,8 +85,7 @@ const props = withDefaults(defineProps<GanttOption>(), {
   rowBuffer: 5,
   rowSelection: 'multiple',
   headerHeight: 25,
-  defaultShowFirstLevel: true,
-  locale: 'en',
+  defaultShowFirstLevel: true
 });
 
 const emit = defineEmits<{
@@ -290,7 +289,7 @@ defineExpose({
 });
 
 defineOptions({
-  name: 'Vue3Gantt',
+  name: 'VueGantt3',
 });
 
 </script>

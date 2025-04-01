@@ -57,8 +57,8 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       link: 'introduction'
     },
     {
-      text: 'Getting Started',
-      link: 'getting-started',
+      text: 'Installation',
+      link: 'installation',
     },
     {
       text: 'Usage',
