@@ -83,6 +83,10 @@ const openCodeSandBox = () => {
       'src/App.vue': {
         content: decodeURIComponent(props.rawSource),
       },
+      'src/CellRender.vue': {
+        content: 'https://github.com/xhxhxhxh/vue-gantt-3/blob/master/docs/examples/CellRender.vue',
+        isBinary: true
+      },
       'src/index.ts': {
         content: `import { createApp } from 'vue';
 import App from './App.vue';

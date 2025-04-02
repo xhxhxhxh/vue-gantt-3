@@ -42,5 +42,34 @@ emptyRow
 
 :::
 
+## Row Selection
+
+Row selection is configured with the `rowSelection` gantt property.
+
+:::demo `rowSelection` has `single`, `multiple` and `none` three properties. Setting `rowSelection` to `none` will disable the row selection. You can use drag, `ctrl` or `shift` to multiselect rows when `rowSelection` is in multiple mode. Gantt also expose a `selectChange` event, let you know which rows have been selected.
+
+rowSelection
+
+:::
+
+## Add or remove row
+
+Add or remove the row data inside the gantt by updating the rows gantt property.
+
+:::demo You should use `shallowRef` to define rows data that means you could't push or remove row data directly, you can shallow copy rows data, then redefine rows.
+
+addorRemove
+
+:::
+
+## Update row
+
+You can update the row data directly, then call `freshRowNodes` to fresh view.
+
+:::demo You can create a cell editor component, provide it in `defaultCol` or `columns`. Here is a smaple component for cell edit, see [CellRender](https://github.com/xhxhxhxh/vue-gantt-3/blob/master/play/src/components/CellRender.vue)
+
+updateRow
+
+:::
 
 
