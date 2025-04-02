@@ -100,7 +100,7 @@ Gantt will combine time lines auto if two time lines date overlap.
 
 Gantt support show time points in time line.
 
-:::demo Provide time point data in row's timeLine data. You also can set `timePointComp` property by provide a custom component, then set timeLine's `useTimePointComp` to true, and provide any params you want in timeLine's `compParams`. You can listen event `timePointMoveFinished` when time point move.
+:::demo Set time point data in row's timeLine data. You can set `timePointComp` property by provide a custom component, then set timeLine's `useTimePointComp` to `true`, and provide any params you want in timeLine's `compParams`. You can listen event `timePointMoveFinished` when time point move.
 
 timePoints
 
@@ -110,7 +110,7 @@ timePoints
 
 Gantt support display tree structure data.
 
-:::demo When row contains the children field, it is treated as nested data.
+:::demo When `row` contains the `children` field, it is treated as nested data.
 
 treeData
 
