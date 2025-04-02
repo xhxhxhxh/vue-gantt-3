@@ -12,17 +12,17 @@
            class="vg-time-line-row-time-line">
         <div v-if="timeLine.type === 'normal'"
              class="vg-time-line-normal"
-             :class="{moving: timeLine.moving === true}"
+             :class="{moving: timeLine.moving === true, disabledMove: timeLine.disableMove || disableMove}"
              :style="{ backgroundColor: getTimeLineBackgroundColor(timeLine)}"
              @mousedown="e => startTimeLineMove(e, timeLine, row.id)">
-          <div class="vg-move-block" @mousedown="e => startTimeLineStretch(e, timeLine, row.id, 'left')"></div>
+          <div v-show="!timeLine.disableStretch && !disableStretch" class="vg-move-block" @mousedown="e => startTimeLineStretch(e, timeLine, row.id, 'left')"></div>
           <div v-show="styleOption?.barsLabeling !== 'none'"
                class="vg-time-line-label"
                :class="{toLeft: styleOption?.barsLabeling === 'beforeTheBar', toRight: styleOption?.barsLabeling === 'afterTheBar'}">
             <img v-show="styleOption?.barsLabeling === 'insideBarWithIcon' && timeLine.icon" :src="timeLine.icon" alt="">
             <span>{{ timeLine.label || '' }}</span>
           </div>
-          <div class="vg-move-block" @mousedown="e => startTimeLineStretch(e, timeLine, row.id, 'right')"></div>
+          <div v-show="!timeLine.disableStretch && !disableStretch" class="vg-move-block" @mousedown="e => startTimeLineStretch(e, timeLine, row.id, 'right')"></div>
           <div v-for="timePoint in timeLine.timePointNodes?.filter((() => styleOption?.showTimePoints))"
                :key="timePoint.id"
                class="vg-time-line-normal-time-points"
@@ -30,7 +30,7 @@
                @contextmenu.stop="e => onTimePointContextMenu(e, timeLine, timePoint, row.id)"
                @mousedown.stop="e => onTimePointMouseDown(e, timeLine, timePoint)">
             <component :is="timePointComp" v-if="timePoint.useTimePointComp" v-bind="timePoint.compParams"></component>
-            <img v-else :src="timePoint.icon" alt="">
+            <img v-else :src="timePoint.icon || timePointSvg" alt="">
           </div>
         </div>
         <div v-if="timeLine.type === 'parentTimeLineNode'" class="vg-time-line-parentNode">
@@ -53,6 +53,7 @@ import { useTimeLine } from './useTimeLine';
 import { useTimePoint, createTimePointNodes } from './useTimePoint';
 import { useTimeLineStretch } from './useTimeLineStretch';
 import { useTimeLineMove } from './useTimeLineMove';
+import timePointSvg from '../../../../assets/images/timePoint.svg';
 
 dayjs.extend(minMax);
 dayjs.extend(isBetween);
@@ -93,6 +94,14 @@ const rowHeightRef = toRef(props, 'rowHeight');
 const rowNodeMapRef = toRef(props, 'rowNodeMap');
 const timePointSize = computed(() => {
   return props.styleOption?.timePointSize || 28;
+});
+
+const disableStretch = computed(() => {
+  return props.styleOption?.disableStretch;
+});
+
+const disableMove = computed(() => {
+  return props.styleOption?.disableMove;
 });
 
 const getTimeLineBackgroundColor = (timeLine: VisibleTimeLine) => {
@@ -189,6 +198,7 @@ const { startTimeLineStretch } = useTimeLineStretch({
   movingTimeLine,
   timeLineMoving,
   visibleTimeLineMap,
+  disableStretch,
   closeEdgeScroll,
   sortTimeLineNodes,
   mergeOverlapTimeLine,
@@ -207,6 +217,7 @@ const { startTimeLineMove } = useTimeLineMove({
   movingTimeLine,
   timeLineMoving,
   visibleTimeLineMap,
+  disableMove,
   closeEdgeScroll,
   sortTimeLineNodes,
   mergeOverlapTimeLine,
@@ -255,6 +266,9 @@ defineExpose({
         cursor: grab;
         &.moving {
           cursor: grabbing;
+        }
+        &.disabledMove {
+          cursor: default;
         }
         .vg-time-line-normal-time-points {
           cursor: move;

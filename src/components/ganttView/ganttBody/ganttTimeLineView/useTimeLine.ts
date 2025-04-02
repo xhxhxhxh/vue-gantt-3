@@ -180,6 +180,8 @@ export const useTimeLine = ({
       styleOption,
       icon: timeLine.icon,
       label: timeLine.label,
+      disableStretch: timeLine.disableStretch,
+      disableMove: timeLine.disableMove,
     };
     return baseNode;
   };
@@ -261,6 +263,8 @@ export const useTimeLine = ({
             timePointNodes,
             icon: currentTimeNode.icon,
             label: currentTimeNode.label,
+            disableStretch: currentTimeNode.disableStretch,
+            disableMove: currentTimeNode.disableMove,
           });
         }
         if (hasMovingTimeLine) {

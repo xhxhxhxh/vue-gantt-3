@@ -1,5 +1,5 @@
 import { inject, triggerRef } from 'vue';
-import type { Ref, ShallowRef } from 'vue';
+import type { Ref, ShallowRef, ComputedRef } from 'vue';
 import type { GanttRowNode, VisibleTimeLine, TimeLineNode } from '@/types';
 import dayjs from 'dayjs';
 import { getRound } from '@/utils/common';
@@ -12,6 +12,7 @@ export const useTimeLineStretch = ({
   movingTimeLine,
   timeLineMoving,
   visibleTimeLineMap,
+  disableStretch,
   closeEdgeScroll,
   sortTimeLineNodes,
   mergeOverlapTimeLine,
@@ -28,6 +29,7 @@ export const useTimeLineStretch = ({
   movingTimeLine: Ref<VisibleTimeLine | null>,
   timeLineMoving: Ref<boolean>,
   visibleTimeLineMap: ShallowRef<Map<string, VisibleTimeLine[]>, Map<string, VisibleTimeLine[]>>,
+  disableStretch: ComputedRef<boolean | undefined>,
   closeEdgeScroll: (perMoveSpacing: number, callBack: (moveSpacing: number) => any) => void
   sortTimeLineNodes: (timeLineNodes: TimeLineNode[]) => void,
   mergeOverlapTimeLine: (timeLineNodes: TimeLineNode[]) => TimeLineNode[],
@@ -52,6 +54,7 @@ export const useTimeLineStretch = ({
    * @param direction
    */
   const startTimeLineStretch = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: string, direction: 'left' | 'right') => {
+    if (disableStretch.value || timeLine.disableStretch) return;
     let lastX = e.clientX;
     const oldWidth = timeLine.width;
     const minWidth = 4;

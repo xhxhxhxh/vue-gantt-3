@@ -32,7 +32,9 @@ export interface TimeLine {
   icon?: string,
   label?: string,
   timePoints?: TimePoint[],
-  styleOption?: TimeLineStyle
+  styleOption?: TimeLineStyle,
+  disableStretch?: boolean,
+  disableMove?: boolean,
 }
 
 export interface TimeLineNode {
@@ -47,6 +49,8 @@ export interface TimeLineNode {
   hasChildren?: boolean,
   icon?: string,
   label?: string,
+  disableStretch?: boolean,
+  disableMove?: boolean,
 }
 
 export interface RowData {
@@ -92,7 +96,9 @@ export interface VisibleTimeLine {
   label?: string,
   styleOption?: TimeLineStyle,
   timePointNodes?: TimePointNode[],
-  type: 'parentTimeLineNode' | 'sameDateTimeLineNode' | 'normal'
+  type: 'parentTimeLineNode' | 'sameDateTimeLineNode' | 'normal',
+  disableStretch?: boolean,
+  disableMove?: boolean,
 }
 
 export interface ColumnNode extends ColDef {
@@ -140,7 +146,9 @@ export interface GanttStyleOption {
   showHorizontalGridLines?: boolean,
   barsLabeling?: 'none' | 'insideBarWithIcon' | 'insideBarWithoutIcon' | 'beforeTheBar' | 'afterTheBar',
   timePointSize?: number,
-  showTimePoints?: boolean
+  showTimePoints?: boolean,
+  disableStretch?: boolean,
+  disableMove?: boolean,
 }
 
 export interface MovedTimeLineData {

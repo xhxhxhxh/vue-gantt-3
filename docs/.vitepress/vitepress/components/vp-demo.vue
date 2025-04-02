@@ -83,10 +83,6 @@ const openCodeSandBox = () => {
       'src/App.vue': {
         content: decodeURIComponent(props.rawSource),
       },
-      'src/CellRender.vue': {
-        content: 'https://github.com/xhxhxhxh/vue-gantt-3/blob/master/docs/examples/CellRender.vue',
-        isBinary: true
-      },
       'src/index.ts': {
         content: `import { createApp } from 'vue';
 import App from './App.vue';
@@ -117,7 +113,8 @@ app.mount('#app');
         content: {
           dependencies: {
             "vue": "^3.2.0",
-            "vue-gantt-3": `^${pkg.version}`
+            "vue-gantt-3": `^${pkg.version}`,
+            "dayjs": "^1.11.10",
           },
           "devDependencies": {
             "typescript": "~5.7.2",

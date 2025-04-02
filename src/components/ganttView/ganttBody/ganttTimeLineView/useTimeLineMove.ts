@@ -1,5 +1,5 @@
 import { inject, triggerRef } from 'vue';
-import type { Ref, ShallowRef } from 'vue';
+import type { Ref, ShallowRef, ComputedRef } from 'vue';
 import type { GanttRowNode, VisibleTimeLine, TimeLineNode, MovedTimeLineData } from '@/types';
 import dayjs from 'dayjs';
 import { getRound } from '@/utils/common';
@@ -12,6 +12,7 @@ export const useTimeLineMove = ({
   movingTimeLine,
   timeLineMoving,
   visibleTimeLineMap,
+  disableMove,
   closeEdgeScroll,
   sortTimeLineNodes,
   mergeOverlapTimeLine,
@@ -28,6 +29,7 @@ export const useTimeLineMove = ({
   movingTimeLine: Ref<VisibleTimeLine | null>,
   timeLineMoving: Ref<boolean>,
   visibleTimeLineMap: ShallowRef<Map<string, VisibleTimeLine[]>, Map<string, VisibleTimeLine[]>>,
+  disableMove: ComputedRef<boolean | undefined>,
   closeEdgeScroll: (perMoveSpacing: number, callBack: (moveSpacing: number) => any) => void
   sortTimeLineNodes: (timeLineNodes: TimeLineNode[]) => void,
   mergeOverlapTimeLine: (timeLineNodes: TimeLineNode[]) => TimeLineNode[],
@@ -51,6 +53,7 @@ export const useTimeLineMove = ({
    * @param rowId
    */
   const startTimeLineMove = (e: MouseEvent, timeLine: VisibleTimeLine, rowId: string) => {
+    if (disableMove.value || timeLine.disableMove) return;
     timeLine.moving = true;
     movingTimeLine.value = timeLine;
     movingTimeLineRowId.value = rowId;

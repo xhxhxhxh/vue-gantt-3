@@ -10,6 +10,7 @@
   "dependencies": {
     "@vueuse/core": "^12.7.0",
     "lz-string": "^1.5.0",
+    "dayjs": "^1.11.10",
     "vue-gantt-3": "workspace:*",
     "vue-gantt-3-play": "workspace:*"
   },

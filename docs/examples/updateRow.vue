@@ -11,10 +11,9 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, shallowRef, markRaw } from 'vue';
+import { ref, shallowRef, markRaw, defineComponent, h, computed, watch, withDirectives } from 'vue';
 import { ColDef, TimeLine, RowData, DefaultColDef, ValueSetterParams } from 'vue-gantt-3/types';
 import Vue3GanttInstance from 'vue-gantt-3';
-import CellRender from './CellRender.vue';
 
 export interface Row extends RowData {
   id: string;
@@ -25,6 +24,54 @@ export interface Row extends RowData {
 }
 
 const vgGanttRef = ref<InstanceType<typeof Vue3GanttInstance> | undefined>();
+
+const CellRender = defineComponent(
+  (props: { params }) => {
+    const field = ref(props.params.colDef.field as string);
+    const vFocus = {
+      mounted: (el: HTMLInputElement) => {
+        el.focus();
+      }
+    };
+    const rowValue = computed(() => {
+      return props.params.data[field.value] as string;
+    });
+    const inputValue = ref(rowValue.value);
+
+    watch(rowValue, val => {
+      inputValue.value = val;
+    });
+
+    const isEdit = ref(false);
+
+    const handleDbClick = () => {
+      isEdit.value = true;
+    };
+
+    const handleBlur = (e: FocusEvent) => {
+      isEdit.value = false;
+      props.params.setValue(inputValue.value);
+    };
+
+    return () => {
+      return h('div', { onDblclick: handleDbClick }, [
+        isEdit.value ?
+          withDirectives(h('input', {
+            value: inputValue.value,
+            onInput: (e: any) => {
+              inputValue.value = e.target.value;
+            },
+            onBlur: handleBlur
+          }), [[vFocus]]) :
+          h('span', rowValue.value)
+      ]);
+    };
+  },
+  // 目前仍然需要手动声明运行时的 props
+  {
+    props: ['params']
+  }
+);
 
 const getRowId = (rowData: Row) => rowData.id;
 const columns = ref<ColDef[]>([
@@ -118,6 +165,6 @@ const getEmptyRows = (emptyRowCount: number) => {
 </script>
 <style lang="scss" scoped>
 .vg-doc-gantt-container {
-  height: 300px;
+  height: 250px;
 }
 </style>

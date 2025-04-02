@@ -26,7 +26,7 @@ changeHeight
 
 You can pass the `styleOption` property to define some style in the gantt. Most styles can be modified by changing the css.
 
-:::demo `styleOption` has `barColor`, `showHorizontalGridLines`, `barsLabeling`, `timePointSize` and `showTimePoints` five properties.
+:::demo `styleOption` has `barColor`, `showHorizontalGridLines`, `barsLabeling`, `timePointSize` and `showTimePoints` properties.
 
 styleOption
 
@@ -46,7 +46,7 @@ emptyRow
 
 Row selection is configured with the `rowSelection` gantt property.
 
-:::demo `rowSelection` has `single`, `multiple` and `none` three properties. Setting `rowSelection` to `none` will disable the row selection. You can use drag, `ctrl` or `shift` to multiselect rows when `rowSelection` is in multiple mode. Gantt also expose a `selectChange` event, let you know which rows have been selected.
+:::demo `rowSelection` has `single`, `multiple` and `none` properties. Setting `rowSelection` to `none` will disable the row selection. You can use drag, `ctrl` or `shift` to multiselect rows when `rowSelection` is in multiple mode. Gantt also expose a `selectChange` event, let you know which rows have been selected.
 
 rowSelection
 
@@ -72,4 +72,51 @@ updateRow
 
 :::
 
+## Time scale
+
+You can use `shift` + `mouse wheel` to scale the time.
+
+:::demo Set property `defaultPerHourSpacing` to define per hour's spacing, or you can set `defaultTimeScale` which value can be `day`, `week`, `month` ,`quarter` and `year`. `defaultTimeScale` has a higher priority than `defaultPerHourSpacing`.
+
+timeScale
+
+:::
+
+## Stretch and move time line
+
+Move the timeline to where you want it.
+
+:::demo You can listen event `timeLineStretchChange` and `timeLineMoveChange` when time line change. Gantt will not update date in origial data directly, you should update date by yourself.
+
+stretchAndMove
+
+:::
+
+::: tip
+Gantt will combine time lines auto if two time lines date overlap.
+:::
+
+## Time points
+
+Gantt support show time points in time line.
+
+:::demo Provide time point data in row's timeLine data. You also can set `timePointComp` property by provide a custom component, then set timeLine's `useTimePointComp` to true, and provide any params you want in timeLine's `compParams`. You can listen event `timePointMoveFinished` when time point move.
+
+timePoints
+
+:::
+
+## Tree data
+
+Gantt support display tree structure data.
+
+:::demo When row contains the children field, it is treated as nested data.
+
+treeData
+
+:::
+
+::: info
+If a row has children, its display date will depend on its children's date.
+:::
 
