@@ -1,6 +1,6 @@
 <template>
   <div class="gantt-container">
-    <Vue3Gantt
+    <VueGantt3
       ref="vgGanttRef"
       :getRowId="getRowId"
       :columns="columns"
@@ -10,7 +10,7 @@
       :getEmptyRows="getEmptyRows"
       @select-change="onSelectChange"
       @expand-change="onExpandChange"
-    ></Vue3Gantt>
+    ></VueGantt3>
   </div>
 </template>
 <script lang="ts" setup>
@@ -19,10 +19,10 @@ import { ColDef, DefaultColDef } from 'vue-gantt-3/types';
 import type { ValueSetterParams } from 'ag-grid-community';
 import { getSingleRow, getMultiRows, getLargeNumRows, getEmptyRows } from './utils/mockData';
 import CellRender from './components/CellRender.vue';
-import Vue3GanttInstance from 'vue-gantt-3';
+import VueGantt3Instance from 'vue-gantt-3';
 import { Row } from './types';
 
-const vgGanttRef = ref<InstanceType<typeof Vue3GanttInstance> | undefined>();
+const vgGanttRef = ref<InstanceType<typeof VueGantt3Instance> | undefined>();
 
 const getRowId = (rowData: Row) => rowData.id;
 const columns = ref<ColDef[]>([

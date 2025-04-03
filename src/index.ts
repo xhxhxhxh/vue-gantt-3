@@ -3,5 +3,5 @@ import { withInstall } from './utils/withInstall';
 
 export * from './types';
 
-export const Vue3Gantt = withInstall(Gantt);
-export default Vue3Gantt;
+export const VueGantt3 = withInstall(Gantt);
+export default VueGantt3;

@@ -1,10 +1,10 @@
 <template>
   <div class="vg-doc-gantt-container">
-    <Vue3Gantt
+    <VueGantt3
       :getRowId="getRowId"
       :columns="columns"
       :rows="rows"
-    ></Vue3Gantt>
+    ></VueGantt3>
   </div>
 </template>
 <script lang="ts" setup>

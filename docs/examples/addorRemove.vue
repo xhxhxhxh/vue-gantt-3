@@ -4,14 +4,14 @@
       <button @click="addRow">Add</button>
       <button @click="removeRow">Remove</button>
     </div>
-    <Vue3Gantt
+    <VueGantt3
       :getRowId="getRowId"
       :columns="columns"
       :rows="rows"
       :getEmptyRows="getEmptyRows"
       :rowSelection="'multiple'"
       @select-change="onSelectChange"
-    ></Vue3Gantt>
+    ></VueGantt3>
   </div>
 </template>
 <script lang="ts" setup>

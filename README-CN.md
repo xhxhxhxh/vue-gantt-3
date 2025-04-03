@@ -29,10 +29,10 @@ pnpm install vue-gantt-3
 ```javascript
 import { createApp } from 'vue';
 import App from './App.vue';
-import Vue3Gantt from 'vue-gantt-3';
+import VueGantt3 from 'vue-gantt-3';
 
 const app = createApp(App);
-app.use(Vue3Gantt);
+app.use(VueGantt3);
 app.mount('#app');
 ```
 
@@ -40,11 +40,11 @@ App.vue例子:
 
 ```javascript
 <template>
-  <Vue3Gantt
+  <VueGantt3
       :getRowId="getRowId"
       :columns="columns"
       :rows="rows"
-    ></Vue3Gantt>
+    ></VueGantt3>
 </template>
 
 <script lang="ts" setup>

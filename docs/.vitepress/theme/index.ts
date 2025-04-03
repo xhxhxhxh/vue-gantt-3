@@ -15,12 +15,12 @@ export default {
   },
   async enhanceApp({ app, router, siteData }) {
     if (!import.meta.env.SSR) {
-      const Vue3Gantt = await import('vue-gantt-3');
+      const VueGantt3 = await import('vue-gantt-3');
       const GanttPreview = await import('vue-gantt-3-play/App.vue');
       const { globals } = await import('../vitepress');
       const modules = import.meta.glob('../../examples/*.vue', { eager: true });
 
-      app.component('Vue3Gantt', Vue3Gantt.default);
+      app.component('VueGantt3', VueGantt3.default);
       app.component('GanttPreview', GanttPreview.default);
 
       globals.forEach(([name, Comp]) => {

@@ -1,19 +1,19 @@
 <template>
   <div class="vg-doc-gantt-container">
-    <Vue3Gantt
+    <VueGantt3
       ref="vgGanttRef"
       :getRowId="getRowId"
       :columns="columns"
       :rows="rows"
       :getEmptyRows="getEmptyRows"
       :defaultCol="defaultCol"
-    ></Vue3Gantt>
+    ></VueGantt3>
   </div>
 </template>
 <script lang="ts" setup>
 import { ref, shallowRef, markRaw, defineComponent, h, computed, watch, withDirectives } from 'vue';
 import { ColDef, TimeLine, RowData, DefaultColDef, ValueSetterParams } from 'vue-gantt-3/types';
-import Vue3GanttInstance from 'vue-gantt-3';
+import VueGantt3Instance from 'vue-gantt-3';
 
 export interface Row extends RowData {
   id: string;
@@ -23,7 +23,7 @@ export interface Row extends RowData {
   timeLines?: TimeLine[],
 }
 
-const vgGanttRef = ref<InstanceType<typeof Vue3GanttInstance> | undefined>();
+const vgGanttRef = ref<InstanceType<typeof VueGantt3Instance> | undefined>();
 
 const CellRender = defineComponent(
   (props: { params }) => {

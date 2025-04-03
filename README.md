@@ -31,10 +31,10 @@ Write the following in main.js:
 ```javascript
 import { createApp } from 'vue';
 import App from './App.vue';
-import Vue3Gantt from 'vue-gantt-3';
+import VueGantt3 from 'vue-gantt-3';
 
 const app = createApp(App);
-app.use(Vue3Gantt);
+app.use(VueGantt3);
 app.mount('#app');
 ```
 
@@ -42,11 +42,11 @@ Example for App.vue:
 
 ```javascript
 <template>
-  <Vue3Gantt
+  <VueGantt3
       :getRowId="getRowId"
       :columns="columns"
       :rows="rows"
-    ></Vue3Gantt>
+    ></VueGantt3>
 </template>
 
 <script lang="ts" setup>

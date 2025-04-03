@@ -86,10 +86,10 @@ const openCodeSandBox = () => {
       'src/index.ts': {
         content: `import { createApp } from 'vue';
 import App from './App.vue';
-import Vue3Gantt from 'vue-gantt-3';
+import VueGantt3 from 'vue-gantt-3';
 import 'vue-gantt-3/es/vue-gantt-3.css';
 const app = createApp(App);
-app.use(Vue3Gantt);
+app.use(VueGantt3);
 app.mount('#app');
         `,
       },

@@ -1,13 +1,13 @@
 <template>
   <div class="vg-doc-gantt-container">
-    <Vue3Gantt
+    <VueGantt3
       :getRowId="getRowId"
       :columns="columns"
       :rows="rows"
       :styleOption="styleOption"
       @time-line-stretch-change="onTimeLineStretchChange"
       @time-line-move-change="onTimeLineMoveChange"
-    ></Vue3Gantt>
+    ></VueGantt3>
   </div>
 </template>
 <script lang="ts" setup>

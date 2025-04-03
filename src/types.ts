@@ -162,6 +162,6 @@ export type TimeScale = 'day' | 'week' | 'month' | 'quarter'| 'year'
 // GlobalComponents for Volar
 declare module 'vue' {
   export interface GlobalComponents {
-    Vue3Gantt: typeof import('./Gantt.vue')['default']
+    VueGantt3: typeof import('./Gantt.vue')['default']
   }
 }
