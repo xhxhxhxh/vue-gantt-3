@@ -49,7 +49,6 @@ export interface Props {
   styleOption?: GanttStyleOption,
   timePointComp?: any
 }
-console.log('ganttBody');
 
 const emit = defineEmits<{
   (event: 'updateMinDate', date: dayjs.Dayjs): void,
@@ -105,7 +104,6 @@ const onScroll = ({ scrollTop, scrollLeft }: {scrollTop: number, scrollLeft: num
 };
 
 const onResize = () => {
-  console.log('ganttbody resize');
   getGanttBodyWidth();
   getGanttBodyHeight();
   if (ganttGridRef.value) {

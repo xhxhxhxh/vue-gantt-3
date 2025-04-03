@@ -66,7 +66,7 @@ export interface Props {
   timePointComp?: any,
   locale?: string
 }
-console.log('GanttView');
+
 const props = withDefaults(defineProps<Props>(), {
   defaultPerHourSpacing: 0.1
 });
@@ -206,16 +206,13 @@ provide(
 );
 
 const updateMinAndMaxDate = () => {
-  console.time('getMinAndMaxDate');
   const { minStartDate, maxEndDate } = getMinAndMaxDate(props.firstLevelRowNode);
-  console.timeEnd('getMinAndMaxDate');
   if (minStartDate) {
     ganttMinDate.value = minStartDate;
   }
   if (maxEndDate) {
     ganttMaxDate.value = maxEndDate;
   }
-  console.log('min, max date', ganttMinDate.value, ganttMaxDate.value);
 };
 
 const updateMinDate = (minDate: dayjs.Dayjs) => {

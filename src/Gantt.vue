@@ -75,7 +75,7 @@ export interface GanttOption {
   locale?: string,
   defaultShowFirstLevel?: boolean
 }
-console.log('Gantt');
+
 const props = withDefaults(defineProps<GanttOption>(), {
   defaultTableViewWidth: 350,
   maxTableViewWidth: 1000,

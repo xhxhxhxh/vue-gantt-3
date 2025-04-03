@@ -35,7 +35,7 @@ export interface Props {
   ganttMinDate: dayjs.Dayjs,
   styleOption?: GanttStyleOption
 }
-console.log('ganttGrid');
+
 const props = defineProps<Props>();
 
 const wrapRef = inject('wrapRef') as Ref<HTMLDivElement | undefined>;
@@ -52,11 +52,8 @@ const showHorizontalGridLines = computed(() => {
 });
 
 const freshGrid = () => {
-  console.log('freshGrid');
-  console.time('freshGrid');
   freshVerticalLines();
   freshHorizontalLines();
-  console.timeEnd('freshGrid');
 };
 
 // get the left position of the first month vertical line
@@ -76,7 +73,6 @@ const startInfo = computed<GanttBodyStartInfo>(() => {
 
 const freshVerticalLines = () => {
   if (!wrapRef.value) return;
-  console.log('freshVerticalLines');
 
   const wrapWidth = wrapRef.value.offsetWidth;
   const { perHourSpacing } = props;
@@ -115,7 +111,6 @@ const freshVerticalLines = () => {
 
 const freshHorizontalLines = () => {
   if (!wrapRef.value) return;
-  console.log('freshHorizontalLines');
 
   if (!showHorizontalGridLines.value) {
     horizontalLinesList.value = [];

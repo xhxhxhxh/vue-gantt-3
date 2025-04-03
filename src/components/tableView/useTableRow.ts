@@ -81,8 +81,6 @@ export const useTableRow = ({
       let newEmptyRows: RowData[] = [];
       const lastEmptyRowCount = emptyRows.value.length;
       if (emptyRowCount !== lastEmptyRowCount) {
-        console.log('handleEmptyRowChanged');
-
         const verticalScroll = tableBodyVerticalScrollViewport.value?.parentElement;
         if (verticalScroll) {
           if (emptyRowCount > 0) {

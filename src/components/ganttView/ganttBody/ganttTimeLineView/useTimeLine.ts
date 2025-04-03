@@ -48,7 +48,6 @@ export const useTimeLine = ({
 
   const freshVisibleRows = () => {
     if (!wrapRef.value) return;
-    console.log('freshVisibleRows');
     const wrapHeight = wrapRef.value.offsetHeight;
     const bufferHeight = rowHeight.value * rowBuffer;
     const startNumInView = Math.floor((scrollViewScrollTop.value - bufferHeight) / rowHeight.value);

@@ -38,7 +38,6 @@ export const useGanttRowNode = ({
   });
 
   watch(rows, (newRows, oldRows) => {
-    console.log('rows change');
     onRowsChange(newRows, oldRows);
   }, { deep: false });
 
@@ -46,8 +45,6 @@ export const useGanttRowNode = ({
    * init rowNode, convert original row data to rowNode, include create and update rowNode
    */
   const initRowNode = () => {
-    console.time('initRowNode');
-    console.log('initRowNode');
     const oldRowNodeMap = rowNodeMap.value;
     const newRowNodeMap = new Map<string, GanttRowNode>();
     const newRowNodeIds: string[] = [];
@@ -72,8 +69,6 @@ export const useGanttRowNode = ({
     }
     visibleRowIds.value = newVisibleRowIds;
     firstLevelRowNode.value = newFirstLevelRowNode;
-    console.log('newRowNodeMap', newRowNodeMap);
-    console.timeEnd('initRowNode');
   };
 
   /**

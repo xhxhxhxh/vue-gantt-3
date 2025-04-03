@@ -42,7 +42,7 @@ export interface Props {
   ganttViewWidth: number,
   locale?: string
 }
-console.log('ganttHeader');
+
 const props = defineProps<Props>();
 
 const firstLevelBlocks = shallowRef<BlockItem[]>([]);
@@ -125,8 +125,6 @@ const startInfo = computed(() => {
 
 const freshBlocks = () => {
   if (!ganttHeaderRef.value) return;
-  console.time('freshBlocks');
-  console.log('freshBlocks');
   const { firstLevelStartUnitDate, secondLevelStartUnitDate, firstLevelStartLeft, secondLevelStartLeft } = startInfo.value;
 
   const { firstLevelUnit, secondLevelUnit, canShowSecondLevel } = getUnit.value;
@@ -139,7 +137,6 @@ const freshBlocks = () => {
   if (canShowSecondLevel) {
     secondLevelBlocks.value = getNewBlocks(secondLevelStartLeft, secondLevelStartUnitDate, secondLevelUnit);
   }
-  console.timeEnd('freshBlocks');
 };
 
 /**

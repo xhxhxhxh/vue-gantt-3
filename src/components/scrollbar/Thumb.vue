@@ -42,8 +42,6 @@ const onScroll = () => {
     return;
   }
   if (wrapRef.value && thumbRef.value) {
-    console.log('thumb scroll');
-
     scrollFromThumb.value = true;
     const { scrollTop, scrollLeft } = thumbRef.value;
     if (props.isHorizontal) {

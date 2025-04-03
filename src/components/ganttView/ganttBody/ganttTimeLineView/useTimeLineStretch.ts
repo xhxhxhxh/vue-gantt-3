@@ -68,7 +68,6 @@ export const useTimeLineStretch = ({
     const onMouseMove = (event: MouseEvent) => {
       let currentX = event.clientX;
       const diffX = currentX - lastX;
-      console.log('onMouseMove');
 
       // keep stretch if timeline width is less than minWidth, it will produce invalid distance,
       // then stretch on reverse direction, it will reduce invalid distance, stretch will be effected until invalid distance is 0
@@ -169,7 +168,6 @@ export const useTimeLineStretch = ({
    * @returns
    */
   const timeLineStretch = (timeLine: VisibleTimeLine, rowId: string, distance: number, minWidth: number, direction: 'left' | 'right') => {
-    console.log('ganttViewWidth.value', ganttViewWidth.value);
     const oldWidth = timeLine.width;
     if (direction === 'left') {
       timeLine.width -= distance;

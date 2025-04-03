@@ -71,7 +71,7 @@ export interface Props {
   styleOption?: GanttStyleOption,
   timePointComp?: any
 }
-console.log('ganttTimeLine');
+
 const props = defineProps<Props>();
 
 const emit = defineEmits<{

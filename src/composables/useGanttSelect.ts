@@ -72,7 +72,6 @@ export const useGanttSelect = ({
     if (target && lastMouseMoveTarget !== target) {
       lastMouseMoveTarget = target;
       if (rowId) {
-        console.log('handleGanttMouseMove');
         handleRowSelect(rowId, event, rowIndex, true);
       }
     }

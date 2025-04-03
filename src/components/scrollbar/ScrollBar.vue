@@ -140,7 +140,6 @@ useResizeObserver(wrapRef, onWrapResize);
 const handleScroll = () => {
   if (wrapRef.value && barRef.value) {
     if (!scrollFromThumb.value) {
-      console.log('wrap scroll', wrapRef.value.scrollTop);
       emit('scroll', { scrollTop: wrapRef.value.scrollTop, scrollLeft: wrapRef.value.scrollLeft });
       barRef.value.handleScroll(wrapRef.value);
     } else {

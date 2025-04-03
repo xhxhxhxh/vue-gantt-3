@@ -54,7 +54,6 @@ export interface Props {
   getEmptyRows?: (count: number) => RowData[],
 
 }
-console.log('tableView');
 
 const props = defineProps<Props>();
 const emit = defineEmits<{
