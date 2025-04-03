@@ -101,6 +101,6 @@ const onSelectChange = (selectedIds: string[]) => {
 </script>
 <style lang="scss" scoped>
 .vg-doc-gantt-container {
-  height: 300px;
+  height: 250px;
 }
 </style>
