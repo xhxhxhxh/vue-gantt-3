@@ -49,7 +49,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           # 目标仓库信息
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          deploy_key: ${{ secrets.DEPLOY_KEY }}
           external_repository: xhxhxhxh/xhxhxhxh.github.io  # 目标仓库名称
           publish_dir: ./docs/.vitepress/dist  # 要部署的目录（根据构建工具调整）
           keep_files: false  # 是否保留目标仓库现有文件
