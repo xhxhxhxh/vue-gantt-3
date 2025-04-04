@@ -6,6 +6,10 @@
   <img src="./public/gantt-preview.png" alt="gantt preview">
 </div>
 
+## API & Examples
+
+- 请访问 [vue-gantt-3](https://xhxhxhxh.github.io/)
+
 ## 安装
 
 ```

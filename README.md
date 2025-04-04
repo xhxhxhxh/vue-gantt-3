@@ -8,6 +8,10 @@ A Gantt component for vue3. High performance(global virtual scroll), support tim
   <img src="./public/gantt-preview.png" alt="gantt preview">
 </div>
 
+## API & Examples
+
+- Please visit [vue-gantt-3](https://xhxhxhxh.github.io/)
+
 ## Install
 
 ```
