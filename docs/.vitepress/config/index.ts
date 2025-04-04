@@ -11,6 +11,10 @@ export default defineConfig({
   themeConfig: {
     logo: { src: '/logo.svg', width: 24, height: 24 },
   },
+  head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
+    ['link', { rel: 'icon', type: 'image/png', href: '/logo.png' }],
+  ],
   locales: {
     'root': {
       label: 'English',
