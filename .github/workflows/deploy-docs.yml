@@ -46,7 +46,7 @@ jobs:
       - name: Build with VitePress
         run: npm run docs:build # 或 pnpm docs:build / yarn docs:build / bun run docs:build
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v1
+        uses: peaceiris/actions-gh-pages@v4
         with:
           # 目标仓库信息
           github_token: ${{ secrets.GITHUB_TOKEN }}
