@@ -41,26 +41,17 @@ jobs:
         with:
           node-version: 18
           cache: pnpm # 或 pnpm / yarn
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
       - name: Install dependencies
         run: pnpm install # 或 pnpm install / yarn install / bun install
       - name: Build with VitePress
         run: npm run docs:build # 或 pnpm docs:build / yarn docs:build / bun run docs:build
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs/.vitepress/dist
-
-  # 部署工作
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    name: Deploy
-    steps:
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v1
+        with:
+          # 目标仓库信息
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          external_repository: xhxhxhxh/xhxhxhxh.github.io  # 目标仓库名称
+          publish_dir: ./docs/.vitepress/dist  # 要部署的目录（根据构建工具调整）
+          keep_files: false  # 是否保留目标仓库现有文件
+          # 如果目标分支是 main 或 master，需指定：
+          publish_branch: main
