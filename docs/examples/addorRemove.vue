@@ -131,7 +131,9 @@ const removeRow = () => {
 </script>
 <style lang="scss" scoped>
 .vg-doc-gantt-container {
-  height: 300px;
+  .vue-gantt-3 {
+    height: 300px;
+  }
   .btn-box {
     margin-bottom: 12px;
     button {
