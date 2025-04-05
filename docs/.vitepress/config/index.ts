@@ -10,6 +10,9 @@ export default defineConfig({
   cleanUrls: true,
   themeConfig: {
     logo: { src: '/logo.svg', width: 24, height: 24 },
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/xhxhxhxh/vue-gantt-3' }
+    ],
   },
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],

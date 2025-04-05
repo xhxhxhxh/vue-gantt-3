@@ -104,7 +104,7 @@ export default defineComponent({
     background:transparent;
     right: 1px;
     width: 4px;
-    cursor: url("/statics/images/myCursor.cur"), col-resize !important;
+    cursor: col-resize !important;
     // opacity: 0;
     // background-color: red;
     height: 100%;
