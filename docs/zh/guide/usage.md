@@ -120,3 +120,12 @@ treeData
 如果行有子级, 它的时间线是根据子级的时间来显示的。
 :::
 
+## 自定义时间线
+
+提供一个组件覆盖默认的时间线.
+
+:::demo 通过 `timeLineRender` 设置时间线组件, 你也可以将需要的参数放入 `timeLineRenderParams` 中. [TimeLineRender](https://github.com/xhxhxhxh/vue-gantt-3/blob/master/play/src/components/TimeLineRender.vue) 是一个简单的时间线组件，用以显示实际完成时间.
+
+customTimeLine
+
+:::

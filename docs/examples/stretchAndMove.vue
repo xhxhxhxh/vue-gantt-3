@@ -88,7 +88,7 @@ const onTimeLineStretchChange = (rowId: string, timeLineIds: string[], startDate
   console.log('onTimeLineStretchChange', rowId, timeLineIds, startDate, endDate);
 };
 
-const onTimeLineMoveChange = (rowId: string, timeLineIds: string[], movedTimeData: MovedTimeLineData) => {
+const onTimeLineMoveChange = (rowId: string, timeLineIds: string[], movedTimeData: MovedTimeLineData[]) => {
   console.log('onTimeLineMoveChange', rowId, timeLineIds, movedTimeData);
 };
 

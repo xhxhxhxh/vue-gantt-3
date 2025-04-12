@@ -67,7 +67,6 @@ const CellRender = defineComponent(
       ]);
     };
   },
-  // 目前仍然需要手动声明运行时的 props
   {
     props: ['params']
   }

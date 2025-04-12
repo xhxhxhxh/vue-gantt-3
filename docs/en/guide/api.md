@@ -21,6 +21,8 @@
 | locale | internationalization | `en / zh-cn` | browser's language |
 | timePointComp | time point component | `Comp` | — |
 | getEmptyRows | return rows data | `(count: number) => RowData[]` | — |
+| timeLineRender | custom time line component | `Comp` | — |
+| timeLineRenderParams | time line component params | `Record<string, any>` | — |
 
 ## Events
 

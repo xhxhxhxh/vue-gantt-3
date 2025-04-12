@@ -76,3 +76,11 @@ export const getEmptyRows = (emptyRowCount: number) => {
   }
   return newEmptyRows;
 };
+
+export const onActualDateChange = (row: Row, dateObj: Record<string, dayjs.Dayjs>) => {
+  row.timeLines?.forEach((timeLine) => {
+    if (timeLine.id in dateObj) {
+      timeLine.actualDate = dateObj[timeLine.id].format('YYYY-MM-DD');
+    }
+  })
+}

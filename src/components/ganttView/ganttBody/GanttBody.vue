@@ -22,6 +22,8 @@
       :styleOption="styleOption"
       :timePointComp="timePointComp"
       :ganttViewWidth="ganttViewWidth"
+      :timeLineRender="timeLineRender"
+      :timeLineRenderParams="timeLineRenderParams"
       @update-min-date="updateMinDate"
       @update-max-date="updateMaxDate"
     ></GanttTimeLineView>
@@ -47,7 +49,9 @@ export interface Props {
   rowNodeMap: Map<string, GanttRowNode>,
   visibleRowIds: string[],
   styleOption?: GanttStyleOption,
-  timePointComp?: any
+  timePointComp?: any,
+  timeLineRender?: any,
+  timeLineRenderParams?: Record<string, any>,
 }
 
 const emit = defineEmits<{

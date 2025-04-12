@@ -36,6 +36,8 @@
       :defaultPerHourSpacing="defaultPerHourSpacing"
       :defaultTimeScale="defaultTimeScale"
       :locale="locale"
+      :timeLineRender="timeLineRender"
+      :timeLineRenderParams="timeLineRenderParams"
       @trigger-table-view-scroll="triggerTableViewScroll"
       @gantt-body-resize="onGanttBodyResize"
       @perHourSpacingChange="perHourSpacingChange"
@@ -73,7 +75,9 @@ export interface GanttOption {
   defaultPerHourSpacing?: number,
   defaultTimeScale?: TimeScale,
   locale?: string,
-  defaultShowFirstLevel?: boolean
+  defaultShowFirstLevel?: boolean,
+  timeLineRender?: any,
+  timeLineRenderParams?: Record<string, any>,
 }
 
 const props = withDefaults(defineProps<GanttOption>(), {

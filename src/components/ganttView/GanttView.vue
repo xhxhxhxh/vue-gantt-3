@@ -31,6 +31,8 @@
         :visibleRowIds="visibleRowIds"
         :styleOption="styleOption"
         :timePointComp="timePointComp"
+        :timeLineRender="timeLineRender"
+        :timeLineRenderParams="timeLineRenderParams"
         @update-min-date="updateMinDate"
         @update-max-date="updateMaxDate"
       ></GanttBody>
@@ -64,7 +66,9 @@ export interface Props {
   defaultTimeScale?: TimeScale,
   styleOption?: GanttStyleOption,
   timePointComp?: any,
-  locale?: string
+  locale?: string,
+  timeLineRender?: any,
+  timeLineRenderParams?: Record<string, any>,
 }
 
 const props = withDefaults(defineProps<Props>(), {

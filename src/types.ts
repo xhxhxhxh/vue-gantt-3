@@ -37,10 +37,11 @@ export interface TimeLine {
   disableMove?: boolean,
 }
 
-export interface TimeLineNode {
+export interface TimeLineNode<T extends TimeLine = TimeLine> {
   startDate: dayjs.Dayjs,
   endDate: dayjs.Dayjs,
   id: string,
+  data?: T,
   isMerge?: boolean,
   mergedTimeLineNodes?: TimeLineNode[],
   timePointNodes?: TimePointNode[],

@@ -66,7 +66,7 @@ addorRemove
 
 You can update the row data directly, then call `freshRowNodes` method to refresh the view.
 
-:::demo You can create a cell editor component, setting it in `defaultCol` or `columns`. Here is a smaple component for cell editor, see [CellRender](https://github.com/xhxhxhxh/vue-gantt-3/blob/master/play/src/components/CellRender.vue).
+:::demo You can create a cell editor component, setting it in `defaultCol` or `columns`. Here is a sample component for cell editor, see [CellRender](https://github.com/xhxhxhxh/vue-gantt-3/blob/master/play/src/components/CellRender.vue).
 
 updateRow
 
@@ -118,5 +118,15 @@ treeData
 
 ::: info
 If a row has children, its display date will depend on its children.
+:::
+
+## Custom time line
+
+Using a component to cover time line's default behavior.
+
+:::demo Setting component in `timeLineRender`, you can also set params in `timeLineRenderParams`.  Here is a sample component for custom time line, see [TimeLineRender](https://github.com/xhxhxhxh/vue-gantt-3/blob/master/play/src/components/TimeLineRender.vue).
+
+customTimeLine
+
 :::
 

@@ -13,14 +13,19 @@
         <div v-if="timeLine.type === 'normal'"
              class="vg-time-line-normal"
              :class="{moving: timeLine.moving === true, disabledMove: timeLine.disableMove || disableMove}"
-             :style="{ backgroundColor: getTimeLineBackgroundColor(timeLine)}"
              @mousedown="e => startTimeLineMove(e, timeLine, row.id)">
           <div v-show="!timeLine.disableStretch && !disableStretch" class="vg-move-block" @mousedown="e => startTimeLineStretch(e, timeLine, row.id, 'left')"></div>
-          <div v-show="styleOption?.barsLabeling !== 'none'"
+          <component :is="timeLineRender" v-if="timeLineRender" :params="timeLineRenderParams" 
+          :visibleTimeLine="timeLine" :timeLineWidth="timeLine.width" :rowNode="row.rowNode"></component>
+          <div class="vg-time-line-normal-body" v-if="!timeLineRender" 
+            :style="{ backgroundColor: getTimeLineBackgroundColor(timeLine)}"
+          >
+            <div v-show="styleOption?.barsLabeling !== 'none'"
                class="vg-time-line-label"
                :class="{toLeft: styleOption?.barsLabeling === 'beforeTheBar', toRight: styleOption?.barsLabeling === 'afterTheBar'}">
-            <img v-show="styleOption?.barsLabeling === 'insideBarWithIcon' && timeLine.icon" :src="timeLine.icon" alt="">
-            <span>{{ timeLine.label || '' }}</span>
+              <img v-show="styleOption?.barsLabeling === 'insideBarWithIcon' && timeLine.icon" :src="timeLine.icon" alt="">
+              <span>{{ timeLine.label || '' }}</span>
+            </div>
           </div>
           <div v-show="!timeLine.disableStretch && !disableStretch" class="vg-move-block" @mousedown="e => startTimeLineStretch(e, timeLine, row.id, 'right')"></div>
           <div v-for="timePoint in timeLine.timePointNodes?.filter((() => styleOption?.showTimePoints))"
@@ -69,7 +74,9 @@ export interface Props {
   ganttViewWidth: number,
   edgeSpacing: number,
   styleOption?: GanttStyleOption,
-  timePointComp?: any
+  timePointComp?: any,
+  timeLineRender?: any,
+  timeLineRenderParams?: Record<string, any>,
 }
 
 const props = defineProps<Props>();
@@ -258,17 +265,19 @@ defineExpose({
         width: 100%;
         left: 0;
         top: 50%;
-        transform: translateY(-50%);
-        height: 16px;
-        border-radius: 6px;
-        border: 1px solid #000;
-        background: #fff;
+        transform: translateY(-50%); 
         cursor: grab;
         &.moving {
           cursor: grabbing;
         }
         &.disabledMove {
           cursor: default;
+        }
+        .vg-time-line-normal-body {
+          height: 16px;
+          border-radius: 6px;
+          border: 1px solid #000;
+          background: #fff;
         }
         .vg-time-line-normal-time-points {
           cursor: move;
@@ -284,6 +293,7 @@ defineExpose({
           position: absolute;
           width: 6px;
           height: 100%;
+          top: 0;
           cursor: ew-resize;
           &:first-of-type {
             left: 0;

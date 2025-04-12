@@ -12,6 +12,7 @@
 + 移动时间线
 + 时间点
 + 虚拟滚动
++ 自定义时间线
 
 ## 如何贡献
 如果你希望参与贡献，欢迎[Pull Request](https://github.com/xhxhxhxh/vue-gantt-3/issues).

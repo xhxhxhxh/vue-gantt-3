@@ -21,6 +21,8 @@
 | locale | 国际化 | `en / zh-cn` | browser's language |
 | timePointComp | 时间点组件 | `Comp` | — |
 | getEmptyRows | 返回空白行 | `(count: number) => RowData[]` | — |
+| timeLineRender | 自定义时间线组件 | `Comp` | — |
+| timeLineRenderParams | 自定义时间线组件参数 | `Record<string, any>` | — |
 
 ## 事件
 

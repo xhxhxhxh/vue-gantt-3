@@ -12,6 +12,7 @@ A Gantt component for vue3. High performance(global virtual scroll), support tim
 + move time line
 + time points
 + virtual scroll
++ custom time line
 
 ## How to contribute
 If you want to contribute, please create a [Pull Request](https://github.com/xhxhxhxh/vue-gantt-3/issues).

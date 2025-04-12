@@ -173,6 +173,7 @@ export const useTimeLine = ({
     const baseNode: TimeLineNode = {
       id: timeLine.id,
       timePointNodes,
+      data: timeLine,
       startDate,
       endDate,
       isSameDate,
