@@ -116,11 +116,19 @@ app.mount('#app');
             "vue-gantt-3": `^${pkg.version}`,
             "dayjs": "^1.11.10",
           },
-          "devDependencies": {
+          devDependencies: {
             "typescript": "~5.7.2",
           }
         },
       },
+      'tsconfig.json': {
+        content: {
+          compilerOptions: {
+            esModuleInterop: true,
+            allowSyntheticDefaultImports: true
+          }
+        },
+      }
     },
   });
 
