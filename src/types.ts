@@ -156,6 +156,7 @@ export interface MovedTimeLineData {
   timeLineId: string,
   startDate: dayjs.Dayjs,
   endDate: dayjs.Dayjs,
+  timePoints?: Pick<TimePointNode, 'id' | 'date'>[],
 }
 
 export type TimeScale = 'day' | 'week' | 'month' | 'quarter'| 'year'

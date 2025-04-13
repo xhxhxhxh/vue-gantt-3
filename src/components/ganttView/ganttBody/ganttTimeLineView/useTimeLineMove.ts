@@ -1,6 +1,6 @@
 import { inject, triggerRef } from 'vue';
 import type { Ref, ShallowRef, ComputedRef } from 'vue';
-import type { GanttRowNode, VisibleTimeLine, TimeLineNode, MovedTimeLineData } from '@/types';
+import type { GanttRowNode, VisibleTimeLine, TimeLineNode, MovedTimeLineData, TimePointNode } from '@/types';
 import dayjs from 'dayjs';
 import { getRound } from '@/utils/common';
 
@@ -192,29 +192,32 @@ export const useTimeLineMove = ({
    */
   const onTimeLineMoveChange = (rowId: string, timeLine: VisibleTimeLine, diffSecond: number) => {
     const timeLineNode = timeLine.timeLineNode;
-    const timeLineIds: string[] = [timeLineNode.id];
-    const result: MovedTimeLineData[] = [
-      {
-        timeLineId: timeLineNode.id,
-        startDate: timeLineNode.startDate,
-        endDate: timeLineNode.endDate
-      }
-    ];
+    const mergedTimeLineNodes = timeLineNode.mergedTimeLineNodes || []
+    const allTimeLineNodes = [timeLineNode, ...mergedTimeLineNodes.filter(node => node.id !== timeLineNode.id)];
+    const timeLineIds: string[] = [];
+    const result: MovedTimeLineData[] = [];
 
-    if (timeLineNode.isMerge) {
-      const mergedTimeLineNodes = timeLineNode.mergedTimeLineNodes;
-      for (let mergedTimeLineNode of mergedTimeLineNodes!) {
-        if (mergedTimeLineNode.id !== timeLineNode.id) {
-          timeLineIds.push(mergedTimeLineNode.id);
-          mergedTimeLineNode.startDate = mergedTimeLineNode.startDate.add(diffSecond, 'second');
-          mergedTimeLineNode.endDate = mergedTimeLineNode.endDate.add(diffSecond, 'second');
-          result.push({
-            timeLineId: mergedTimeLineNode.id,
-            startDate: mergedTimeLineNode.startDate,
-            endDate: mergedTimeLineNode.endDate
-          });
-        }
+    for (let currentTimeLineNode of allTimeLineNodes) {
+      timeLineIds.push(currentTimeLineNode.id);
+      if (currentTimeLineNode.id !== timeLineNode.id) {
+        currentTimeLineNode.startDate = currentTimeLineNode.startDate.add(diffSecond, 'second');
+        currentTimeLineNode.endDate = currentTimeLineNode.endDate.add(diffSecond, 'second');
       }
+      const movedResult: MovedTimeLineData = {
+        timeLineId: currentTimeLineNode.id,
+        startDate: currentTimeLineNode.startDate,
+        endDate: currentTimeLineNode.endDate
+      }
+      
+      if (currentTimeLineNode.timePointNodes) {
+        const timePointsData: Pick<TimePointNode, 'id' | 'date'>[] = []
+        currentTimeLineNode.timePointNodes.forEach(timePointNode => {
+          timePointNode.date = timePointNode.date.add(diffSecond, 'second');
+          timePointsData.push({ id: timePointNode.id, date: timePointNode.date });
+        });
+        movedResult.timePoints = timePointsData;
+      }
+      result.push(movedResult);
     }
     timeLineMoveChange(rowId, timeLineIds, result);
   };

@@ -14,7 +14,7 @@
              class="vg-time-line-normal"
              :class="{moving: timeLine.moving === true, disabledMove: timeLine.disableMove || disableMove}"
              @mousedown="e => startTimeLineMove(e, timeLine, row.id)">
-          <div v-show="!timeLine.disableStretch && !disableStretch" class="vg-move-block" @mousedown="e => startTimeLineStretch(e, timeLine, row.id, 'left')"></div>
+          <div v-show="!timeLine.disableStretch && !disableStretch" class="vg-move-block first-block" @mousedown="e => startTimeLineStretch(e, timeLine, row.id, 'left')"></div>
           <component :is="timeLineRender" v-if="timeLineRender" :params="timeLineRenderParams" 
           :visibleTimeLine="timeLine" :timeLineWidth="timeLine.width" :rowNode="row.rowNode"></component>
           <div class="vg-time-line-normal-body" v-if="!timeLineRender" 
@@ -27,7 +27,7 @@
               <span>{{ timeLine.label || '' }}</span>
             </div>
           </div>
-          <div v-show="!timeLine.disableStretch && !disableStretch" class="vg-move-block" @mousedown="e => startTimeLineStretch(e, timeLine, row.id, 'right')"></div>
+          <div v-show="!timeLine.disableStretch && !disableStretch" class="vg-move-block last-block" @mousedown="e => startTimeLineStretch(e, timeLine, row.id, 'right')"></div>
           <div v-for="timePoint in timeLine.timePointNodes?.filter((() => styleOption?.showTimePoints))"
                :key="timePoint.id"
                class="vg-time-line-normal-time-points"
@@ -295,11 +295,11 @@ defineExpose({
           height: 100%;
           top: 0;
           cursor: ew-resize;
-          &:first-of-type {
+          &.first-block {
             left: 0;
             transform: translateX(-100%);
           }
-          &:last-of-type {
+          &.last-block {
             right: 0;
             transform: translateX(100%);
           }
