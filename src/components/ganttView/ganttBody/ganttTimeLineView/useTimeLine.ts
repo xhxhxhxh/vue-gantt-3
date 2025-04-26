@@ -1,8 +1,8 @@
-import { inject, shallowRef } from 'vue';
+import { inject, shallowRef, ref } from 'vue';
 import type { Ref, ComputedRef } from 'vue';
 import type { GanttRowNode, VisibleRow, TimeLineNode, TimeLine, TimePointNode, VisibleTimeLine } from '@/types';
 import dayjs from 'dayjs';
-import { treeForEach } from '@/utils/common';
+import { treeForEach, arrangementArr } from '@/utils/common';
 
 export const useTimeLine = ({
   rowHeight,
@@ -35,8 +35,12 @@ export const useTimeLine = ({
   const visibleRows = shallowRef<VisibleRow[]>([]);
   const visibleTimeLineMap = shallowRef<Map<string, VisibleTimeLine[]>>(new Map());
   const bufferWidth = 200;
+  const wrapWidth = ref(0);
+  const wrapHeight = ref(0);
 
   const freshTimeLineView = () => {
+    wrapWidth.value = wrapRef.value?.offsetWidth || 0;
+    wrapHeight.value = wrapRef.value?.offsetHeight || 0;
     freshVisibleRows();
     freshVisibleTimeLines();
   };
@@ -48,10 +52,9 @@ export const useTimeLine = ({
 
   const freshVisibleRows = () => {
     if (!wrapRef.value) return;
-    const wrapHeight = wrapRef.value.offsetHeight;
     const bufferHeight = rowHeight.value * rowBuffer;
     const startNumInView = Math.floor((scrollViewScrollTop.value - bufferHeight) / rowHeight.value);
-    const endNumInView = Math.ceil((scrollViewScrollTop.value + wrapHeight + bufferHeight) / rowHeight.value);
+    const endNumInView = Math.ceil((scrollViewScrollTop.value + wrapHeight.value + bufferHeight) / rowHeight.value);
 
     const newVisibleRows: VisibleRow[] = [];
     const start = Math.max(0, startNumInView);
@@ -78,7 +81,7 @@ export const useTimeLine = ({
       }
 
     }
-    visibleRows.value = newVisibleRows;
+    visibleRows.value = arrangementArr(newVisibleRows, visibleRows.value);
   };
 
   const sortTimeLinesInRowNode = (rowNode: GanttRowNode) => {
@@ -193,10 +196,9 @@ export const useTimeLine = ({
    */
   const freshVisibleTimeLines = (freshAll = true) => {
     if (!wrapRef.value) return;
-    const wrapWidth = wrapRef.value.offsetWidth;
     const { startDate } = startInfo.value;
     const startLeftInView = scrollViewScrollLeft.value - bufferWidth;
-    const endLeftInView = scrollViewScrollLeft.value + wrapWidth + bufferWidth;
+    const endLeftInView = scrollViewScrollLeft.value + wrapWidth.value + bufferWidth;
 
     const startDateInView = startDate.add(Math.max(0, startLeftInView) / perHourSpacing.value, 'hour');
     const endDateInView = startDate.add(endLeftInView / perHourSpacing.value, 'hour');

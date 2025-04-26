@@ -62,7 +62,7 @@ const emit = defineEmits<{
 const props = defineProps<Props>();
 
 const wrapRef = inject('wrapRef') as Ref<HTMLDivElement | undefined>;
-
+const wrapRefWidth = ref(0);
 const ganttGridRef = ref<InstanceType<typeof GanttGrid>>();
 const ganttTimeLineViewRef = ref<InstanceType<typeof GanttTimeLineView>>();
 const ganttViewWidth = toRef(props, 'ganttViewWidth');
@@ -75,8 +75,7 @@ const getGanttBodyWidth = () => {
     ganttBodyWidth.value = '100%';
     return;
   }
-  const minWidth = wrapRef.value.offsetWidth as number;
-  ganttBodyWidth.value = Math.max(minWidth, ganttViewWidth.value) + 'px';
+  ganttBodyWidth.value = Math.max(wrapRefWidth.value, ganttViewWidth.value) + 'px';
 };
 
 const getGanttBodyHeight = () => {
@@ -108,6 +107,7 @@ const onScroll = ({ scrollTop, scrollLeft }: {scrollTop: number, scrollLeft: num
 };
 
 const onResize = () => {
+  wrapRefWidth.value = wrapRef.value?.offsetWidth || 0;
   getGanttBodyWidth();
   getGanttBodyHeight();
   if (ganttGridRef.value) {

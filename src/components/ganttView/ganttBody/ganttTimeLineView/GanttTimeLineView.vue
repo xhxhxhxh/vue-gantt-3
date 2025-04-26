@@ -15,14 +15,19 @@
              :class="{moving: timeLine.moving === true, disabledMove: timeLine.disableMove || disableMove}"
              @mousedown="e => startTimeLineMove(e, timeLine, row.id)">
           <div v-show="!timeLine.disableStretch && !disableStretch" class="vg-move-block first-block" @mousedown="e => startTimeLineStretch(e, timeLine, row.id, 'left')"></div>
-          <component :is="timeLineRender" v-if="timeLineRender" :params="timeLineRenderParams" 
-          :visibleTimeLine="timeLine" :timeLineWidth="timeLine.width" :rowNode="row.rowNode"></component>
-          <div class="vg-time-line-normal-body" v-if="!timeLineRender" 
-            :style="{ backgroundColor: getTimeLineBackgroundColor(timeLine)}"
+          <component :is="timeLineRender"
+                     v-if="timeLineRender"
+                     :params="timeLineRenderParams"
+                     :visibleTimeLine="timeLine"
+                     :timeLineWidth="timeLine.width"
+                     :rowNode="row.rowNode"></component>
+          <div v-if="!timeLineRender"
+               class="vg-time-line-normal-body"
+               :style="{ backgroundColor: getTimeLineBackgroundColor(timeLine)}"
           >
             <div v-show="styleOption?.barsLabeling !== 'none'"
-               class="vg-time-line-label"
-               :class="{toLeft: styleOption?.barsLabeling === 'beforeTheBar', toRight: styleOption?.barsLabeling === 'afterTheBar'}">
+                 class="vg-time-line-label"
+                 :class="{toLeft: styleOption?.barsLabeling === 'beforeTheBar', toRight: styleOption?.barsLabeling === 'afterTheBar'}">
               <img v-show="styleOption?.barsLabeling === 'insideBarWithIcon' && timeLine.icon" :src="timeLine.icon" alt="">
               <span>{{ timeLine.label || '' }}</span>
             </div>
@@ -265,7 +270,7 @@ defineExpose({
         width: 100%;
         left: 0;
         top: 50%;
-        transform: translateY(-50%); 
+        transform: translateY(-50%);
         cursor: grab;
         &.moving {
           cursor: grabbing;

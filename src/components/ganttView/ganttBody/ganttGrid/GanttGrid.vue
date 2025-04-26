@@ -41,6 +41,8 @@ const props = defineProps<Props>();
 const wrapRef = inject('wrapRef') as Ref<HTMLDivElement | undefined>;
 const verticalLinesList = ref<number[]>([]);
 const horizontalLinesList = ref<number[]>([]);
+const wrapWidth = ref(0);
+const wrapHeight = ref(0);
 
 const scrollViewScrollTop = ref(0);
 const scrollViewScrollLeft = ref(0);
@@ -74,13 +76,12 @@ const startInfo = computed<GanttBodyStartInfo>(() => {
 const freshVerticalLines = () => {
   if (!wrapRef.value) return;
 
-  const wrapWidth = wrapRef.value.offsetWidth;
   const { perHourSpacing } = props;
 
   const { startMonthDate, startLeft } = startInfo.value;
 
   const startLeftInView = scrollViewScrollLeft.value - bufferWidth;
-  const endLeftInView = scrollViewScrollLeft.value + wrapWidth + bufferWidth;
+  const endLeftInView = scrollViewScrollLeft.value + wrapWidth.value + bufferWidth;
 
   const newVerticalLinesList: number[] = [];
   let start = startLeft;
@@ -117,10 +118,9 @@ const freshHorizontalLines = () => {
     return;
   }
   const { rowHeight, rowBuffer } = props;
-  const wrapHeight = wrapRef.value.offsetHeight;
   const bufferHeight = rowHeight * rowBuffer;
   const startNumInView = Math.ceil((scrollViewScrollTop.value - bufferHeight) / rowHeight);
-  const endIdNumView = Math.floor((scrollViewScrollTop.value + wrapHeight + bufferHeight) / rowHeight);
+  const endIdNumView = Math.floor((scrollViewScrollTop.value + wrapHeight.value + bufferHeight) / rowHeight);
 
   const newHorizontalLinesList: number[] = [];
   const start = Math.max(1, startNumInView);
@@ -141,6 +141,8 @@ const onScroll = ({ scrollTop, scrollLeft }: {scrollTop: number, scrollLeft: num
 };
 
 const onResize = () => {
+  wrapWidth.value = wrapRef.value?.offsetWidth || 0;
+  wrapHeight.value = wrapRef.value?.offsetHeight || 0;
   freshGrid();
 
 };

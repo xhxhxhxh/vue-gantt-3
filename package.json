@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "main": "./src/index.ts",
+  "type": "module",
   "scripts": {
     "dev": "pnpm run -C play dev",
     "build": "vue-tsc -p tsconfig.node.json --noEmit && vite build && npm run build-umd",
