@@ -34,6 +34,7 @@ pnpm install vue-gantt-3
 import { createApp } from 'vue';
 import App from './App.vue';
 import VueGantt3 from 'vue-gantt-3';
+import 'vue-gantt-3/es/vue-gantt-3.css';
 
 const app = createApp(App);
 app.use(VueGantt3);
