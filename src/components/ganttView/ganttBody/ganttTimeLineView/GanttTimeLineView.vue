@@ -45,8 +45,12 @@
         </div>
         <div v-if="timeLine.type === 'parentTimeLineNode'" class="vg-time-line-parentNode">
           <div class="vg-time-line-parentNode-bar"></div>
-          <img class="vg-time-line-parentNode-triangle vg-time-line-parentNode-triangle-left" width="12" src="../../../../assets/images/BlackTriangle.svg">
-          <img class="vg-time-line-parentNode-triangle vg-time-line-parentNode-triangle-right" width="12" src="../../../../assets/images/BlackTriangle.svg">
+          <span class="vg-time-line-parentNode-triangle vg-time-line-parentNode-triangle-left">
+            <img width="12" src="../../../../assets/images/BlackTriangle.svg">
+          </span>
+          <span class="vg-time-line-parentNode-triangle vg-time-line-parentNode-triangle-right">
+            <img width="12" src="../../../../assets/images/BlackTriangle.svg">
+          </span>
         </div>
         <div v-if="timeLine.type === 'sameDateTimeLineNode'" class="vg-time-line-sameNode"></div>
       </div>
@@ -336,6 +340,7 @@ defineExpose({
         .vg-time-line-parentNode-triangle {
           position: absolute;
           top: 50%;
+          font-size: 0;
           &.vg-time-line-parentNode-triangle-left {
             left: 0;
             transform: translateX(-50%) translateY(-50%);

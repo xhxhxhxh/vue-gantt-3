@@ -4,8 +4,12 @@
           class="vg-cell-expand-box"
           :style="{left: positionLeft + 'px'}"
           @mousedown.stop="setExpand">
-      <img v-show="rowNode.expand" src="../../assets/images/shrink.svg" alt="">
-      <img v-show="!rowNode.expand" src="../../assets/images/spread.svg" alt="">
+      <span v-show="rowNode.expand" class="vg-cell-shrink-icon">
+        <img src="../../assets/images/shrink.svg" alt="">
+      </span>
+      <span v-show="!rowNode.expand" class="vg-cell-spread-icon">
+        <img src="../../assets/images/spread.svg" alt="">
+      </span>
     </span>
     <component :is="params.component" v-if="params.component" :params="params"></component>
     <div v-else>{{props.params.value}}</div>
