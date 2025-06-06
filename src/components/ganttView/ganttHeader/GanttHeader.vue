@@ -285,11 +285,8 @@ defineExpose({
 .vg-header {
   min-width: 100%;
   max-width: 100%;
-  overflow: auto;
+  overflow: hidden;
   color: #000;
-  &::-webkit-scrollbar {
-    display: none;
-  }
   .vg-header-first-level, .vg-header-second-level {
     position: relative;
 
