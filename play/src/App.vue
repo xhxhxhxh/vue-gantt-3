@@ -15,12 +15,13 @@
 </template>
 <script lang="ts" setup>
 import { ref, onBeforeMount, shallowRef, markRaw } from 'vue';
-import { ColDef, DefaultColDef } from 'vue-gantt-3/types';
+import { ColDef, DefaultColDef, GanttHeaderUnit } from 'vue-gantt-3/types';
 import type { ValueSetterParams } from 'ag-grid-community';
 import { getSingleRow, getMultiRows, getLargeNumRows, getEmptyRows } from './utils/mockData';
 import CellRender from './components/CellRender.vue';
 import VueGantt3Instance from 'vue-gantt-3';
 import { Row } from './types';
+import dayjs from 'dayjs';
 
 const vgGanttRef = ref<InstanceType<typeof VueGantt3Instance> | undefined>();
 
@@ -93,6 +94,39 @@ const onExpandChange = (unExpandIds: string[]) => {
   unExpandRowIds.value = unExpandIds;
 };
 
+const headerTextRender = (date: dayjs.Dayjs, unit: GanttHeaderUnit) => {
+  switch (unit) {
+    case 'hour':
+      return date.hour();
+    case 'day':
+      return date.date();
+    case 'month':
+      return date.month() + 1;
+    case 'year':
+      return date.format('YYYY-MM-DD');
+    case 'week':
+      return `${date.startOf('week').format('YYYY.MM.DD')}-${date.endOf('week').format('YYYY.MM.DD')}`;
+    case 'quarter':
+      return `${date.startOf('quarter').month() + 1}-${date.endOf('quarter').month() + 1}`;
+  }
+};
+
+const headerTipRender = (date: dayjs.Dayjs, unit: GanttHeaderUnit) => {
+  switch (unit) {
+    case 'hour':
+      return date.format('hour');
+    case 'day':
+      return date.format('day');
+    case 'month':
+      return date.format('month');
+    case 'year':
+      return date.format('YYYY-MM-DD');
+    case 'week':
+      return `${date.startOf('week').format('YYYY.MM.DD')}-${date.endOf('week').format('YYYY.MM.DD')}`;
+    case 'quarter':
+      return `${date.startOf('quarter').format('month')}-${date.endOf('quarter').format('month')}`;
+  }
+};
 
 </script>
 <style lang="scss">

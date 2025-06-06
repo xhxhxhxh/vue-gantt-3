@@ -23,6 +23,8 @@
 | getEmptyRows | return rows data | `(count: number) => RowData[]` | — |
 | timeLineRender | custom time line component | `Comp` | — |
 | timeLineRenderParams | time line component params | `Record<string, any>` | — |
+| headerTextRender | custom gantt header text | `(date: dayjs.Dayjs, unit: GanttHeaderUnit) => string \| number` | — |
+| headerTipRender | custom gantt header tip | `(date: dayjs.Dayjs, unit: GanttHeaderUnit) => string` | — |
 
 ## Events
 

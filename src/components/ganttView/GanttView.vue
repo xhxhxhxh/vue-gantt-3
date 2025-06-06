@@ -8,6 +8,8 @@
       :ganttViewWidth="ganttViewWidth"
       :headerHeight="headerHeight"
       :locale="locale"
+      :headerTextRender="headerTextRender"
+      :headerTipRender="headerTipRender"
     ></GanttHeader>
     <ScrollBar ref="scrollBarRef"
                :intercept-shift-scroll="true"
@@ -42,7 +44,7 @@
 <script lang="ts" setup>
 import ScrollBar from '../scrollbar/ScrollBar.vue';
 import GanttHeader from './ganttHeader/GanttHeader.vue';
-import type { RowData, ColDef, DefaultColDef, GanttRowNode, GanttStyleOption, TimeScale } from '@/types';
+import type { RowData, ColDef, DefaultColDef, GanttRowNode, GanttStyleOption, TimeScale, GanttHeaderUnit } from '@/types';
 import dayjs from 'dayjs';
 import { ref, onBeforeMount, onMounted, watch, inject, provide } from 'vue';
 import minMax from 'dayjs/plugin/minMax';
@@ -69,6 +71,8 @@ export interface Props {
   locale?: string,
   timeLineRender?: any,
   timeLineRenderParams?: Record<string, any>,
+  headerTextRender?: (date: dayjs.Dayjs, unit: GanttHeaderUnit) => string | number,
+  headerTipRender?: (date: dayjs.Dayjs, unit: GanttHeaderUnit) => string,
 }
 
 const props = withDefaults(defineProps<Props>(), {

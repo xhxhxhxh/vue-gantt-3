@@ -38,6 +38,8 @@
       :locale="locale"
       :timeLineRender="timeLineRender"
       :timeLineRenderParams="timeLineRenderParams"
+      :headerTextRender="headerTextRender"
+      :headerTipRender="headerTipRender"
       @trigger-table-view-scroll="triggerTableViewScroll"
       @gantt-body-resize="onGanttBodyResize"
       @perHourSpacingChange="perHourSpacingChange"
@@ -47,7 +49,7 @@
 <script lang="ts" setup>
 import TableView from "./components/tableView/TableView.vue";
 import GanttView from "./components/ganttView/GanttView.vue";
-import type { RowData, ColDef, DefaultColDef, GanttRowNode, GanttStyleOption, TimePoint, MovedTimeLineData, TimeScale } from '@/types';
+import type { RowData, ColDef, DefaultColDef, GanttRowNode, GanttStyleOption, TimePoint, MovedTimeLineData, TimeScale, GanttHeaderUnit } from '@/types';
 import { ref, provide, toRef } from 'vue';
 import ExpandableBox from './components/common/ExpandableBox.vue';
 import dayjs from 'dayjs';
@@ -63,6 +65,8 @@ export interface GanttOption {
   columns?: ColDef[],
   rows?: RowData[],
   getEmptyRows?: (count: number) => RowData[],
+  headerTextRender?: (date: dayjs.Dayjs, unit: GanttHeaderUnit) => string | number,
+  headerTipRender?: (date: dayjs.Dayjs, unit: GanttHeaderUnit) => string,
   defaultCol?: DefaultColDef,
   rowHeight?: number,
   headerHeight?: number, // table and gantt view header height

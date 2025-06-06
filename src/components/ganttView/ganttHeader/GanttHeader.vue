@@ -40,7 +40,9 @@ export interface Props {
   perHourSpacing: number,
   ganttMinDate: dayjs.Dayjs,
   ganttViewWidth: number,
-  locale?: string
+  locale?: string,
+  headerTextRender?: (date: dayjs.Dayjs, unit: GanttHeaderUnit) => string | number,
+  headerTipRender?: (date: dayjs.Dayjs, unit: GanttHeaderUnit) => string,
 }
 
 const props = defineProps<Props>();
@@ -199,6 +201,9 @@ const getNewBlocks = (startLeft: number, startDate: dayjs.Dayjs, currentUnit: Ga
 };
 
 const getBlockText = (date: dayjs.Dayjs, unit: GanttHeaderUnit) => {
+  if (props.headerTextRender) {
+    return props.headerTextRender(date, unit);
+  }
   const currentLang = lang[localeRef.value];
   switch (unit) {
     case 'hour':
@@ -218,6 +223,9 @@ const getBlockText = (date: dayjs.Dayjs, unit: GanttHeaderUnit) => {
 };
 
 const getBlockTip = (date: dayjs.Dayjs, unit: GanttHeaderUnit) => {
+  if (props.headerTipRender) {
+    return props.headerTipRender(date, unit);
+  }
   const dateFormat = lang[localeRef.value].dateFormat;
   switch (unit) {
     case 'hour':
