@@ -18,6 +18,7 @@ export const useTimeLineStretch = ({
   mergeOverlapTimeLine,
   freshVisibleTimeLines,
   getDiffSecondByDistance,
+  getDistanceByDiffDate,
   emitUpdateMinDate,
   emitUpdateMaxDate,
   updateParentTimeLine
@@ -35,6 +36,7 @@ export const useTimeLineStretch = ({
   mergeOverlapTimeLine: (timeLineNodes: TimeLineNode[]) => TimeLineNode[],
   freshVisibleTimeLines: (freshAll?: boolean) => void
   getDiffSecondByDistance: (distance: number, startDate: dayjs.Dayjs) => dayjs.Dayjs,
+  getDistanceByDiffDate: (startDate: dayjs.Dayjs, endDate: dayjs.Dayjs) => number,
   emitUpdateMinDate: (date: dayjs.Dayjs) => void,
   emitUpdateMaxDate: (date: dayjs.Dayjs) => void,
   updateParentTimeLine: (rowId: string) => void
@@ -190,7 +192,10 @@ export const useTimeLineStretch = ({
           updateParentTimeLine(rowId);
           return;
         } else if (nextStartDate.isAfter(minStartDate) || nextStartDate.isSame(minStartDate)) {
+          timeLine.translateX += getDistanceByDiffDate(minStartDate, nextStartDate);
           emitUpdateMinDate(minStartDate);
+          updateParentTimeLine(rowId);
+          return;
         }
       }
       timeLine.translateX += diffWidth;

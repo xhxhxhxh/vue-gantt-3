@@ -18,6 +18,7 @@ export const useTimeLineMove = ({
   mergeOverlapTimeLine,
   freshVisibleTimeLines,
   getDiffSecondByDistance,
+  getDistanceByDiffDate,
   emitUpdateMinDate,
   emitUpdateMaxDate,
   updateParentTimeLine
@@ -35,6 +36,7 @@ export const useTimeLineMove = ({
   mergeOverlapTimeLine: (timeLineNodes: TimeLineNode[]) => TimeLineNode[],
   freshVisibleTimeLines: (freshAll?: boolean) => void
   getDiffSecondByDistance: (distance: number, startDate: dayjs.Dayjs) => dayjs.Dayjs,
+  getDistanceByDiffDate: (startDate: dayjs.Dayjs, endDate: dayjs.Dayjs) => number,
   emitUpdateMinDate: (date: dayjs.Dayjs) => void,
   emitUpdateMaxDate: (date: dayjs.Dayjs) => void,
   updateParentTimeLine: (rowId: string) => void
@@ -159,7 +161,10 @@ export const useTimeLineMove = ({
         updateParentTimeLine(rowId);
         return;
       } else if (nextStartDate.isAfter(minStartDate) || nextStartDate.isSame(minStartDate)) {
+        timeLine.translateX += getDistanceByDiffDate(minStartDate, nextStartDate);
         emitUpdateMinDate(minStartDate);
+        updateParentTimeLine(rowId);
+        return;
       }
     } else if (getRound(timeLine.translateX + timeLine.width + edgeSpacing) === getRound(ganttViewWidth.value) && distance < 0) {
       const { maxEndDate } = getGanttMinAndMaxDate([rowId], false, true);
@@ -192,7 +197,7 @@ export const useTimeLineMove = ({
    */
   const onTimeLineMoveChange = (rowId: string, timeLine: VisibleTimeLine, diffSecond: number) => {
     const timeLineNode = timeLine.timeLineNode;
-    const mergedTimeLineNodes = timeLineNode.mergedTimeLineNodes || []
+    const mergedTimeLineNodes = timeLineNode.mergedTimeLineNodes || [];
     const allTimeLineNodes = [timeLineNode, ...mergedTimeLineNodes.filter(node => node.id !== timeLineNode.id)];
     const timeLineIds: string[] = [];
     const result: MovedTimeLineData[] = [];
@@ -207,10 +212,10 @@ export const useTimeLineMove = ({
         timeLineId: currentTimeLineNode.id,
         startDate: currentTimeLineNode.startDate,
         endDate: currentTimeLineNode.endDate
-      }
-      
+      };
+
       if (currentTimeLineNode.timePointNodes) {
-        const timePointsData: Pick<TimePointNode, 'id' | 'date'>[] = []
+        const timePointsData: Pick<TimePointNode, 'id' | 'date'>[] = [];
         currentTimeLineNode.timePointNodes.forEach(timePointNode => {
           timePointNode.date = timePointNode.date.add(diffSecond, 'second');
           timePointsData.push({ id: timePointNode.id, date: timePointNode.date });

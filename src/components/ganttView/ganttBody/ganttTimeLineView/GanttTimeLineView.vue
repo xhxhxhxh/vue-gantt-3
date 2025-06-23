@@ -159,6 +159,12 @@ const getDiffSecondByDistance = (distance: number, startDate: dayjs.Dayjs) => {
   return startDate.add(diffSecond, 'second');
 };
 
+const getDistanceByDiffDate = (startDate: dayjs.Dayjs, endDate: dayjs.Dayjs) => {
+  const { perHourSpacing } = props;
+
+  return endDate.diff(startDate, 'hour', true) * perHourSpacing;
+};
+
 const closeEdgeScroll = (perMoveSpacing: number, callBack: (moveSpacing: number) => any) => {
   if (timeLineMoving.value) {
     wrapRef.value!.scrollLeft += perMoveSpacing;
@@ -220,6 +226,7 @@ const { startTimeLineStretch } = useTimeLineStretch({
   mergeOverlapTimeLine,
   freshVisibleTimeLines,
   getDiffSecondByDistance,
+  getDistanceByDiffDate,
   emitUpdateMinDate,
   emitUpdateMaxDate,
   updateParentTimeLine
@@ -239,6 +246,7 @@ const { startTimeLineMove } = useTimeLineMove({
   mergeOverlapTimeLine,
   freshVisibleTimeLines,
   getDiffSecondByDistance,
+  getDistanceByDiffDate,
   emitUpdateMinDate,
   emitUpdateMaxDate,
   updateParentTimeLine
