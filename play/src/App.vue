@@ -47,6 +47,7 @@ const columns = ref<ColDef[]>([
     field: 'blank',
     headerName: '',
     resizable: false,
+    flex: 1,
     cellStyle: { borderRight: 0 }
   }
 ]);
